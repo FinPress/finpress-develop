@@ -390,10 +390,10 @@ class Tests_Admin_IncludesTemplate extends WP_UnitTestCase {
 			'type'    => 'error',
 		);
 		$blogdescription_error = array(
-			'setting' => 'blogdescription',
-			'code'    => 'blogdescription',
-			'message' => 'Too short',
-			'type'    => 'error',
+			'setting'   => 'blogdescription',
+			'code'      => 'blogdescription',
+			'message'   => 'Too short',
+			'type'      => 'error',
 			'aria_live' => '',
 		);
 
