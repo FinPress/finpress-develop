@@ -685,7 +685,7 @@ if ( is_multisite() ) :
 		 */
 		public function test_get_blogaddress_by_id_with_valid_id() {
 			$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
-			
+
 			$blogaddress = get_blogaddress_by_id( 1 );
 			$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/', $blogaddress );
 		}
@@ -695,7 +695,7 @@ if ( is_multisite() ) :
 		 */
 		public function test_get_blogaddress_by_id_with_invalid_id() {
 			$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
-			
+
 			$blogaddress = get_blogaddress_by_id( PHP_INT_MAX );
 			$this->assertSame( '', $blogaddress );
 		}
@@ -705,7 +705,7 @@ if ( is_multisite() ) :
 		 */
 		public function test_get_blogaddress_by_id_scheme_reflects_blog_scheme() {
 			$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
-			
+
 			$blog = self::factory()->blog->create();
 
 			$this->assertSame( 'http', parse_url( get_blogaddress_by_id( $blog ), PHP_URL_SCHEME ) );
@@ -720,7 +720,7 @@ if ( is_multisite() ) :
 		 */
 		public function test_get_blogaddress_by_id_scheme_is_unaffected_by_request() {
 			$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
-			
+
 			$blog = self::factory()->blog->create();
 
 			$this->assertFalse( is_ssl() );
