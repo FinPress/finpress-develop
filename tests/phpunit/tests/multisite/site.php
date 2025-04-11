@@ -683,7 +683,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * Tests returning an address for a given valid ID.
 	 */
 	public function test_get_blogaddress_by_id_with_valid_id() {
-    $this->setExpectedDeprecated( 'get_blogaddress_by_id' );
+		$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
 
 		$blogaddress = get_blogaddress_by_id( 1 );
 		$this->assertSame( 'http://' . WP_TESTS_DOMAIN . '/', $blogaddress );
@@ -693,7 +693,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * Tests returning an empty string for a non-existing ID.
 	 */
 	public function test_get_blogaddress_by_id_with_invalid_id() {
-    $this->setExpectedDeprecated( 'get_blogaddress_by_id' );
+		$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
 
 		$blogaddress = get_blogaddress_by_id( PHP_INT_MAX );
 		$this->assertSame( '', $blogaddress );
@@ -703,7 +703,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 14867
 	 */
 	public function test_get_blogaddress_by_id_scheme_reflects_blog_scheme() {
-    $this->setExpectedDeprecated( 'get_blogaddress_by_id' );
+		$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
 
 		$blog = self::factory()->blog->create();
 
@@ -718,7 +718,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 14867
 	 */
 	public function test_get_blogaddress_by_id_scheme_is_unaffected_by_request() {
-    $this->setExpectedDeprecated( 'get_blogaddress_by_id' );
+		$this->setExpectedDeprecated( 'get_blogaddress_by_id' );
 
 		$blog = self::factory()->blog->create();
 
