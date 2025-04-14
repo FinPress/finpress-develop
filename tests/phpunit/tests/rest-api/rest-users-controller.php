@@ -1378,6 +1378,10 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	 * @ticket 40477
 	 */
 	public function test_create_user_sends_admin_notification() {
+		if ( is_multisite() ) {
+			grant_super_admin( self::$user );
+		}
+
 		wp_set_current_user( self::$user );
 		reset_phpmailer_instance();
 
@@ -1398,6 +1402,10 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 	 * @ticket 40477
 	 */
 	public function test_create_user_notification_respects_filter() {
+		if ( is_multisite() ) {
+			grant_super_admin( self::$user );
+		}
+
 		wp_set_current_user( self::$user );
 		add_filter(
 			'rest_wp_user_created_notification',
