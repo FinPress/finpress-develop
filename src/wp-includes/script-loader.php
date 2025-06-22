@@ -1733,12 +1733,14 @@ function wp_default_styles( $styles ) {
 	);
 
 	$package_styles = array(
-		'block-editor'         => array( 'wp-components', 'wp-preferences' ),
+		'block-editor'         => array( 'wp-base-styles', 'wp-components', 'wp-preferences' ),
 		'block-library'        => array(),
 		'block-directory'      => array(),
+		'base-styles'          => array(),
 		'components'           => array(),
 		'commands'             => array(),
 		'edit-post'            => array(
+			'wp-base-styles',
 			'wp-components',
 			'wp-block-editor',
 			'wp-editor',
@@ -1755,7 +1757,7 @@ function wp_default_styles( $styles ) {
 			'wp-preferences',
 		),
 		'format-library'       => array(),
-		'list-reusable-blocks' => array( 'wp-components' ),
+		'list-reusable-blocks' => array( 'wp-base-styles', 'wp-components' ),
 		'reusable-blocks'      => array( 'wp-components' ),
 		'patterns'             => array( 'wp-components' ),
 		'preferences'          => array( 'wp-components' ),
@@ -1764,6 +1766,7 @@ function wp_default_styles( $styles ) {
 			'wp-components',
 		),
 		'edit-widgets'         => array(
+			'wp-base-styles',
 			'wp-widgets',
 			'wp-block-editor',
 			'wp-editor',
@@ -1782,6 +1785,7 @@ function wp_default_styles( $styles ) {
 			'wp-preferences',
 		),
 		'edit-site'            => array(
+			'wp-base-styles',
 			'wp-components',
 			'wp-block-editor',
 			'wp-editor',
