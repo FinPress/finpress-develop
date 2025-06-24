@@ -259,11 +259,11 @@ class WP_Block_Scanner {
 	 *
 	 * @since {WP_VERSION}
 	 *
-	 * @param string $freeform_blocks Optional. Pass `visit` to match freeform HTML content
-	 *                                not surrounded by block delimiters. Defaults to `skip`.
+	 * @param string $freeform_blocks Optional. Pass `visit-freeform` to match freeform HTML content
+	 *                                not surrounded by block delimiters. Defaults to `skip-freeform`.
 	 * @return bool Whether a block delimiter was matched.
 	 */
-	public function next_delimiter( $freeform_blocks = 'skip' ) {
+	public function next_delimiter( $freeform_blocks = 'skip-freeform' ) {
 		if ( $this->last_error ) {
 			return false;
 		}
