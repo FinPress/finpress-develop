@@ -143,4 +143,72 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Should have found a freeform block closer.'
 		);
 	}
+
+	/**
+	 * Verifies that a post containing a single void block finds the block and nothing else.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_finds_post_of_void_block() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:recent-posts /-->' );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found a block delimiter but found nothing.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::VOID,
+			$scanner->get_delimiter_type(),
+			'Should have found a void block delimiter.'
+		);
+
+		$this->assertSame(
+			'core/recent-posts',
+			$scanner->get_block_type(),
+			'Should have found a core/recent-posts void block.'
+		);
+	}
+
+	/**
+	 * Verifies that a post containing a single basic block finds the block opener and closer.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_finds_open_and_close_of_post_with_basic_block() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:paragraph --><p>Content</p><!-- /wp:paragraph -->' );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found an opening block delimiter but found nothing.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::OPENER,
+			$scanner->get_delimiter_type(),
+			'Should have found an opening block delimiter.'
+		);
+
+		$this->assertTrue(
+			$scanner->opens_block( 'core/paragraph' ),
+			'Should have found an opening core/paragraph delimiter.'
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found a closing block delimiter but found nothing.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::CLOSER,
+			$scanner->get_delimiter_type(),
+			'Should have found a closing block delimiter.'
+		);
+
+		$this->assertSame(
+			'core/paragraph',
+			$scanner->get_block_type(),
+			'Should have found a closing paragraph delimiter.'
+		);
+	}
 }

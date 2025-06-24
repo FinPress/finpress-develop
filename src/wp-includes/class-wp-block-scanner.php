@@ -133,6 +133,16 @@ class WP_Block_Scanner {
 	private $json_length;
 
 	/**
+	 * Internal parser state, differentiating whether the instance is currently matched,
+	 * on an implicit freeform node, in error, or ready to begin parsing.
+	 *
+	 * @since {WP_VERSION}}
+	 *
+	 * @var string
+	 */
+	private $state = self::READY;
+
+	/**
 	 * Indicates what kind of block comment delimiter this represents.
 	 *
 	 * One of:
@@ -268,10 +278,15 @@ class WP_Block_Scanner {
 			return false;
 		}
 
-		$text      = $this->source_text;
-		$end       = strlen( $text );
-		$at        = $this->delimiter_at + $this->delimiter_length;
-		$found_one = false;
+		if ( self::IMPLICIT_OPEN === $this->state && 'visit-freeform' === $freeform_blocks ) {
+			$this->state = self::IMPLICIT_CLOSE;
+			return true;
+		}
+
+		$this->state = self::READY;
+		$text        = $this->source_text;
+		$end         = strlen( $text );
+		$at          = $this->delimiter_at + $this->delimiter_length;
 
 		while ( $at < $end ) {
 			/*
@@ -287,7 +302,11 @@ class WP_Block_Scanner {
 			 */
 			$comment_opening_at = strpos( $text, '<!--', $at );
 			if ( false === $comment_opening_at ) {
-				return false;
+				$this->state = 'visit-freeform' === $freeform_blocks
+					? self::IMPLICIT_OPEN
+					: self::COMPLETE;
+
+				return 'visit-freeform' === $freeform_blocks;
 			}
 
 			$opening_whitespace_at     = $comment_opening_at + 4;
@@ -299,6 +318,7 @@ class WP_Block_Scanner {
 
 			$wp_prefix_at = $opening_whitespace_at + $opening_whitespace_length;
 			if ( $wp_prefix_at >= $end ) {
+				$this->state      = self::COMPLETE;
 				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
@@ -316,6 +336,7 @@ class WP_Block_Scanner {
 
 			$namespace_at = $wp_prefix_at + 3;
 			if ( $namespace_at >= $end ) {
+				$this->state      = self::COMPLETE;
 				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
@@ -331,6 +352,7 @@ class WP_Block_Scanner {
 			$namespace_length = 1 + strspn( $text, 'abcdefghijklmnopqrstuvwxyz0123456789-_', $namespace_at + 1 );
 			$separator_at     = $namespace_at + $namespace_length;
 			if ( $separator_at >= $end ) {
+				$this->state      = self::COMPLETE;
 				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
@@ -360,6 +382,7 @@ class WP_Block_Scanner {
 
 			$json_at = $after_name_whitespace_at + $after_name_whitespace_length;
 			if ( $json_at >= $end ) {
+				$this->state      = self::COMPLETE;
 				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
@@ -376,6 +399,7 @@ class WP_Block_Scanner {
 			 */
 			$comment_closing_at = strpos( $text, '-->', $json_at );
 			if ( false === $comment_closing_at ) {
+				$this->state      = self::COMPLETE;
 				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
@@ -415,7 +439,7 @@ class WP_Block_Scanner {
 				}
 
 				// This must be a block delimiter!
-				$found_one = true;
+				$this->state = self::MATCHED;
 				break;
 			}
 
@@ -449,11 +473,11 @@ class WP_Block_Scanner {
 			}
 
 			// This must be a block delimiter!
-			$found_one = true;
+			$this->state = self::MATCHED;
 			break;
 		}
 
-		if ( ! $found_one ) {
+		if ( self::MATCHED !== $this->state ) {
 			return false;
 		}
 
@@ -567,13 +591,26 @@ class WP_Block_Scanner {
 	 *  - `static::OPENER`
 	 *  - `static::CLOSER`
 	 *  - `static::VOID`
+	 *  - `null`
 	 *
 	 * @since {WP_VERSION}
 	 *
-	 * @return string type of the block comment delimiter.
+	 * @return string|null type of the block comment delimiter, if currently matched.
 	 */
 	public function get_delimiter_type() {
-		return $this->type;
+		switch ( $this->state ) {
+			case self::IMPLICIT_OPEN:
+				return self::OPENER;
+
+			case self::IMPLICIT_CLOSE:
+				return self::CLOSER;
+
+			case self::MATCHED:
+				return $this->type;
+
+			default:
+				return null;
+		}
 	}
 
 	/**
@@ -997,4 +1034,37 @@ class WP_Block_Scanner {
 	 * @since {WP_VERSION}
 	 */
 	const VOID = 'void';
+
+	/**
+	 * Indicates that the scanner is ready to start parsing but hasn’t yet begun.
+	 *
+	 * @since {WP_VERSION}}
+	 */
+	const READY = 'scanner-ready';
+
+	/**
+	 * Indicates that the scanner is matched on an explicit block delimiter.
+	 *
+	 * @since {WP_VERSION}
+	 */
+	const MATCHED = 'scanner-matched';
+
+	/**
+	 * Indicates that the scanner is matched on the opening of an implicit freeform delimiter.
+	 *
+	 * @since {WP_VERSION}
+	 */
+	const IMPLICIT_OPEN = 'scanner-opening-freeform';
+
+	/**
+	 * Indicates that the scanner is matched on the closing of an implicit freeform delimiter.
+	 *
+	 * @since {WP_VERSION}
+	 */
+	const IMPLICIT_CLOSE = 'scanner-closing-freeform';
+
+	/**
+	 * Indicates that the scanner has finished parsing and has nothing left to scan.
+	 */
+	const COMPLETE = 'scanner-complete';
 }
