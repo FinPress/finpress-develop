@@ -211,4 +211,49 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Should have found a closing paragraph delimiter.'
 		);
 	}
+
+	/**
+	 * Verifies that corrupted block delimiters are interpreted as HTML comments.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_invalid_block_delimiters_as_html_comments
+	 *
+	 * @param string $html Input containing an invalid block delimiter.
+	 */
+	public function test_rejects_invalid_block_comment_delimiters_as_html_comments( $html ) {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:tests/before /-->{$html}<!-- wp:tests/after /-->" );
+
+		$scanner->next_delimiter();
+		$this->assertTrue(
+			$scanner->opens_block( 'tests/before' ),
+			"Should have found the 'tests/before' block before the invalid block delimiter but found a '{$scanner->get_block_type()}' instead."
+		);
+
+		$scanner->next_delimiter( 'visit-freeform' );
+		$this->assertTrue(
+			$scanner->opens_block( 'freeform' ),
+			"Should have found the malform block delimiter as an HTML comment, but found a '{$scanner->get_block_type()}' instead."
+		);
+
+		$scanner->next_delimiter();
+		$this->assertTrue(
+			$scanner->opens_block( 'tests/after' ),
+			"Should have found the 'tests/after' block after the invalid block delimiter but found a '{$scanner->get_block_type()}' instead."
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_invalid_block_delimiters_as_html_comments() {
+		return array(
+			'Shortest HTML comment'   => array( '<!-->' ),
+			'Span-of-dashes'          => array( '<!------>' ),
+			'No spaces, minimal info' => array( '<!--wp:block-->' ),
+			'No spaces, empty JSON'   => array( '<!--wp:block{}-->' ),
+		);
+	}
 }
