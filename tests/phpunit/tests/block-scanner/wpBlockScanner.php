@@ -213,7 +213,62 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verifies that corrupted block delimiters are interpreted as HTML comments.
+	 * Verifies that the parser refuses to parse the end of a document
+	 * which partially contains what could be a block delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_partial_delimiter_endings
+	 *
+	 * @param string $html Input ending in a partial block delimiter.
+	 */
+	public function test_rejects_on_incomplete_inputs( $html ) {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:test/canary /-->{$html}" );
+
+		$scanner->next_delimiter();
+		$this->assertTrue(
+			$scanner->opens_block( 'test/canary' ),
+			'Should have found the test/canary block: check test code setup.'
+		);
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			'Should have failed to find any blocks after the test canary.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::INCOMPLETE_INPUT,
+			$scanner->get_last_error(),
+			'Should have bailed because the input was incomplete.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_partial_delimiter_endings() {
+		$tests = array();
+
+		$delimiters = array(
+			'opener' => '<!-- wp:core/paragraph {} -->',
+			'void'   => '<!-- wp:my-plugin/mark /-->',
+			'closer' => '<!-- /wp:group -->',
+		);
+
+		foreach ( $delimiters as $kind => $delimiter ) {
+			for ( $i = strlen( $delimiter ) - 1; $i > 0; $i-- ) {
+				$partial                      = substr( $delimiter, 0, $i );
+				$tests["{$kind}: {$partial}"] = array( $partial );
+			}
+		}
+
+		return $tests;
+	}
+
+	/**
+	 * Verifies that corrupted block delimiters are not matched as delimiters.
 	 *
 	 * @ticket {TICKET_NUMBER}
 	 *
@@ -250,10 +305,209 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	 */
 	public static function data_invalid_block_delimiters_as_html_comments() {
 		return array(
-			'Shortest HTML comment'   => array( '<!-->' ),
-			'Span-of-dashes'          => array( '<!------>' ),
-			'No spaces, minimal info' => array( '<!--wp:block-->' ),
-			'No spaces, empty JSON'   => array( '<!--wp:block{}-->' ),
+			'Shortest HTML comment'         => array( '<!-->' ),
+			'Span-of-dashes'                => array( '<!------>' ),
+			'Empty HTML comment'            => array( '<!-- -->' ),
+			'No spaces, minimal info'       => array( '<!--wp:block-->' ),
+			'No spaces, minimal info, void' => array( '<!--wp:block/-->' ),
+			'No spaces, empty JSON'         => array( '<!--wp:block{}-->' ),
+			'No spaces, empty JSON, void'   => array( '<!--wp:block{}/-->' ),
+			'No space before wp:'           => array( '<!--wp:block -->' ),
+			'No space after name'           => array( '<!-- wp:block-->' ),
+			'No space before JSON'          => array( '<!-- wp:block{} -->' ),
+			'No space after JSON'           => array( '<!-- wp:block {}-->' ),
+			'Missing wp:'                   => array( '<!-- core/paragraph -->' ),
+			'Malformed wp:'                 => array( '<!-- wordpress:core/paragraph -->' ),
+			'Malformed block name'          => array( '<!-- wp:core/paragraph/variation -->' ),
+			'Invalid block name characters' => array( '<!-- wp:core/32-block -->' ),
+		);
+	}
+
+	/**
+	 * Verifies that block delimiters are matched even when the JSON attributes
+	 * are malformed and cannot be parsed.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_invalid_block_json
+	 *
+	 * @param string $invalid_block_json improperly-encoded JSON document, or JSON not valid for a block’s attributes.
+	 */
+	public function test_matches_block_with_invalid_json( $invalid_block_json )  {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:block {$invalid_block_json} -->" );
+
+		$scanner->next_delimiter();
+		$this->assertTrue(
+			$scanner->opens_block( 'core/block' ),
+			'Should have found the test block but found nothing instead.'
+		);
+
+		$parsed_data          = $scanner->allocate_and_return_parsed_attributes();
+		$exported_parsed_data = var_export( $parsed_data, true );
+		$exported_parsed_data = self::unhide_whitespace( $exported_parsed_data );
+		$this->assertNull(
+			$parsed_data,
+			"Should have failed to parse JSON attributes, but found '{$exported_parsed_data}' instead."
+		);
+
+		$this->assertNotNull(
+			$scanner->get_last_json_error(),
+			'Should have reported an error when attempting to parse JSON attributes.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_invalid_block_json() {
+		return array(
+			'Extra closing }'  => array( '{}}' ),
+			'Empty list'       => array( '[]' ),
+			'Non-empty list'   => array( '[1, 2, 3]' ),
+			'Nested list'      => array( '[{"type": "broken"}]' ),
+			'True'             => array( 'true' ),
+			'False'            => array( 'false' ),
+			'null'             => array( 'null' ),
+			'Number (36)'      => array( '36' ),
+			'Number (3.141e0)' => array( '3.141e0' ),
+			'Unquoted string'  => array( '{"name": block}' ),
+		);
+	}
+
+	/**
+	 * Verifies that a delimiter with unterminated JSON is not treated as a delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_does_not_match_block_with_unterminated_json() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:block {"has_stuff": true -->' );
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			"Should have failed to find block delimiter but found '{$scanner->get_block_type()}' instead."
+		);
+	}
+
+	/**
+	 * Verifies that a delimiter with content after the JSON attributes is not treated as a delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_does_not_match_block_with_content_after_json() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:block {"has_stuff": true} "not allowed" -->' );
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			"Should have failed to find block delimiter but found '{$scanner->get_block_type()}' instead."
+		);
+	}
+
+	/**
+	 * Verifies that the appropriate block delimiter type is reported for a matched delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_their_types
+	 *
+	 * @param string $html           Contains a single block delimiter.
+	 * @param string $delimiter_type Expected type of delimiter.
+	 */
+	public function test_reports_proper_delimiter_type( $html, $delimiter_type ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test block delimiter but found nothing instead.'
+		);
+
+		$this->assertSame(
+			$delimiter_type,
+			$scanner->get_delimiter_type(),
+			'Failed to match the expected delimiter type (opener/closer/void)'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_delimiters_and_their_types() {
+		return array(
+			'Void'              => array( '<!-- wp:void /-->', WP_Block_Scanner::VOID ),
+			'Void, full name'   => array( '<!-- wp:core/void /-->', WP_Block_Scanner::VOID ),
+			'Opener'            => array( '<!-- wp:paragraph -->', WP_Block_Scanner::OPENER ),
+			'Opener, full name' => array( '<!-- wp:core/list -->', WP_Block_Scanner::OPENER ),
+			'Closer'            => array( '<!-- /wp:paragraph -->', WP_Block_Scanner::CLOSER ),
+			'Closer, full name' => array( '<!-- /wp:core/list -->', WP_Block_Scanner::CLOSER ),
+		);
+	}
+
+	/**
+	 * Verifies that the appropriate block type is reported for a matched delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_their_block_types
+	 */
+	public function test_reports_proper_block_type( $html, $block_type ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test block delimiter but found nothing instead.'
+		);
+
+		$this->assertSame(
+			$block_type,
+			$scanner->get_block_type(),
+			'Should have found the expected block type.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_delimiters_and_their_block_types() {
+		return array(
+			'Opener, core/group' => array( '<!-- wp:core/group -->', 'core/group' ),
+			'Void, core/group'   => array( '<!-- wp:core/group /-->', 'core/group' ),
+			'Closer, core/group' => array( '<!-- /wp:core/group -->', 'core/group' ),
+			'Opener, group'      => array( '<!-- wp:group -->', 'core/group' ),
+			'Void, group'        => array( '<!-- wp:group /-->', 'core/group' ),
+			'Closer, group'      => array( '<!-- /wp:group -->', 'core/group' ),
+			'Opener, my/group'   => array( '<!-- wp:my/group -->', 'my/group' ),
+			'Void, thy/group'    => array( '<!-- wp:thy/group /-->', 'thy/group' ),
+			'Closer, the5/group' => array( '<!-- /wp:the-5/group -->', 'the-5/group' ),
+		);
+	}
+
+	//
+	// Test helpers.
+	//
+
+	/**
+	 * Replaces whitespace in a string with visual indicators for easier debugging.
+	 *
+	 * The definition of “whitespace” here is loose and intended for debugging tests.
+	 * It’s okay to expand for more complete replacement, for example to replace all
+	 * graphemes considered whitespace by Unicode, but not required unless it’s
+	 * essential for tests.
+	 *
+	 * Concerning HTML and the block parser only the HTML whitespace is relevant.
+	 *
+	 * @param string $string Any input, potentially containing whitespace characters.
+	 * @return string The input with whitespace replaced by visual placeholders.
+	 */
+	private static function unhide_whitespace( $string ) {
+		return str_replace(
+			array( ' ', "\t", "\r", "\f", "\n" ),
+			array( '␠', '␉', '␍', '␌', '␤' ),
+			$string
 		);
 	}
 }

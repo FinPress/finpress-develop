@@ -302,14 +302,32 @@ class WP_Block_Scanner {
 			 */
 			$comment_opening_at = strpos( $text, '<!--', $at );
 			if ( false === $comment_opening_at ) {
-				$this->state = 'visit-freeform' === $freeform_blocks
-					? self::IMPLICIT_OPEN
-					: self::COMPLETE;
+				// There might be freeform content after the last block.
+				if ( 'visit-freeform' === $freeform_blocks ) {
+					$this->state = self::IMPLICIT_OPEN;
+					return true;
+				}
 
-				return 'visit-freeform' === $freeform_blocks;
+				// There might also be the start of what could be a delimiter.
+				if (
+					str_ends_with( $text, '<!-' ) ||
+					str_ends_with( $text, '<!' ) ||
+					str_ends_with( $text, '<' )
+				) {
+					$this->last_error = self::INCOMPLETE_INPUT;
+				}
+
+				$this->state = self::COMPLETE;
+				return false;
 			}
 
-			$opening_whitespace_at     = $comment_opening_at + 4;
+			$opening_whitespace_at = $comment_opening_at + 4;
+			if ( $opening_whitespace_at >= $end ) {
+				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = self::COMPLETE;
+				return false;
+			}
+
 			$opening_whitespace_length = strspn( $text, " \t\f\r\n", $opening_whitespace_at );
 			if ( 0 === $opening_whitespace_length ) {
 				$at = $this->find_html_comment_end( $comment_opening_at, $end );
@@ -359,7 +377,14 @@ class WP_Block_Scanner {
 
 			$has_separator = '/' === $text[ $separator_at ];
 			if ( $has_separator ) {
-				$name_at       = $separator_at + 1;
+				$name_at = $separator_at + 1;
+
+				if ( $name_at >= $end ) {
+					$this->state      = self::COMPLETE;
+					$this->last_error = self::INCOMPLETE_INPUT;
+					return false;
+				}
+
 				$start_of_name = $text[ $name_at ];
 				if ( 'a' > $start_of_name || 'z' < $start_of_name ) {
 					$at = $this->find_html_comment_end( $comment_opening_at, $end );
@@ -479,6 +504,12 @@ class WP_Block_Scanner {
 
 		if ( self::MATCHED !== $this->state ) {
 			return false;
+		}
+
+		$after_prev_block = $this->delimiter_at + $this->delimiter_length;
+		if ( 'visit-freeform' === $freeform_blocks && $comment_opening_at > $after_prev_block ) {
+			$this->state = self::IMPLICIT_OPEN;
+			return true;
 		}
 
 		$this->delimiter_at     = $comment_opening_at;
@@ -648,7 +679,7 @@ class WP_Block_Scanner {
 	 */
 	public function is_block_type( $block_type ) {
 		// This is a core/freeform text block, it’s special.
-		if ( 0 === $this->name_length ) {
+		if ( self::IMPLICIT_OPEN === $this->state || self::IMPLICIT_CLOSE === $this->state ) {
 			return 'core/freeform' === $block_type || 'freeform' === $block_type;
 		}
 
@@ -801,7 +832,7 @@ class WP_Block_Scanner {
 	 */
 	public function get_block_type() {
 		// This is a core/freeform text block, it’s special.
-		if ( 0 === $this->name_length ) {
+		if ( self::IMPLICIT_OPEN === $this->state || self::IMPLICIT_CLOSE === $this->state ) {
 			return 'core/freeform';
 		}
 
@@ -932,71 +963,9 @@ class WP_Block_Scanner {
 		return new WP_HTML_Span( $this->delimiter_at, $this->delimiter_length );
 	}
 
-	// Debugging methods not meant for production use.
-
-	/**
-	 * Prints a debugging message showing the structure of the parsed delimiter.
-	 *
-	 * This is not meant to be used in production!
-	 *
-	 * @access private
-	 *
-	 * @since {WP_VERSION}
-	 */
-	public function debug_print_structure() {
-		$c = ( ! defined( 'STDOUT' ) || posix_isatty( STDOUT ) )
-			? function ( $color = null ) { return $color; } // phpcs:ignore
-			: function ( $color ) { return ''; }; // phpcs:ignore
-
-		if ( $this->is_block_type( 'core/freeform' ) ) {
-			$closer = static::CLOSER === $this->get_delimiter_type() ? '/' : '';
-			echo "{$c( "\e[90m" )}<!-- "; // phpcs:ignore
-			echo "{$c( "\e[0;31m" )}{$closer}"; // phpcs:ignore
-			echo "{$c("\e[90m" )}wp:"; // phpcs:ignore
-			echo "{$c( "\e[0;34m" )}freeform"; // phpcs:ignore
-			echo "{$c( "\e[0;36m" )} {$c("\e[90m")}-->\n"; // phpcs:ignore
-			return;
-		}
-
-		$namespace  = substr( $this->source_text, $this->namespace_at, $this->namespace_length );
-		$slash      = 0 === $this->namespace_length ? '' : '/';
-		$block_name = substr( $this->source_text, $this->name_at, $this->name_length );
-		$closer     = static::CLOSER === $this->type ? '/' : '';
-		$json       = substr( $this->source_text, $this->json_at, $this->json_length );
-
-		$opener_whitespace_at     = $this->delimiter_at + 4;
-		$opener_whitespace_length = $this->namespace_at - 3 - $opener_whitespace_at - ( static::CLOSER === $this->type ? 1 : 0 );
-
-		$after_name_whitespace_at     = $this->name_at + $this->name_length;
-		$after_name_whitespace_length = $this->json_at - $after_name_whitespace_at;
-
-		$closing_whitespace_at     = $this->json_at + $this->json_length;
-		$closing_whitespace_length = $this->delimiter_at + $this->delimiter_length - 3 - $closing_whitespace_at;
-
-		if ( '/' === $this->source_text[ $this->delimiter_at + $this->delimiter_length - 4 ] ) {
-			$void_flag = '/';
-			--$closing_whitespace_length;
-		} else {
-			$void_flag = '';
-		}
-
-		$w = function ( $whitespace ) use ( $c ) {
-			return $c( "\e[2;90m" ) . str_replace( array( ' ', "\t", "\f", "\r", "\n" ), array( '␣', '␉', '␌', '␍', '␤' ), $whitespace );
-		};
-
-		echo "{$c( "\e[90m" )}<!--"; // phpcs:ignore
-		echo $w( substr( $this->source_text, $opener_whitespace_at, $opener_whitespace_length ) ); // phpcs:ignore
-		echo "{$c( "\e[0;31m" )}{$closer}"; // phpcs:ignore
-		echo "{$c("\e[90m" )}wp:{$c( "\e[2;34m" )}{$namespace}"; // phpcs:ignore
-		echo "{$c( "\e[2;90m" )}{$slash}"; // phpcs:ignore
-		echo "{$c( "\e[0;34m" )}{$block_name}"; // phpcs:ignore
-		echo $w( substr( $this->source_text, $after_name_whitespace_at, $after_name_whitespace_length ) ); // phpcs:ignore
-		echo "{$c("\e[0;2;32m" )}{$json}"; // phpcs:ignore
-		echo $w( substr( $this->source_text, $closing_whitespace_at, $closing_whitespace_length ) ); // phpcs:ignore
-		echo "{$c( "\e[0;36m" )}{$void_flag}{$c("\e[90m")}-->\n"; // phpcs:ignore
-	}
-
+	//
 	// Constant declarations that would otherwise pollute the top of the class.
+	//
 
 	/**
 	 * Indicates that the block comment delimiter closes an open block.
