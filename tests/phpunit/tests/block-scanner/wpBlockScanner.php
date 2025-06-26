@@ -268,6 +268,31 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verifies that it’s not possible to proceed after reaching an error.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_rejects_once_errored_out() {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:incomplete" );
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			"Shoudn’t have found any delimiters but found a '{$scanner->get_block_type()}'."
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::INCOMPLETE_INPUT,
+			$scanner->get_last_error(),
+			'Should have reported incomplete input.'
+		);
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			'Should have failed to proceed after encountering an error.'
+		);
+	}
+
+	/**
 	 * Verifies that corrupted block delimiters are not matched as delimiters.
 	 *
 	 * @ticket {TICKET_NUMBER}
@@ -308,6 +333,8 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Shortest HTML comment'         => array( '<!-->' ),
 			'Span-of-dashes'                => array( '<!------>' ),
 			'Empty HTML comment'            => array( '<!-- -->' ),
+			'HTML comment with exclamation' => array( '<!-- --! is not the end -->' ),
+//			'Unterminated HTML comment'     => array( '<!-- this is not a block' ),
 			'No spaces, minimal info'       => array( '<!--wp:block-->' ),
 			'No spaces, minimal info, void' => array( '<!--wp:block/-->' ),
 			'No spaces, empty JSON'         => array( '<!--wp:block{}-->' ),
@@ -318,6 +345,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'No space after JSON'           => array( '<!-- wp:block {}-->' ),
 			'Missing wp:'                   => array( '<!-- core/paragraph -->' ),
 			'Malformed wp:'                 => array( '<!-- wordpress:core/paragraph -->' ),
+			'Malformed block namespace'     => array( '<!-- wp:3more/block -->' ),
 			'Malformed block name'          => array( '<!-- wp:core/paragraph/variation -->' ),
 			'Invalid block name characters' => array( '<!-- wp:core/32-block -->' ),
 		);
@@ -373,6 +401,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Number (36)'      => array( '36' ),
 			'Number (3.141e0)' => array( '3.141e0' ),
 			'Unquoted string'  => array( '{"name": block}' ),
+			'Letters'          => array( 'not_even_json' ),
 		);
 	}
 
