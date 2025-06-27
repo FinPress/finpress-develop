@@ -657,6 +657,7 @@ class WP_Block_Scanner {
 			case self::MATCHED:
 				return $this->type;
 
+			// This should not be possible.
 			default:
 				return null;
 		}
