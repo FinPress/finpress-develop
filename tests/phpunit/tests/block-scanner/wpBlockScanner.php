@@ -334,7 +334,6 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Span-of-dashes'                => array( '<!------>' ),
 			'Empty HTML comment'            => array( '<!-- -->' ),
 			'HTML comment with exclamation' => array( '<!-- --! is not the end -->' ),
-//			'Unterminated HTML comment'     => array( '<!-- this is not a block' ),
 			'No spaces, minimal info'       => array( '<!--wp:block-->' ),
 			'No spaces, minimal info, void' => array( '<!--wp:block/-->' ),
 			'No spaces, empty JSON'         => array( '<!--wp:block{}-->' ),
@@ -348,6 +347,66 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'Malformed block namespace'     => array( '<!-- wp:3more/block -->' ),
 			'Malformed block name'          => array( '<!-- wp:core/paragraph/variation -->' ),
 			'Invalid block name characters' => array( '<!-- wp:core/32-block -->' ),
+		);
+	}
+
+	/**
+	 * Verifies that incomplete HTML comments which could not produce delimiters
+	 * are not considered incomplete input by the scanner.
+	 *
+	 * Note that the block parsing operates first on block comment delimiters and
+	 * then on HTML semantics. It’s technically possible for blocks to delimit
+	 * invalid or non-well-formed HTML, so there’s no need to try and preserve
+	 * other HTML boundaries in the parser the way the HTML API does.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_incomplete_html_comments_that_are_not_delimiters
+	 *
+	 * @param string $html Input containing an HTML comment that is both incomplete and
+	 *                     cannot represent an incomplete block comment delimiter.
+	 */
+	public function test_unclosed_html_comment_non_delimiter_is_not_incomplete_input( $html ) {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:group -->{$html}" );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found setup group block but found nothing: check test setup.'
+		);
+
+		$this->assertSame(
+			'core/group',
+			$scanner->get_block_type(),
+			"Should have found setup 'group' block: check test setup."
+		);
+
+		$this->assertFalse(
+			$scanner->next_delimiter(),
+			"Should have found no other delimiters given the incomplete HTML comment, but found a '{$scanner->get_block_type()}' instead."
+		);
+
+		$this->assertNull(
+			$scanner->get_last_error(),
+			'Should have completed without reporting an error.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_incomplete_html_comments_that_are_not_delimiters() {
+		return array(
+			'Opening and non-whitespace' => array( '<!--[' ),
+			'Non wp: token'              => array( '<!-- this is not a block' ),
+			'Non-: after wp'             => array( '<!-- wpm' ),
+			'Invalid namespace'          => array( '<!-- wp:)' ),
+			'Invalid name'               => array( '<!-- wp:core//test' ),
+			'Invalid full name'          => array( '<!-- wp:core/test/variation' ),
+			'Missing final ->'           => array( '<!-- -' ),
+			'Missing final > (has !)'    => array( '<!-- --!' ),
+			'Missing final >'            => array( '<!-- --' ),
 		);
 	}
 

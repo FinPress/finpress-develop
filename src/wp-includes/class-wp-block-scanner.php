@@ -323,12 +323,19 @@ class WP_Block_Scanner {
 
 			$opening_whitespace_at = $comment_opening_at + 4;
 			if ( $opening_whitespace_at >= $end ) {
-				$this->last_error = self::INCOMPLETE_INPUT;
 				$this->state      = self::COMPLETE;
+				$this->last_error = self::INCOMPLETE_INPUT;
 				return false;
 			}
 
 			$opening_whitespace_length = strspn( $text, " \t\f\r\n", $opening_whitespace_at );
+
+			if ( $opening_whitespace_at + $opening_whitespace_length >= $end ) {
+				$this->state      = self::COMPLETE;
+				$this->last_error = self::INCOMPLETE_INPUT;
+				return false;
+			}
+
 			if ( 0 === $opening_whitespace_length ) {
 				$at = $this->find_html_comment_end( $comment_opening_at, $end );
 				continue;
@@ -347,7 +354,13 @@ class WP_Block_Scanner {
 				++$wp_prefix_at;
 			}
 
-			if ( 0 !== substr_compare( $text, 'wp:', $wp_prefix_at, 3 ) ) {
+			if ( $wp_prefix_at < $end && 0 !== substr_compare( $text, 'wp:', $wp_prefix_at, 3 ) ) {
+				if ( str_ends_with( $text, 'wp' ) || str_ends_with( $text, 'w' ) ) {
+					$this->state      = self::COMPLETE;
+					$this->last_error = self::INCOMPLETE_INPUT;
+					return false;
+				}
+
 				$at = $this->find_html_comment_end( $comment_opening_at, $end );
 				continue;
 			}
@@ -396,6 +409,12 @@ class WP_Block_Scanner {
 				$name_at          = $namespace_at;
 				$name_length      = $namespace_length;
 				$namespace_length = 0;
+			}
+
+			if ( $name_at + $name_length >= $end ) {
+				$this->state      = self::COMPLETE;
+				$this->last_error = self::INCOMPLETE_INPUT;
+				return false;
 			}
 
 			$after_name_whitespace_at     = $name_at + $name_length;
@@ -569,7 +588,6 @@ class WP_Block_Scanner {
 		while ( $now_at < $search_end ) {
 			$dashes_at = strpos( $text, '--', $now_at );
 			if ( false === $dashes_at ) {
-				$this->last_error = self::INCOMPLETE_INPUT;
 				return $search_end;
 			}
 
