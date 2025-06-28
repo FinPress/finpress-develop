@@ -59,11 +59,13 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'array[string]'   => array( array( 'one', 'two', 'three' ) ),
 			'object'          => array( (object) array( 'value' => 'not-a-string' ) ),
 			'anonymous class' => array(
-				new class {
+				(
+					new class {
 					public function __toString() {
-						return 'test';
+							return 'look at me I’m a mountain of indentation and syntax and linting success';
+						}
 					}
-				},
+				),
 			),
 		);
 	}
@@ -259,8 +261,8 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 
 		foreach ( $delimiters as $kind => $delimiter ) {
 			for ( $i = strlen( $delimiter ) - 1; $i > 0; $i-- ) {
-				$partial                      = substr( $delimiter, 0, $i );
-				$tests["{$kind}: {$partial}"] = array( $partial );
+				$partial                        = substr( $delimiter, 0, $i );
+				$tests[ "{$kind}: {$partial}" ] = array( $partial );
 			}
 		}
 
@@ -273,7 +275,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	 * @ticket {TICKET_NUMBER}
 	 */
 	public function test_rejects_once_errored_out() {
-		$scanner = WP_Block_Scanner::create( "<!-- wp:incomplete" );
+		$scanner = WP_Block_Scanner::create( '<!-- wp:incomplete' );
 
 		$this->assertFalse(
 			$scanner->next_delimiter(),
@@ -420,7 +422,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	 *
 	 * @param string $invalid_block_json improperly-encoded JSON document, or JSON not valid for a block’s attributes.
 	 */
-	public function test_matches_block_with_invalid_json( $invalid_block_json )  {
+	public function test_matches_block_with_invalid_json( $invalid_block_json ) {
 		$scanner = WP_Block_Scanner::create( "<!-- wp:block {$invalid_block_json} -->" );
 
 		$scanner->next_delimiter();
@@ -1033,7 +1035,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 
 		$this->assertTrue(
 			$scanner->next_delimiter( 'visit-freeform' ),
-			"Should have found (implicit) freeform test block: check test setup."
+			'Should have found (implicit) freeform test block: check test setup.'
 		);
 
 		$this->assertTrue(
@@ -1050,7 +1052,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 
 		$this->assertTrue(
 			$scanner->next_delimiter( 'visit-freeform' ),
-			"Should have found (implicit) freeform test block closer: check test setup."
+			'Should have found (implicit) freeform test block closer: check test setup.'
 		);
 
 		$this->assertTrue(
@@ -1079,7 +1081,6 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			$scanner->is_non_whitespace_freeform(),
 			"Should not have reported the closing 'group' block as non-whitespace freeform."
 		);
-
 	}
 
 	/**
@@ -1091,7 +1092,8 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	 * @ticket {TICKET_NUMBER}
 	 */
 	public function test_indicates_if_freeform_content_is_only_whitespace() {
-		$scanner = WP_Block_Scanner::create( <<<HTML
+		$scanner = WP_Block_Scanner::create(
+			<<<HTML
 this is freeform but between the next two blocks is
 another freeform block whose content is a newline
 <!-- wp:separator /-->
@@ -1133,7 +1135,7 @@ HTML
 
 		$this->assertTrue(
 			$scanner->next_delimiter( 'visit-freeform' ),
-			"Should have found the second implicit freeform delimiter"
+			'Should have found the second implicit freeform delimiter.'
 		);
 
 		$this->assertTrue(
@@ -1148,7 +1150,7 @@ HTML
 
 		$this->assertTrue(
 			$scanner->next_delimiter( 'visit-freeform' ),
-			"Should have found the second implicit freeform closing delimiter"
+			'Should have found the second implicit freeform closing delimiter'
 		);
 
 		$this->assertTrue(
@@ -1184,7 +1186,7 @@ HTML
 			'Should have read eagerly-parsed block attributes: check test setup.'
 		);
 
-		$this->expectExceptionMessage( "Lazy attribute parsing not yet supported" );
+		$this->expectExceptionMessage( 'Lazy attribute parsing not yet supported' );
 		$scanner->get_attributes();
 	}
 

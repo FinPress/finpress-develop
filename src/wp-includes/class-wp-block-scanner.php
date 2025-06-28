@@ -1017,7 +1017,7 @@ class WP_Block_Scanner {
 				return new WP_HTML_Span( $this->delimiter_at, 0 );
 
 			case static::MATCHED:
-				return new WP_HTML_Span( $this->delimiter_at, $this->delimiter_length);
+				return new WP_HTML_Span( $this->delimiter_at, $this->delimiter_length );
 
 			default:
 				return null;
