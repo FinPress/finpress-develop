@@ -885,9 +885,9 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'non-core, fully-qualified'                    => array( '<!-- wp:test/block -->', array( 'test/ship', 'test/block', 'test/wheel' ), true ),
 
 			// Negative matches.
-			'type "test", not in set'          => array( '<!-- wp:test -->', array( 'text', 'core/text', 'my/test' ), false ),
-			'type "core/test", not in set'     => array( '<!-- wp:core/test -->', array( 'text', 'core/text', 'my/test' ), false ),
-			'type "next-dev/code", not in set' => array( '<!-- wp:next-dev/code -->', array( 'code', 'new/code', 'dev/code' ), false ),
+			'type "test", not in set'                      => array( '<!-- wp:test -->', array( 'text', 'core/text', 'my/test' ), false ),
+			'type "core/test", not in set'                 => array( '<!-- wp:core/test -->', array( 'text', 'core/text', 'my/test' ), false ),
+			'type "next-dev/code", not in set'             => array( '<!-- wp:next-dev/code -->', array( 'code', 'new/code', 'dev/code' ), false ),
 		);
 	}
 
@@ -1264,14 +1264,14 @@ HTML
 	 *
 	 * Concerning HTML and the block parser only the HTML whitespace is relevant.
 	 *
-	 * @param string $string Any input, potentially containing whitespace characters.
+	 * @param string $text Any input, potentially containing whitespace characters.
 	 * @return string The input with whitespace replaced by visual placeholders.
 	 */
-	private static function unhide_whitespace( $string ) {
+	private static function unhide_whitespace( $text ) {
 		return str_replace(
 			array( ' ', "\t", "\r", "\f", "\n" ),
 			array( '␠', '␉', '␍', '␌', '␤' ),
-			$string
+			$text
 		);
 	}
 }
