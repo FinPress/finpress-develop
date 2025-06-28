@@ -102,17 +102,17 @@ class WP_Block_Scanner {
 	private $name_length = 0;
 
 	/**
-	 * Whether the delimiter contains the block self-closing flag.
+	 * Whether the delimiter contains the block-closing flag.
 	 *
-	 * This may be erroneous if present within a block closer,
-	 * therefore the {@see self::has_void_flag} can be used by
+	 * This may be erroneous if present within a void block,
+	 * therefore the {@see self::has_closing_flag} can be used by
 	 * calling code to perform appropriate error-handling.
 	 *
 	 * @since {WP_VERSION}
 	 *
 	 * @var bool
 	 */
-	private $has_void_flag = false;
+	private $has_closing_flag = false;
 
 	/**
 	 * Byte offset where JSON attributes span begins.
@@ -543,11 +543,15 @@ class WP_Block_Scanner {
 		$this->json_at     = $json_at;
 		$this->json_length = $json_length;
 
-		$this->type = $has_closer
-			? static::CLOSER
-			: ( $has_void_flag ? static::VOID : static::OPENER );
+		/*
+		 * When delimiters contain both the void flag and the closing flag
+		 * they shall be interpreted as void blocks, per the spec parser.
+		 */
+		$this->type = $has_void_flag
+			? static::VOID
+			: ( $has_closer ? static::CLOSER : static::OPENER );
 
-		$this->has_void_flag = $has_void_flag;
+		$this->has_closing_flag = $has_closer;
 
 		return true;
 	}
@@ -664,7 +668,7 @@ class WP_Block_Scanner {
 	}
 
 	/**
-	 * Returns whether the delimiter contains the void flag.
+	 * Returns whether the delimiter contains the closing flag.
 	 *
 	 * This should be avoided except in cases of handling errors with
 	 * block closers containing the void flag. For normative use,
@@ -672,10 +676,10 @@ class WP_Block_Scanner {
 	 *
 	 * @since {WP_VERSION}
 	 *
-	 * @return bool Whether the currently-matched block delimiter contains the void flag.
+	 * @return bool Whether the currently-matched block delimiter contains the closing flag.
 	 */
-	public function has_void_flag() {
-		return $this->has_void_flag;
+	public function has_closing_flag() {
+		return $this->has_closing_flag;
 	}
 
 	/**

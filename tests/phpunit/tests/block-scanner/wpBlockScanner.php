@@ -574,6 +574,268 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * Verifies that the presence of the void flag is properly reported
+	 * regardless of a conflict with a closing black.
+	 *
+	 * When block delimiters contain both the void flag and the closing flag,
+	 * it shall be interpreted as a void block to match the behavior of
+	 * the spec parser, but the block scanner exposes the closing flag to
+	 * allow for user-space code to make its own determination.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_reports_presence_of_void_flag() {
+		$html    = '<!-- wp:void-and-closed --><!-- wp:void /--><!-- /wp:void-and-closed /-->';
+		$scanner = WP_Block_Scanner::create( $html );
+
+		// Test the opening delimiter.
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			"Should have found opening 'void-and-closed' block delimiter but found nothing: check test setup."
+		);
+
+		$this->assertSame(
+			'core/void-and-closed',
+			$scanner->get_block_type(),
+			"Should have found opening 'void-and-closed' block delimiter: check test setup."
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::OPENER,
+			$scanner->get_delimiter_type(),
+			'Should have found an opening delimiter: check test setup.'
+		);
+
+		$this->assertFalse(
+			$scanner->has_closing_flag(),
+			'Should not have indicated the presence of the closing flag on an opening block.'
+		);
+
+		// Test the void delimiter.
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			"Should have found the void 'void' block delimiter but found nothing: check test setup."
+		);
+
+		$this->assertSame(
+			'core/void',
+			$scanner->get_block_type(),
+			"Should have found opening 'void-and-closed' block delimiter: check test setup."
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::VOID,
+			$scanner->get_delimiter_type(),
+			'Should have found a void delimiter: check test setup.'
+		);
+
+		$this->assertFalse(
+			$scanner->has_closing_flag(),
+			'Should not have indicated the presence of the closing flag on the pure void block.'
+		);
+
+		// Test the void/closing delimiter.
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			"Should have found closing 'void-and-closed' block delimiter but found nothing: check test setup."
+		);
+
+		$this->assertSame(
+			'core/void-and-closed',
+			$scanner->get_block_type(),
+			"Should have found closing 'void-and-closed' block delimiter: check test setup."
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::VOID,
+			$scanner->get_delimiter_type(),
+			'Should have found a closing delimiter: check test setup.'
+		);
+
+		$this->assertTrue(
+			$scanner->has_closing_flag(),
+			'Should have indicated the presence of the closing flag on a block with both the closing and void flags.'
+		);
+	}
+
+	/**
+	 * Verifies that the scanner indicates if the currently-matched delimiter
+	 * is of a given block type.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_their_block_types
+	 *
+	 * @param string $html       Contains a single delimiter.
+	 * @param string $block_type Fully-qualified block type.
+	 */
+	public function test_reports_if_block_is_of_type( $html, $block_type ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test block delimiter but found nothing instead: check test setup.'
+		);
+
+		$this->assertTrue(
+			$scanner->is_block_type( $block_type ),
+			"Should have found the block to be of type '{$block_type}', detected type is '{$scanner->get_block_type()}'."
+		);
+
+		if ( str_starts_with( $block_type, 'core/' ) ) {
+			// Prune off core namespace and detect implicit namespace.
+			$block_type = substr( $block_type, strlen( 'core/' ) );
+
+			$this->assertTrue(
+				$scanner->is_block_type( $block_type ),
+				"Should have found the block to be of core type '{$block_type}', detected type is '{$scanner->get_block_type()}'."
+			);
+		}
+	}
+
+	/**
+	 * Verifies that the scanner indicates if the currently-matched delimiter
+	 * opens a block of a given block type. This is true for openers and void delimiters.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_their_block_types
+	 *
+	 * @param string $html       Contains a single delimiter.
+	 * @param string $block_type Fully-qualified block type.
+	 */
+	public function test_reports_if_block_opens_type( $html, $block_type ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test block delimiter but found nothing instead: check test setup.'
+		);
+
+		if ( WP_Block_Scanner::CLOSER === $scanner->get_delimiter_type() ) {
+			$this->assertFalse(
+				$scanner->opens_block( $block_type ),
+				'Should not have indicated that a closing delimiter opens a block.'
+			);
+			return;
+		}
+
+		$this->assertTrue(
+			$scanner->opens_block( $block_type ),
+			"Should have indicating opening of type '{$block_type}', detected type is '{$scanner->get_block_type()}'."
+		);
+
+		if ( str_starts_with( $block_type, 'core/' ) ) {
+			// Prune off core namespace and detect implicit namespace.
+			$block_type = substr( $block_type, strlen( 'core/' ) );
+
+			$this->assertTrue(
+				$scanner->opens_block( $block_type ),
+				"Should have indicated opening of core type '{$block_type}', detected type is '{$scanner->get_block_type()}'."
+			);
+		}
+	}
+
+	/**
+	 * Verifies that asking if a delimiter opens a block ignores the block type
+	 * if none are provided in the explicit limiting list.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_their_block_types
+	 *
+	 * @param string $html       Contains a single delimiter.
+	 * @param string $block_type Fully-qualified block type (ignored but present due to shared data provider).
+	 */
+	public function test_opens_block_with_no_explicit_types_ignores_block_type( $html, $block_type ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test block delimiter but found nothing instead: check test setup.'
+		);
+
+		if ( WP_Block_Scanner::CLOSER === $scanner->get_delimiter_type() ) {
+			$this->assertFalse(
+				$scanner->opens_block(),
+				'Should not have indicated that a closing delimiter opens a block.'
+			);
+		} else {
+			$this->assertTrue(
+				$scanner->opens_block(),
+				"Should have indicated that a '{$scanner->get_delimiter_type()}' delimiter opens a block."
+			);
+		}
+	}
+
+	/**
+	 * Verifies that when given multiple potential block types, that `opens_block()` properly
+	 * indicates if the currently-matched block is an opening for at least one of them.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_delimiters_and_sets_of_block_types
+	 *
+	 * @param string   $html        Contains a single block delimiter.
+	 * @param string[] $block_types Contains one or more block types, fully qualified or not.
+	 * @param bool     $is_a_match  Indicates if the provided HTML contains a block of the type in the given set.
+	 */
+	public function test_opens_block_checks_against_multiple_provided_block_types( $html, $block_types, $is_a_match ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found test setup block but found none: check test setup.'
+		);
+
+		$joined_types = implode( ', ', $block_types );
+
+		if ( $is_a_match ) {
+			$this->assertTrue(
+				$scanner->opens_block( ...$block_types ),
+				"Should have found that delimiter (type {$scanner->get_block_type()}) opens one of the following block types: {$joined_types}."
+			);
+		} else {
+			$this->assertFalse(
+				$scanner->opens_block( ...$block_types ),
+				"Should not have found that delimiter (type {$scanner->get_block_type()}) opens one of the following block types: {$joined_types}."
+			);
+		}
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_delimiters_and_sets_of_block_types() {
+		return array(
+			// Positive matches.
+			'type "test", first in set'                    => array( '<!-- wp:test -->', array( 'test', 'tossed', 'tess' ), true ),
+			'type "core/test", first in set'               => array( '<!-- wp:core/test -->', array( 'test', 'tossed', 'tess' ), true ),
+			'type "test", middle of set'                   => array( '<!-- wp:test -->', array( 'tust', 'test', 'tossed', 'tess' ), true ),
+			'type "core/test", middle of set'              => array( '<!-- wp:core/test -->', array( 'tust', 'test', 'tossed', 'tess' ), true ),
+			'type "test", last in set'                     => array( '<!-- wp:test -->', array( 'tust', 'tossed', 'tess', 'test' ), true ),
+			'type "core/test", last in set'                => array( '<!-- wp:core/test -->', array( 'tust', 'tossed', 'tess', 'core/test' ), true ),
+			'type "test", core/test first in set'          => array( '<!-- wp:test -->', array( 'core/test', 'tossed', 'tess' ), true ),
+			'type "core/test", core/test first in set'     => array( '<!-- wp:core/test -->', array( 'core/test', 'tossed', 'tess' ), true ),
+			'type "test", core/test in middle of set'      => array( '<!-- wp:test -->', array( 'tust', 'core/test', 'tossed', 'tess' ), true ),
+			'type "core/test", core/test in middle of set' => array( '<!-- wp:core/test -->', array( 'tust', 'core/test', 'tossed', 'tess' ), true ),
+			'type "test", core/test last in set'           => array( '<!-- wp:test -->', array( 'tust', 'tossed', 'tess', 'core/test' ), true ),
+			'type "core/test", core/test last in set'      => array( '<!-- wp:core/test -->', array( 'tust', 'tossed', 'tess', 'core/test' ), true ),
+			'non-core, fully-qualified'                    => array( '<!-- wp:test/block -->', array( 'test/ship', 'test/block', 'test/wheel' ), true ),
+
+			// Negative matches.
+			'type "test", not in set'          => array( '<!-- wp:test -->', array( 'text', 'core/text', 'my/test' ), false ),
+			'type "core/test", not in set'     => array( '<!-- wp:core/test -->', array( 'text', 'core/text', 'my/test' ), false ),
+			'type "next-dev/code", not in set' => array( '<!-- wp:next-dev/code -->', array( 'code', 'new/code', 'dev/code' ), false ),
+		);
+	}
+
 	//
 	// Test helpers.
 	//
