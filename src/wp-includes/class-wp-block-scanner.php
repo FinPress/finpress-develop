@@ -139,7 +139,7 @@ class WP_Block_Scanner {
 	 *
 	 * @var int
 	 */
-	private $json_length;
+	private $json_length = 0;
 
 	/**
 	 * Internal parser state, differentiating whether the instance is currently matched,
@@ -970,11 +970,7 @@ class WP_Block_Scanner {
 	public function allocate_and_return_parsed_attributes() {
 		$this->last_json_error = JSON_ERROR_NONE;
 
-		if ( static::CLOSER === $this->type ) {
-			return null;
-		}
-
-		if ( 0 === $this->json_length ) {
+		if ( static::CLOSER === $this->type || $this->is_freeform() || 0 === $this->json_length ) {
 			return null;
 		}
 
