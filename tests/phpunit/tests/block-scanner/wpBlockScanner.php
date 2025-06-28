@@ -59,7 +59,7 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'array[string]'   => array( array( 'one', 'two', 'three' ) ),
 			'object'          => array( (object) array( 'value' => 'not-a-string' ) ),
 			'anonymous class' => array(
-				new class () {
+				new class() {
 					public function __toString() {
 						return 'look at me I’m a mountain of indentation and syntax and linting success';
 					}
