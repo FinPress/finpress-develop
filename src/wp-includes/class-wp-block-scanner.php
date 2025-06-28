@@ -359,7 +359,8 @@ class WP_Block_Scanner {
 
 			$opening_whitespace_length = strspn( $text, " \t\f\r\n", $opening_whitespace_at );
 
-			if ( $opening_whitespace_at + $opening_whitespace_length >= $end ) {
+			$wp_prefix_at = $opening_whitespace_at + $opening_whitespace_length;
+			if ( $wp_prefix_at >= $end ) {
 				$this->state      = static::COMPLETE;
 				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
@@ -368,13 +369,6 @@ class WP_Block_Scanner {
 			if ( 0 === $opening_whitespace_length ) {
 				$at = $this->find_html_comment_end( $comment_opening_at, $end );
 				continue;
-			}
-
-			$wp_prefix_at = $opening_whitespace_at + $opening_whitespace_length;
-			if ( $wp_prefix_at >= $end ) {
-				$this->state      = static::COMPLETE;
-				$this->last_error = static::INCOMPLETE_INPUT;
-				return false;
 			}
 
 			$has_closer = false;
@@ -448,17 +442,19 @@ class WP_Block_Scanner {
 
 			$after_name_whitespace_at     = $name_at + $name_length;
 			$after_name_whitespace_length = strspn( $text, " \t\f\r\n", $after_name_whitespace_at );
-			if ( 0 === $after_name_whitespace_length ) {
-				$at = $this->find_html_comment_end( $comment_opening_at, $end );
-				continue;
-			}
+			$json_at                      = $after_name_whitespace_at + $after_name_whitespace_length;
 
-			$json_at = $after_name_whitespace_at + $after_name_whitespace_length;
 			if ( $json_at >= $end ) {
 				$this->state      = static::COMPLETE;
 				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
+
+			if ( 0 === $after_name_whitespace_length ) {
+				$at = $this->find_html_comment_end( $comment_opening_at, $end );
+				continue;
+			}
+
 			$has_json    = '{' === $text[ $json_at ];
 			$json_length = 0;
 
@@ -498,18 +494,6 @@ class WP_Block_Scanner {
 			 */
 			if ( ! $has_json ) {
 				$max_whitespace_length = $comment_closing_at - $json_at - $void_flag_length;
-
-				// This shouldn't be possible, but it can't be allowed regardless.
-				if ( $max_whitespace_length < 0 ) {
-					$at = $this->find_html_comment_end( $comment_opening_at, $end );
-					continue;
-				}
-
-				$closing_whitespace_length = strspn( $text, " \t\f\r\n", $json_at, $comment_closing_at - $json_at - $void_flag_length );
-				if ( 0 === $after_name_whitespace_length + $closing_whitespace_length ) {
-					$at = $this->find_html_comment_end( $comment_opening_at, $end );
-					continue;
-				}
 
 				// This must be a block delimiter!
 				$this->state = static::MATCHED;
@@ -636,8 +620,6 @@ class WP_Block_Scanner {
 
 			$now_at++;
 		}
-
-		return $search_end;
 	}
 
 	/**
