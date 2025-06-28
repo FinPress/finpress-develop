@@ -66,6 +66,15 @@ class WP_Block_Scanner {
 	private $delimiter_length = 0;
 
 	/**
+	 * Byte offset into source text after which last matched block ended.
+	 *
+	 * @since {WP_VERSION}
+	 *
+	 * @var int
+	 */
+	private $last_delimiter_ended_before = 0;
+
+	/**
 	 * Byte offset where namespace span begins.
 	 *
 	 * @since {WP_VERSION}
@@ -278,15 +287,33 @@ class WP_Block_Scanner {
 			return false;
 		}
 
-		if ( self::IMPLICIT_OPEN === $this->state && 'visit-freeform' === $freeform_blocks ) {
-			$this->state = self::IMPLICIT_CLOSE;
+		if ( static::IMPLICIT_OPEN === $this->state && 'visit-freeform' === $freeform_blocks ) {
+			$this->state = static::IMPLICIT_CLOSE;
 			return true;
 		}
 
-		$this->state = self::READY;
-		$text        = $this->source_text;
-		$end         = strlen( $text );
-		$at          = $this->delimiter_at + $this->delimiter_length;
+		$text = $this->source_text;
+		$end  = strlen( $text );
+
+		if (
+			static::IMPLICIT_CLOSE === $this->state ||
+			(
+				static::IMPLICIT_OPEN === $this->state &&
+				'visit-freeform' !== $freeform_blocks
+			)
+		) {
+			if ( $this->delimiter_at < $end ) {
+				$this->state = static::MATCHED;
+				return true;
+			} else {
+				$this->state = static::COMPLETE;
+				return false;
+			}
+		}
+
+		$this->state          = static::READY;
+		$after_prev_delimiter = $this->delimiter_at + $this->delimiter_length;
+		$at                   = $after_prev_delimiter;
 
 		while ( $at < $end ) {
 			/*
@@ -304,7 +331,9 @@ class WP_Block_Scanner {
 			if ( false === $comment_opening_at ) {
 				// There might be freeform content after the last block.
 				if ( 'visit-freeform' === $freeform_blocks ) {
-					$this->state = self::IMPLICIT_OPEN;
+					$this->state                       = static::IMPLICIT_OPEN;
+					$this->last_delimiter_ended_before = $after_prev_delimiter;
+					$this->delimiter_at                = $end;
 					return true;
 				}
 
@@ -314,25 +343,25 @@ class WP_Block_Scanner {
 					str_ends_with( $text, '<!' ) ||
 					str_ends_with( $text, '<' )
 				) {
-					$this->last_error = self::INCOMPLETE_INPUT;
+					$this->last_error = static::INCOMPLETE_INPUT;
 				}
 
-				$this->state = self::COMPLETE;
+				$this->state = static::COMPLETE;
 				return false;
 			}
 
 			$opening_whitespace_at = $comment_opening_at + 4;
 			if ( $opening_whitespace_at >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
 			$opening_whitespace_length = strspn( $text, " \t\f\r\n", $opening_whitespace_at );
 
 			if ( $opening_whitespace_at + $opening_whitespace_length >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -343,8 +372,8 @@ class WP_Block_Scanner {
 
 			$wp_prefix_at = $opening_whitespace_at + $opening_whitespace_length;
 			if ( $wp_prefix_at >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -356,8 +385,8 @@ class WP_Block_Scanner {
 
 			if ( $wp_prefix_at < $end && 0 !== substr_compare( $text, 'wp:', $wp_prefix_at, 3 ) ) {
 				if ( str_ends_with( $text, 'wp' ) || str_ends_with( $text, 'w' ) ) {
-					$this->state      = self::COMPLETE;
-					$this->last_error = self::INCOMPLETE_INPUT;
+					$this->state      = static::COMPLETE;
+					$this->last_error = static::INCOMPLETE_INPUT;
 					return false;
 				}
 
@@ -367,8 +396,8 @@ class WP_Block_Scanner {
 
 			$namespace_at = $wp_prefix_at + 3;
 			if ( $namespace_at >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -383,8 +412,8 @@ class WP_Block_Scanner {
 			$namespace_length = 1 + strspn( $text, 'abcdefghijklmnopqrstuvwxyz0123456789-_', $namespace_at + 1 );
 			$separator_at     = $namespace_at + $namespace_length;
 			if ( $separator_at >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -393,8 +422,8 @@ class WP_Block_Scanner {
 				$name_at = $separator_at + 1;
 
 				if ( $name_at >= $end ) {
-					$this->state      = self::COMPLETE;
-					$this->last_error = self::INCOMPLETE_INPUT;
+					$this->state      = static::COMPLETE;
+					$this->last_error = static::INCOMPLETE_INPUT;
 					return false;
 				}
 
@@ -412,8 +441,8 @@ class WP_Block_Scanner {
 			}
 
 			if ( $name_at + $name_length >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -426,8 +455,8 @@ class WP_Block_Scanner {
 
 			$json_at = $after_name_whitespace_at + $after_name_whitespace_length;
 			if ( $json_at >= $end ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 			$has_json    = '{' === $text[ $json_at ];
@@ -443,8 +472,8 @@ class WP_Block_Scanner {
 			 */
 			$comment_closing_at = strpos( $text, '-->', $json_at );
 			if ( false === $comment_closing_at ) {
-				$this->state      = self::COMPLETE;
-				$this->last_error = self::INCOMPLETE_INPUT;
+				$this->state      = static::COMPLETE;
+				$this->last_error = static::INCOMPLETE_INPUT;
 				return false;
 			}
 
@@ -483,7 +512,7 @@ class WP_Block_Scanner {
 				}
 
 				// This must be a block delimiter!
-				$this->state = self::MATCHED;
+				$this->state = static::MATCHED;
 				break;
 			}
 
@@ -517,19 +546,15 @@ class WP_Block_Scanner {
 			}
 
 			// This must be a block delimiter!
-			$this->state = self::MATCHED;
+			$this->state = static::MATCHED;
 			break;
 		}
 
-		if ( self::MATCHED !== $this->state ) {
+		if ( static::MATCHED !== $this->state ) {
 			return false;
 		}
 
-		$after_prev_block = $this->delimiter_at + $this->delimiter_length;
-		if ( 'visit-freeform' === $freeform_blocks && $comment_opening_at > $after_prev_block ) {
-			$this->state = self::IMPLICIT_OPEN;
-			return true;
-		}
+		$this->last_delimiter_ended_before = $after_prev_delimiter;
 
 		$this->delimiter_at     = $comment_opening_at;
 		$this->delimiter_length = $comment_closing_at + 3 - $comment_opening_at;
@@ -552,6 +577,11 @@ class WP_Block_Scanner {
 			: ( $has_closer ? static::CLOSER : static::OPENER );
 
 		$this->has_closing_flag = $has_closer;
+
+		if ( 'visit-freeform' === $freeform_blocks && $comment_opening_at > $after_prev_delimiter ) {
+			$this->state = static::IMPLICIT_OPEN;
+			return true;
+		}
 
 		return true;
 	}
@@ -652,16 +682,15 @@ class WP_Block_Scanner {
 	 */
 	public function get_delimiter_type() {
 		switch ( $this->state ) {
-			case self::IMPLICIT_OPEN:
-				return self::OPENER;
+			case static::IMPLICIT_OPEN:
+				return static::OPENER;
 
-			case self::IMPLICIT_CLOSE:
-				return self::CLOSER;
+			case static::IMPLICIT_CLOSE:
+				return static::CLOSER;
 
-			case self::MATCHED:
+			case static::MATCHED:
 				return $this->type;
 
-			// This should not be possible.
 			default:
 				return null;
 		}
@@ -702,8 +731,11 @@ class WP_Block_Scanner {
 	 */
 	public function is_block_type( $block_type ) {
 		// This is a core/freeform text block, it’s special.
-		if ( self::IMPLICIT_OPEN === $this->state || self::IMPLICIT_CLOSE === $this->state ) {
-			return 'core/freeform' === $block_type || 'freeform' === $block_type;
+		if ( $this->is_freeform() ) {
+			return (
+				'core/freeform' === $block_type ||
+				'freeform' === $block_type
+			);
 		}
 
 		$slash_at = strpos( $block_type, '/' );
@@ -776,7 +808,11 @@ class WP_Block_Scanner {
 	 *              opens a block of one of the given block types, if provided.
 	 */
 	public function opens_block( ...$block_type ) {
-		if ( static::CLOSER === $this->type ) {
+		if ( static::IMPLICIT_CLOSE === $this->state ) {
+			return false;
+		}
+
+		if ( static::CLOSER === $this->type && ! $this->is_freeform() ) {
 			return false;
 		}
 
@@ -804,7 +840,10 @@ class WP_Block_Scanner {
 	 * @return bool Whether or not the matched delimiter is implied as `core/freeform`.
 	 */
 	public function is_freeform() {
-		return 0 === $this->name_length;
+		return (
+			static::IMPLICIT_OPEN === $this->state ||
+			static::IMPLICIT_CLOSE === $this->state
+		);
 	}
 
 	/**
@@ -823,11 +862,20 @@ class WP_Block_Scanner {
 	 *              top-level non-block content containing non-whitespace text.
 	 */
 	public function is_non_whitespace_freeform() {
-		if ( 0 !== $this->name_length ) {
+		if ( ! $this->is_freeform() ) {
 			return false;
 		}
 
-		// @todo Finish
+		$length = $this->delimiter_at - $this->last_delimiter_ended_before;
+
+		$whitespace_length = strspn(
+			$this->source_text,
+			" \t\f\r\n",
+			$this->last_delimiter_ended_before,
+			$length
+		);
+
+		return $whitespace_length !== $length;
 	}
 
 	/**
@@ -855,7 +903,7 @@ class WP_Block_Scanner {
 	 */
 	public function get_block_type() {
 		// This is a core/freeform text block, it’s special.
-		if ( self::IMPLICIT_OPEN === $this->state || self::IMPLICIT_CLOSE === $this->state ) {
+		if ( $this->is_freeform() ) {
 			return 'core/freeform';
 		}
 
@@ -872,14 +920,12 @@ class WP_Block_Scanner {
 	 * Returns a lazy wrapper around the block attributes, which can be used
 	 * for efficiently interacting with the JSON attributes.
 	 *
-	 * @todo Create a lazy JSON wrapper so specific attributes can be
-	 *       efficiently queried without parsing everything and loading
-	 *       the entire object into memory.
-	 * @todo After realistic benchmarking, see if JsonStreamingParser\Parser
-	 *       could be used — it would need to be fast enough for the reduction
-	 *       in memory use to be worth it, compared to {@see \json_decode}.
+	 * This stub hints that there should be a lazy interface for parsing
+	 * block attributes but doesn’t define it. It serves both as a placeholder
+	 * for one to come as well as a guard against implementing an eager
+	 * function in its place.
 	 *
-	 * @see \JsonStreamingParser\Parser
+	 * @see self::allocate_and_return_parsed_attributes()
 	 *
 	 * @throws Exception This function is a stub for subclasses to implement
 	 *                   when providing streaming attribute parsing.
@@ -976,14 +1022,24 @@ class WP_Block_Scanner {
 	 *     $scanner->next_delimiter();
 	 *     WP_HTML_Span( 0, 17 ) === $scanner->get_span();
 	 *
-	 * @todo Return `NULL` when not currently matched.
-	 *
 	 * @since {WP_VERSION}
 	 *
 	 * @return WP_HTML_Span|null Span of text in source text spanning matched delimiter.
 	 */
 	public function get_span() {
-		return new WP_HTML_Span( $this->delimiter_at, $this->delimiter_length );
+		switch ( $this->state ) {
+			case static::IMPLICIT_OPEN:
+				return new WP_HTML_Span( $this->last_delimiter_ended_before, 0 );
+
+			case static::IMPLICIT_CLOSE:
+				return new WP_HTML_Span( $this->delimiter_at, 0 );
+
+			case static::MATCHED:
+				return new WP_HTML_Span( $this->delimiter_at, $this->delimiter_length);
+
+			default:
+				return null;
+		}
 	}
 
 	//

@@ -534,6 +534,61 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Verifies that `get_delimiter_type()` returns `null` before finding any delimiters.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_reports_no_delimiter_type_before_scanning() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:any/content -->' );
+
+		$this->assertNull(
+			$scanner->get_delimiter_type(),
+			'Should not have returned a delimiter type before matching any delimiters.'
+		);
+	}
+
+	/**
+	 * Verifies that `get_delimiter_type()` returns `null` after scanning the last delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_reports_no_delimiter_type_after_scanning() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:any/content -->' );
+
+		while ( $scanner->next_delimiter( 'visit-freeform' ) ) {
+			continue;
+		}
+
+		$this->assertNull(
+			$scanner->get_delimiter_type(),
+			'Should not have returned a delimiter type before matching any delimiters.'
+		);
+	}
+
+	/**
+	 * Verifies that `get_delimiter_type()` returns `null` after encountering an error.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_reports_no_delimiter_type_after_an_error() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:incomplete/blo' );
+
+		while ( $scanner->next_delimiter( 'visit-freeform' ) ) {
+			continue;
+		}
+
+		$this->assertNotNull(
+			$scanner->get_last_error(),
+			'Should have found an error state but found none: check test setup.'
+		);
+
+		$this->assertNull(
+			$scanner->get_delimiter_type(),
+			'Should not have returned a delimiter type before matching any delimiters.'
+		);
+	}
+
+	/**
 	 * Verifies that the appropriate block type is reported for a matched delimiter.
 	 *
 	 * @ticket {TICKET_NUMBER}
@@ -833,6 +888,365 @@ class Tests_Blocks_BlockScanner_WP_Block_Scanner extends WP_UnitTestCase {
 			'type "test", not in set'          => array( '<!-- wp:test -->', array( 'text', 'core/text', 'my/test' ), false ),
 			'type "core/test", not in set'     => array( '<!-- wp:core/test -->', array( 'text', 'core/text', 'my/test' ), false ),
 			'type "next-dev/code", not in set' => array( '<!-- wp:next-dev/code -->', array( 'code', 'new/code', 'dev/code' ), false ),
+		);
+	}
+
+	/**
+	 * Verifies that when scanning and visiting freeform blocks, that they
+	 * return the appropriate information, an opening, and a closing.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_freeform_blocks_and_delimiter_indices
+	 *
+	 * @param string $html        Contains a freeform block after zero or more delimiters.
+	 * @param int    $freeform_at Freeform is located after this many other delimiters.
+	 */
+	public function test_indicates_if_matched_delimiter_is_freeform( $html, $freeform_at ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		for ( $i = 0; $i < $freeform_at; $i++ ) {
+			$scanner->next_delimiter( 'visit-freeform' );
+		}
+
+		// Opening delimiter.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			'Should have found the freeform content but didn’t: check test setup.'
+		);
+
+		$this->assertSame(
+			'core/freeform',
+			$scanner->get_block_type(),
+			'Should have found a freeform block.'
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have identified the delimiter as freeform.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::OPENER,
+			$scanner->get_delimiter_type(),
+			'Should have stopped first on a freeform block opener.'
+		);
+
+		$this->assertTrue(
+			$scanner->opens_block( 'freeform' ),
+			'Should indicate that this (implicit) delimiter opens a freeform block (without the Core namespace).'
+		);
+
+		$this->assertTrue(
+			$scanner->is_block_type( 'freeform' ),
+			'Should indicate that this (implicit) delimiter is freeform (without the Core namespace).'
+		);
+
+		$this->assertTrue(
+			$scanner->opens_block( 'core/freeform' ),
+			'Should indicate that this (implicit) delimiter opens a freeform block (fully-qualified).'
+		);
+
+		$this->assertTrue(
+			$scanner->is_block_type( 'core/freeform' ),
+			'Should indicate that this (implicit) delimiter is freeform (fully-qualified).'
+		);
+
+		$this->assertNull(
+			$scanner->allocate_and_return_parsed_attributes(),
+			'Should not find any attributes on any freeform content.'
+		);
+
+		// Closing delimiter.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			'Should have found the closing (implicit) freeform delimiter but found nothing instead.'
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have identified the delimiter as freeform.'
+		);
+
+		$this->assertSame(
+			WP_Block_Scanner::CLOSER,
+			$scanner->get_delimiter_type(),
+			'Should have found the closing (implicit) freeform delimiter.'
+		);
+
+		$this->assertSame(
+			'core/freeform',
+			$scanner->get_block_type(),
+			'Should have found the freeform block type.'
+		);
+
+		$this->assertFalse(
+			$scanner->opens_block( 'core/freeform' ),
+			'Should not indicate that the (implicit) freeform closing delimiter opens a block.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_freeform_blocks_and_delimiter_indices() {
+		return array(
+			'Only non-block content (one freeform)' => array( 'this is not inside a block', 0 ),
+			'Freeform before a block'               => array( 'before the block<!-- wp:suffix /-->', 0 ),
+			'Freeform after a block'                => array( '<!-- wp:prefix /-->after the block', 1 ),
+			'Freeform between blocks'               => array( '<!-- wp:prefix /-->after the block<!-- wp:suffix /-->', 1 ),
+			'Visits HTML content inside blocks'     => array( '<!-- wp:block -->this is innerHTML<!-- /wp:block -->this is freeform', 1 ),
+		);
+	}
+
+	/**
+	 * Verifies that the freeform functions do not report freeform content
+	 * when explicit delimiters are matched.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_actual_delimiters_are_not_freeform() {
+		$scanner = WP_Block_Scanner::create( "<!-- wp:group --> \f\t\r\n <!-- /wp:group -->" );
+
+		// Opening block.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found opening 'group' test block: check test setup."
+		);
+
+		$this->assertFalse(
+			$scanner->is_freeform(),
+			"Should not have reported the opening 'group' block as freeform."
+		);
+
+		$this->assertFalse(
+			$scanner->is_non_whitespace_freeform(),
+			"Should not have reported the opening 'group' block as non-whitespace freeform."
+		);
+
+		// Freeform block (implicit) opener.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found (implicit) freeform test block: check test setup."
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have reported the (implicit) opening freeform delimiter.'
+		);
+
+		$this->assertFalse(
+			$scanner->is_non_whitespace_freeform(),
+			'Should have reported the (implicit) opening freeform delimiter as whitespace-only.'
+		);
+
+		// Freeform block (implicit) closer.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found (implicit) freeform test block closer: check test setup."
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have reported the (implicit) closing freeform delimiter.'
+		);
+
+		$this->assertFalse(
+			$scanner->is_non_whitespace_freeform(),
+			'Should have reported the (implicit) closing freeform delimiter as whitespace-only.'
+		);
+
+		// Closing block.
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found closing 'group' test block: check test setup."
+		);
+
+		$this->assertFalse(
+			$scanner->is_freeform(),
+			"Should not have reported the closing 'group' block as freeform."
+		);
+
+		$this->assertFalse(
+			$scanner->is_non_whitespace_freeform(),
+			"Should not have reported the closing 'group' block as non-whitespace freeform."
+		);
+
+	}
+
+	/**
+	 * Verifies that whitespace-only freeform content is properly indicated.
+	 *
+	 * This is used to skip over whitespace-only freeform content which is
+	 * usually produced by {@see \serialize_blocks()} for clearer formatting.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_indicates_if_freeform_content_is_only_whitespace() {
+		$scanner = WP_Block_Scanner::create( <<<HTML
+this is freeform but between the next two blocks is
+another freeform block whose content is a newline
+<!-- wp:separator /-->
+<!-- wp:ladder /-->
+HTML
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			'Should have found the first freeform block: check test setup.'
+		);
+
+		$this->assertSame(
+			'core/freeform',
+			$scanner->get_block_type(),
+			'Should have identified the first (implicit) delimiter as freeform.'
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have identified the first delimiter as (implicit) freeform.'
+		);
+
+		$this->assertTrue(
+			$scanner->is_non_whitespace_freeform(),
+			'Should have identified that the freeform block contains non-whitespace content.'
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'skip-freeform' ),
+			"Should have found the first explicit 'separator' delimiter: check test setup."
+		);
+
+		$this->assertSame(
+			'core/separator',
+			$scanner->get_block_type(),
+			"Should have found the 'separator' delimiter: check test setup."
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found the second implicit freeform delimiter"
+		);
+
+		$this->assertTrue(
+			$scanner->is_freeform(),
+			'Should have identified the second (implicit) freeform opening delimiter.'
+		);
+
+		$this->assertFalse(
+			$scanner->is_non_whitespace_freeform(),
+			'Should have identified that the second freeform block contains only whitespace content.'
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found the second implicit freeform closing delimiter"
+		);
+
+		$this->assertTrue(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			"Should have found the final 'ladder' delimiter."
+		);
+
+		$this->assertSame(
+			'core/ladder',
+			$scanner->get_block_type(),
+			"Should have identified the final delimiter as a 'core/ladder' type: check test setup."
+		);
+	}
+
+	/**
+	 * Verifies that `get_attributes()` throws because it’s unsupported at the moment.
+	 *
+	 * This test should be changed if and when lazy attribute parsing is added.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
+	public function test_get_attributes_currently_throws() {
+		$scanner = WP_Block_Scanner::create( '<!-- wp:test {"not": "yet supported"} -->' );
+
+		$this->assertTrue(
+			$scanner->next_delimiter(),
+			'Should have found the "test" setup delimiter but found nothing: check test setup.'
+		);
+
+		$this->assertSame(
+			array( 'not' => 'yet supported' ),
+			$scanner->allocate_and_return_parsed_attributes(),
+			'Should have read eagerly-parsed block attributes: check test setup.'
+		);
+
+		$this->expectExceptionMessage( "Lazy attribute parsing not yet supported" );
+		$scanner->get_attributes();
+	}
+
+	/**
+	 * Verifies that the scanner reports the appropriate string indices for each delimiter.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 *
+	 * @dataProvider data_content_and_delimiter_spans
+	 *
+	 * @param string $html Contains one or more block delimiters,
+	 *                     including implicit freeform delimiters.
+	 * @param int[] $spans For each delimiter in `$html`, a [ start, length ]
+	 *                     pair representing the textual span of the delimiter.
+	 */
+	public function test_returns_appropriate_span_for_delimiters( $html, ...$spans ) {
+		$scanner = WP_Block_Scanner::create( $html );
+
+		if ( 0 === count( $spans ) ) {
+			$this->assertNull(
+				$scanner->get_span(),
+				'Should not have returned any span when not matched on a delimiter.'
+			);
+			return;
+		}
+
+		foreach ( $spans as $i => $span ) {
+			$this->assertTrue(
+				$scanner->next_delimiter( 'visit-freeform' ),
+				"Should have found delimiter in position {$i} but found nothing: check test setup."
+			);
+
+			$reported = $scanner->get_span();
+			$this->assertSame(
+				$span,
+				array( $reported->start, $reported->length ),
+				'Should have reported the proper span of text covered by the delimiter.'
+			);
+		}
+
+		$this->assertFalse(
+			$scanner->next_delimiter( 'visit-freeform' ),
+			'Should not have found any additional delimiters: check test setup.'
+		);
+
+		$this->assertNull(
+			$scanner->get_span(),
+			'Should not have returned any span after finishing the scan of a document.'
+		);
+	}
+
+	/**
+	 * Data provider.
+	 *
+	 * @return array[]
+	 */
+	public static function data_content_and_delimiter_spans() {
+		return array(
+			'Before matching' => array( 'Blocks <!-- wp:will/not --> advance yet' ),
+			'Only freeform'   => array( 'Have a lovely day.', array( 0, 0 ), array( 18, 0 ) ),
+			'Only void'       => array( '<!-- wp:into/abyss /-->', array( 0, 23 ) ),
+			'Mixed'           => array( '<!-- wp:pw --><><!-- /wp:pw -->', array( 0, 14 ), array( 14, 0 ), array( 16, 0 ), array( 16, 15 ) ),
 		);
 	}
 
