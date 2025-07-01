@@ -2112,36 +2112,39 @@ function sanitize_file_name( $filename ) {
 }
 
 /**
- * Returns true if the string contains no more than one unicode
- * script, and false if it contains two or more. This only considers
- * alphabetic characters.
+ * Validates that a string contains only characters from a single unicode script.
  *
- * This returns true for an empty string.
+ * The function only considers alphabetic characters. It returns true if a string
+ * contains no more than one unicode script, and false if it contains two or more.
+ * An empty string is considered to contain no scripts, and thus returns true.
  *
  * IntlChar does not support returning the script property defined by
- * https://www.unicode.org/reports/tr24/, so this implementation uses
- * a workaround. Some of the old scripts have several code blocks, but
- * the scripts currently being added have only one, since the
- * committee has grown better at estimating the necessary size.
+ * https://www.unicode.org/reports/tr24/, so this implementation uses a workaround.
+ * It maps the known extension blocks ("latin extended a" etc) to the first block
+ * for that script, and then checks that the string uses only a single block.
  *
- * This maps the known extension blocks ("latin extended a" etc) to
- * the first block for that script, and then checks that the string
- * uses only a single block. This works for the scripts currently in
- * Unicode, and will work for future scripts as long as the committee
- * keeps estimating high enough, so there's only one block for each
- * future script.
+ * This works for the scripts currently in Unicode, and should continue to work for
+ * future scripts as long as each new script needs a single code block. While older
+ * scripts may have multiple blocks, the Unicode committee has grown better at
+ * estimating sizes high enough so that only one block is needed.
  *
  * @since 6.9.0
  *
- * @param $input A string to check
- * @return true if all letters in the string belong to the same unicode script, and false if letters fromm two more more scripts are included.
+ * @param string $input A string to check.
+ * @return bool True if all letters in the string belong to the same unicode
+ *              script or if the string is empty.
+ *              False if letters from two more more scripts are included.
  */
-
-function uses_single_unicode_script( $input ) {
-	if ( version_compare( PHP_VERSION, '7.4.0', '<' ) ) {
-		/* mb_str_split is new in 7.4; accept ASCII only in 7.2-3 */
-		return preg_match( '/^[a-zA-Z0-9 _.\-@]+$/i', $input );
+function uses_single_unicode_script( string $input ): bool {
+	if ( '' === $input ) {
+		return true;
 	}
+
+	if ( version_compare( PHP_VERSION, '7.4.0', '<' ) ) {
+		// Since mb_str_split is not available in PHP < 7.4 we can only check ASCII characters.
+		return (bool) preg_match( '/^[a-zA-Z0-9 _.\-@]+$/i', $input );
+	}
+
 	$block = 0;
 	// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.mb_str_splitFound -- old versions of PHP are handled above
 	foreach ( mb_str_split( $input ) as $cp ) {
@@ -2231,6 +2234,7 @@ function uses_single_unicode_script( $input ) {
 			}
 		}
 	}
+
 	return true;
 }
 
