@@ -17,6 +17,7 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 				array(
 					'post_title' => 'blog-page',
 					'post_type'  => 'page',
+					'status' => 'publish'
 				)
 			)
 		);
