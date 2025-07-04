@@ -10,8 +10,8 @@ class Tests_Formatting_antispambot extends WP_UnitTestCase {
 	/**
 	 * This is basically a driveby test. While working on ticket
 	 * 31992 I noticed that there was no unit testing for
-		 * antispambot, so I added a little, just so I'd leave
-		 * the code better than I found it.
+	 * antispambot, so I added a little, just so I'd leave the code
+	 * better than I found it.
 	 *
 	 * @ticket 31992
 	 *

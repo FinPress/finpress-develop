@@ -2203,10 +2203,11 @@ function uses_single_unicode_script( string $input ): bool {
 				case IntlChar::BLOCK_CODE_DEVANAGARI_EXTENDED:
 					$b = IntlChar::BLOCK_CODE_DEVANAGARI;
 					break;
-				case IntlChar::BLOCK_CODE_HANGUL_JAMO:
+				case IntlChar::BLOCK_CODE_HANGUL_COMPATIBILITY_JAMO:
 				case IntlChar::BLOCK_CODE_HANGUL_JAMO_EXTENDED_A:
 				case IntlChar::BLOCK_CODE_HANGUL_JAMO_EXTENDED_B:
-					$b = IntlChar::BLOCK_CODE_HANGUL;
+				case IntlChar::BLOCK_CODE_HANGUL_SYLLABLES:
+					$b = IntlChar::BLOCK_CODE_HANGUL_JAMO;
 					break;
 				case IntlChar::BLOCK_CODE_MYANMAR_EXTENDED_A:
 				case IntlChar::BLOCK_CODE_MYANMAR_EXTENDED_B:
