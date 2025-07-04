@@ -27,6 +27,7 @@ class Tests_Template extends WP_UnitTestCase {
 			array(
 				'post_type' => 'page',
 				'post_name' => 'page-on-front-😀',
+				'post_status' => 'publish',
 			)
 		);
 
@@ -34,6 +35,7 @@ class Tests_Template extends WP_UnitTestCase {
 			array(
 				'post_type' => 'page',
 				'post_name' => 'page-for-posts-😀',
+				'post_status' => 'publish',
 			)
 		);
 
