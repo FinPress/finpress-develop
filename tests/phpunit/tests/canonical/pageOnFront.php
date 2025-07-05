@@ -15,8 +15,8 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 			'page_for_posts',
 			self::factory()->post->create(
 				array(
-					'post_title' => 'blog-page',
-					'post_type'  => 'page',
+					'post_title'  => 'blog-page',
+					'post_type'   => 'page',
 					'post_status' => 'publish',
 				)
 			)
@@ -28,7 +28,7 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 					'post_title'   => 'front-page',
 					'post_type'    => 'page',
 					'post_content' => "Page 1\n<!--nextpage-->\nPage 2",
-					'post_status' => 'publish',
+					'post_status'  => 'publish',
 				)
 			)
 		);

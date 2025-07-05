@@ -25,16 +25,16 @@ class Tests_Template extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$page_on_front = $factory->post->create_and_get(
 			array(
-				'post_type' => 'page',
-				'post_name' => 'page-on-front-😀',
+				'post_type'   => 'page',
+				'post_name'   => 'page-on-front-😀',
 				'post_status' => 'publish',
 			)
 		);
 
 		self::$page_for_posts = $factory->post->create_and_get(
 			array(
-				'post_type' => 'page',
-				'post_name' => 'page-for-posts-😀',
+				'post_type'   => 'page',
+				'post_name'   => 'page-for-posts-😀',
 				'post_status' => 'publish',
 			)
 		);
