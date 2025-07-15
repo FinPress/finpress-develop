@@ -3110,21 +3110,34 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 	public function test_comment_roundtrip_as_superadmin() {
 		wp_set_current_user( self::$superadmin_id );
 
+		$raw_content       = <<<'HTML'
+\\&\\ &amp; &invalid; < &lt; &amp;lt;
+HTML;
+		$rendered          = <<<'HTML'
+<p>\\&#038;\\ &amp; &invalid; < &lt; &amp;lt;</p>
+HTML;
+		$author_name       = <<<'HTML'
+\\&amp;\\ &amp; &amp;invalid; &lt; &lt; &amp;lt;
+HTML;
+		$author_user_agent = <<<'HTML'
+\\&\\ &amp; &invalid; &lt; &lt; &amp;lt;
+HTML;
+
 		$this->assertTrue( current_user_can( 'unfiltered_html' ) );
 		$this->verify_comment_roundtrip(
 			array(
-				'content'           => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
-				'author_name'       => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
-				'author_user_agent' => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
+				'content'           => $raw_content,
+				'author_name'       => $raw_content,
+				'author_user_agent' => $raw_content,
 				'author'            => self::$superadmin_id,
 			),
 			array(
 				'content'           => array(
-					'raw'      => '\\\&\\\ &amp; &invalid; < &lt; &amp;lt;',
-					'rendered' => '<p>\\\&#038;\\\ &amp; &invalid; < &lt; &amp;lt;' . "\n</p>",
+					'raw'      => $raw_content,
+					'rendered' => $rendered,
 				),
-				'author_name'       => '\\\&amp;\\\ &amp; &amp;invalid; &lt; &lt; &amp;lt;',
-				'author_user_agent' => '\\\&\\\ &amp; &invalid; &lt; &lt; &amp;lt;',
+				'author_name'       => $author_name,
+				'author_user_agent' => $author_user_agent,
 				'author'            => self::$superadmin_id,
 			)
 		);
