@@ -3107,6 +3107,19 @@ class WP_Test_REST_Comments_Controller extends WP_Test_REST_Controller_Testcase 
 		}
 	}
 
+	/**
+	 * Ensures that saving a comment as a super-admin does not corrupt the
+	 * comment content when presented with common edge cases.
+	 *
+	 * Note that this test used to assert the wrong behavior due to a bug
+	 * in {@see wp_html_split()}. Whereby the unescaped `<` used to be
+	 * mistakenly identified as the start of an HTML tag or comment, this
+	 * led to accidental replacement “inside” the mistaken tag. The test
+	 * has been updated with `wp_html_split()` in accordance with the
+	 * HTML5 living specification.
+	 *
+	 * @ticket {TICKET_NUMBER}
+	 */
 	public function test_comment_roundtrip_as_superadmin() {
 		wp_set_current_user( self::$superadmin_id );
 
