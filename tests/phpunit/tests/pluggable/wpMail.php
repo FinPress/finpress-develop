@@ -554,4 +554,22 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 		$phpmailer = $GLOBALS['phpmailer'];
 		$this->assertNotSame( 'user1', $phpmailer->AltBody );
 	}
+
+	/**
+	 * @ticket 28473
+	 */
+	public function test_wp_mail_multiline_header() {
+		$headers  = 'From: =?UTF-8?B?0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg0YLQtdGB0YIg?=';
+		$headers .= "\n =?UTF-8?B?0YLQtdGB0YIg0YLQtdGB0YI=?= <test@example.com>";
+		wp_mail( 'test@test.com', 'subject', 'message', $headers );
+
+		$mailer = tests_retrieve_phpmailer_instance();
+		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$this->assertSame( 'test@example.com', $mailer->From );
+		$this->assertSame(
+			'тест тест тест тест тест тест тест',
+			$mailer->FromName
+		);
+		// phpcs:enable
+	}
 }
