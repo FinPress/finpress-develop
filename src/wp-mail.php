@@ -124,11 +124,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 				$subject = trim( $line );
 				$subject = substr( $subject, 9, strlen( $subject ) - 9 );
 				// Captures any text in the subject before $phone_delim as the subject.
-				if ( function_exists( 'iconv_mime_decode' ) ) {
-					$subject = iconv_mime_decode( $subject, 2, get_option( 'blog_charset' ) );
-				} else {
-					$subject = wp_iso_descrambler( $subject );
-				}
+				$subject = rfc2047_decode( $subject );
 				$subject = explode( $phone_delim, $subject );
 				$subject = $subject[0];
 			}
