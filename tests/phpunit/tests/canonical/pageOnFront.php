@@ -12,16 +12,6 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 
 		update_option( 'show_on_front', 'page' );
 		update_option(
-			'page_for_posts',
-			self::factory()->post->create(
-				array(
-					'post_title'  => 'blog-page',
-					'post_type'   => 'page',
-					'post_status' => 'publish',
-				)
-			)
-		);
-		update_option(
 			'page_on_front',
 			self::factory()->post->create(
 				array(
@@ -38,6 +28,21 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 	 * @dataProvider data
 	 */
 	public function test( $test_url, $expected, $ticket = 0, $expected_doing_it_wrong = array() ) {
+
+		// Determine the page status based on the test case data
+		$is_publish = ( '404' !== $expected );
+
+		// Dynamically create the posts page with the desired status.
+		$page_for_posts = self::factory()->post->create(
+			array(
+				'post_title'  => 'blog-page',
+				'post_type'   => 'page',
+				'post_status' => $is_publish ? 'publish' : 'draft',
+			)
+		);
+		update_option( 'page_for_posts', $page_for_posts );
+
+		// For posts pages, assert canonical URL.
 		$this->assertCanonical( $test_url, $expected, $ticket, $expected_doing_it_wrong );
 	}
 
@@ -66,8 +71,11 @@ class Tests_Canonical_PageOnFront extends WP_Canonical_UnitTestCase {
 			// The posts page does not support the <!--nextpage--> pagination.
 			array( '/blog-page/2/', '/blog-page/', 45337 ),
 			array( '/blog-page/?page=2', '/blog-page/', 45337 ),
-			// The posts page supports regular pagination.
+			// The posts page supports regular pagination when it is published.
 			array( '/blog-page/?paged=2', '/blog-page/page/2/', 20385 ),
+			// When the posts page is a draft, it should result in a 404.
+			array( '/blog-page/', '404', 60566 ),
+			array( '/blog-page/?paged=2', '404', 60566 ),
 		);
 	}
 }
