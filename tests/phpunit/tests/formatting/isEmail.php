@@ -34,6 +34,33 @@ class Tests_Formatting_IsEmail extends WP_UnitTestCase {
 			'bob@your mom',
 			'a@b.c',
 			'" "@b.c',
+			'h(aj@couc.ou', // bad comment
+			'hi@',
+			'hi@hi@couc.ou', // double @
+			/* The next address is not deliverable as described,
+			 * SMTP servers should strip the (ab), so it is very
+			 * likely a source of confusion or a typo.
+			 * Best rejected.
+			 */
+			'(ab)cd@couc.ou',
+			/* The next address is not globally deliverable,
+			 * so it may work with PHPMailer and break with
+			 * mail sending services. Best not allow users
+			 * to paint themselves into that corner. This also
+			 * avoids security problems like those that were
+			 * used to probe the local network around web
+			 * browsers and servers.
+			*/
+			'toto@to',
+			/* Several addresses are best rejected because
+			 * we don't want to allow sending to fe80::, 192.168
+			 * and other special addresses; that too might
+			 * be used to probe the Wordpress server's local
+			 * network.
+			 */
+			'to@[2001:db8::1]',
+			'to@[IPv6:2001:db8::1]',
+			'to@[192.168.1.1]',
 		);
 		foreach ( $data as $datum ) {
 			$this->assertFalse( is_email( $datum ), $datum );
