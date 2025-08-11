@@ -51,7 +51,7 @@ class WP_Ability {
 	 * @since 0.1.0
 	 * @var array
 	 */
-	protected array $input_schema = [];
+	protected array $input_schema = array();
 
 	/**
 	 * The optional ability output schema.
@@ -59,7 +59,7 @@ class WP_Ability {
 	 * @since 0.1.0
 	 * @var array
 	 */
-	protected array $output_schema = [];
+	protected array $output_schema = array();
 
 	/**
 	 * The ability execute callback.
@@ -83,7 +83,7 @@ class WP_Ability {
 	 * @since 0.1.0
 	 * @var array
 	 */
-	protected array $meta = [];
+	protected array $meta = array();
 
 	/**
 	 * Constructor.

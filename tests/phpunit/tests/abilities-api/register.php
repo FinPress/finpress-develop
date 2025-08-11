@@ -11,7 +11,7 @@
 class Tests_Abilities_API_Register extends WP_UnitTestCase {
 
 	public static $test_ability_name       = 'test/add-numbers';
-	public static $test_ability_properties = [];
+	public static $test_ability_properties = array();
 
 	/**
 	 * Set up before each test.
@@ -19,40 +19,40 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 	public function set_up(): void {
 		parent::set_up();
 
-		self::$test_ability_properties = [
+		self::$test_ability_properties = array(
 			'label'               => 'Add numbers',
 			'description'         => 'Calculates the result of adding two numbers.',
-			'input_schema'        => [
+			'input_schema'        => array(
 				'type'                 => 'object',
-				'properties'           => [
-					'a' => [
+				'properties'           => array(
+					'a' => array(
 						'type'        => 'number',
 						'description' => 'First number.',
 						'required'    => true,
-					],
-					'b' => [
+					),
+					'b' => array(
 						'type'        => 'number',
 						'description' => 'Second number.',
 						'required'    => true,
-					],
-				],
+					),
+				),
 				'additionalProperties' => false,
-			],
-			'output_schema'       => [
+			),
+			'output_schema'       => array(
 				'type'        => 'number',
 				'description' => 'The result of adding the two numbers.',
 				'required'    => true,
-			],
+			),
 			'execute_callback'    => function ( array $input ): int {
 				return $input['a'] + $input['b'];
 			},
 			'permission_callback' => function (): bool {
 				return true;
 			},
-			'meta'                => [
+			'meta'                => array(
 				'category' => 'math',
-			],
-		];
+			),
+		);
 	}
 
 	/**
@@ -76,7 +76,7 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 	public function test_register_ability_invalid_name(): void {
 		do_action( 'abilities_api_init' );
 
-		$result = wp_register_ability( 'invalid_name', [] );
+		$result = wp_register_ability( 'invalid_name', array() );
 
 		$this->assertNull( $result );
 	}
@@ -107,8 +107,23 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 		$this->assertSame( self::$test_ability_properties['input_schema'], $result->get_input_schema() );
 		$this->assertSame( self::$test_ability_properties['output_schema'], $result->get_output_schema() );
 		$this->assertSame( self::$test_ability_properties['meta'], $result->get_meta() );
-		$this->assertTrue( $result->has_permission( [ 'a' => 2, 'b' => 3 ] ) );
-		$this->assertSame( 5, $result->execute( [ 'a' => 2, 'b' => 3 ] ) );
+		$this->assertTrue(
+			$result->has_permission(
+				array(
+					'a' => 2,
+					'b' => 3,
+				)
+			)
+		);
+		$this->assertSame(
+			5,
+			$result->execute(
+				array(
+					'a' => 2,
+					'b' => 3,
+				)
+			)
+		);
 	}
 
 	/**
@@ -124,8 +139,22 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 		};
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
-		$this->assertFalse( $result->has_permission( [ 'a' => 2, 'b' => 3 ] ) );
-		$this->assertNull( $result->execute( [ 'a' => 2, 'b' => 3 ] ) );
+		$this->assertFalse(
+			$result->has_permission(
+				array(
+					'a' => 2,
+					'b' => 3,
+				)
+			)
+		);
+		$this->assertNull(
+			$result->execute(
+				array(
+					'a' => 2,
+					'b' => 3,
+				)
+			)
+		);
 	}
 
 	/**
@@ -139,7 +168,15 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
-		$this->assertNull( $result->execute( [ 'a' => 2, 'b' => 3, 'unknown' => 1 ] ) );
+		$this->assertNull(
+			$result->execute(
+				array(
+					'a'       => 2,
+					'b'       => 3,
+					'unknown' => 1,
+				)
+			)
+		);
 	}
 
 	/**
@@ -155,7 +192,14 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 		};
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
-		$this->assertNull( $result->execute( [ 'a' => 2, 'b' => 3 ] ) );
+		$this->assertNull(
+			$result->execute(
+				array(
+					'a' => 2,
+					'b' => 3,
+				)
+			)
+		);
 	}
 
 	/**
@@ -168,7 +212,15 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
-		$this->assertFalse( $result->has_permission( [ 'a' => 2, 'b' => 3, 'unknown' => 1 ] ) );
+		$this->assertFalse(
+			$result->has_permission(
+				array(
+					'a'       => 2,
+					'b'       => 3,
+					'unknown' => 1,
+				)
+			)
+		);
 	}
 
 	/**
@@ -186,12 +238,38 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
 		// Test with a > b (should be allowed)
-		$this->assertTrue( $result->has_permission( [ 'a' => 5, 'b' => 3 ] ) );
-		$this->assertSame( [ 'a' => 5, 'b' => 3 ], $received_input );
+		$this->assertTrue(
+			$result->has_permission(
+				array(
+					'a' => 5,
+					'b' => 3,
+				)
+			)
+		);
+		$this->assertSame(
+			array(
+				'a' => 5,
+				'b' => 3,
+			),
+			$received_input
+		);
 
 		// Test with a < b (should be denied)
-		$this->assertFalse( $result->has_permission( [ 'a' => 2, 'b' => 8 ] ) );
-		$this->assertSame( [ 'a' => 2, 'b' => 8 ], $received_input );
+		$this->assertFalse(
+			$result->has_permission(
+				array(
+					'a' => 2,
+					'b' => 8,
+				)
+			)
+		);
+		$this->assertSame(
+			array(
+				'a' => 2,
+				'b' => 8,
+			),
+			$received_input
+		);
 	}
 
 	/**

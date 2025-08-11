@@ -8,7 +8,7 @@
 class Tests_Abilities_API_wpAbilitiesRegistry extends WP_UnitTestCase {
 
 	public static $test_ability_name       = 'test/add-numbers';
-	public static $test_ability_properties = [];
+	public static $test_ability_properties = array();
 
 	/**
 	 * Mock abilities registry.
@@ -25,40 +25,40 @@ class Tests_Abilities_API_wpAbilitiesRegistry extends WP_UnitTestCase {
 
 		$this->registry = new WP_Abilities_Registry();
 
-		self::$test_ability_properties = [
+		self::$test_ability_properties = array(
 			'label'               => 'Add numbers',
 			'description'         => 'Calculates the result of adding two numbers.',
-			'input_schema'        => [
+			'input_schema'        => array(
 				'type'                 => 'object',
-				'properties'           => [
-					'a' => [
+				'properties'           => array(
+					'a' => array(
 						'type'        => 'number',
 						'description' => 'First number.',
 						'required'    => true,
-					],
-					'b' => [
+					),
+					'b' => array(
 						'type'        => 'number',
 						'description' => 'Second number.',
 						'required'    => true,
-					],
-				],
+					),
+				),
 				'additionalProperties' => false,
-			],
-			'output_schema'       => [
+			),
+			'output_schema'       => array(
 				'type'        => 'number',
 				'description' => 'The result of adding the two numbers.',
 				'required'    => true,
-			],
+			),
 			'execute_callback'    => function ( array $input ): int {
 				return $input['a'] + $input['b'];
 			},
 			'permission_callback' => function (): bool {
 				return true;
 			},
-			'meta'                => [
+			'meta'                => array(
 				'category' => 'math',
-			],
-		];
+			),
+		);
 	}
 
 	/**
