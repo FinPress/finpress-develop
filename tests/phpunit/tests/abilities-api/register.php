@@ -229,12 +229,13 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 	public function test_permission_callback_receives_input(): void {
 		do_action( 'abilities_api_init' );
 
-		$received_input = null;
+		$received_input                                       = null;
 		self::$test_ability_properties['permission_callback'] = function ( array $input ) use ( &$received_input ): bool {
 			$received_input = $input;
 			// Allow only if 'a' is greater than 'b'
 			return $input['a'] > $input['b'];
 		};
+
 		$result = wp_register_ability( self::$test_ability_name, self::$test_ability_properties );
 
 		// Test with a > b (should be allowed)
@@ -337,9 +338,9 @@ class Tests_Abilities_API_Register extends WP_UnitTestCase {
 		wp_register_ability( $ability_three_name, $ability_three_properties );
 
 		$expected = array(
-			$ability_one_name    => new WP_Ability( $ability_one_name, $ability_one_properties ),
-			$ability_two_name    => new WP_Ability( $ability_two_name, $ability_two_properties ),
-			$ability_three_name  => new WP_Ability( $ability_three_name, $ability_three_properties ),
+			$ability_one_name   => new WP_Ability( $ability_one_name, $ability_one_properties ),
+			$ability_two_name   => new WP_Ability( $ability_two_name, $ability_two_properties ),
+			$ability_three_name => new WP_Ability( $ability_three_name, $ability_three_properties ),
 		);
 
 		$result = wp_get_abilities();

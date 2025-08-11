@@ -115,7 +115,7 @@ class Tests_Abilities_API_wpAbilitiesRegistry extends WP_UnitTestCase {
 	 */
 	public function test_register_invalid_name_using_instance() {
 		$ability = new WP_Ability( 'invalid_name', array() );
-		$result = $this->registry->register( $ability );
+		$result  = $this->registry->register( $ability );
 		$this->assertNull( $result );
 	}
 
@@ -314,7 +314,7 @@ class Tests_Abilities_API_wpAbilitiesRegistry extends WP_UnitTestCase {
 	 */
 	public function test_register_new_ability_using_instance() {
 		$ability = new WP_Ability( self::$test_ability_name, self::$test_ability_properties );
-		$result = $this->registry->register( $ability );
+		$result  = $this->registry->register( $ability );
 
 		$this->assertSame( $ability, $result );
 	}
@@ -407,13 +407,13 @@ class Tests_Abilities_API_wpAbilitiesRegistry extends WP_UnitTestCase {
 	 * @covers WP_Abilities_Registry::get_all_registered
 	 */
 	public function test_get_all_registered() {
-		$ability_one_name       = 'test/one';
+		$ability_one_name = 'test/one';
 		$this->registry->register( $ability_one_name, self::$test_ability_properties );
 
-		$ability_two_name       = 'test/two';
+		$ability_two_name = 'test/two';
 		$this->registry->register( $ability_two_name, self::$test_ability_properties );
 
-		$ability_three_name       = 'test/three';
+		$ability_three_name = 'test/three';
 		$this->registry->register( $ability_three_name, self::$test_ability_properties );
 
 		$result = $this->registry->get_all_registered();
