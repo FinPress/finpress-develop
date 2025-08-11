@@ -23,7 +23,7 @@ final class WP_Abilities_Registry {
 	 * @since 0.1.0
 	 * @var WP_Ability[]
 	 */
-	private array $registered_abilities = array();
+	private $registered_abilities = array();
 
 	/**
 	 * Container for the main instance of the class.
@@ -31,7 +31,7 @@ final class WP_Abilities_Registry {
 	 * @since 0.1.0
 	 * @var ?WP_Abilities_Registry
 	 */
-	private static ?WP_Abilities_Registry $instance = null;
+	private static $instance = null;
 
 	/**
 	 * Registers a new ability.
