@@ -124,7 +124,7 @@ for ( $i = 1; $i <= $count; $i++ ) {
 				$subject = trim( $line );
 				$subject = substr( $subject, 9, strlen( $subject ) - 9 );
 				// Captures any text in the subject before $phone_delim as the subject.
-				$subject = rfc2047_decode( $subject );
+				$subject = wp_decode_rfc2047( $subject );
 				$subject = explode( $phone_delim, $subject );
 				$subject = $subject[0];
 			}

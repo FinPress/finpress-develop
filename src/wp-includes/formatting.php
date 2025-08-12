@@ -3804,13 +3804,13 @@ function is_email( $email, $deprecated = false ) {
  * Converts to ASCII from email subjects.
  *
  * @since 1.2.0
- * @deprecated {WP_VERSION} Use {@see rfc2047_decode()}.
- *
  * @param string $subject Subject line.
  * @return string Converted string to ASCII.
+ *@deprecated {WP_VERSION} Use {@see wp_decode_rfc2047()}.
+ *
  */
 function wp_iso_descrambler( $subject ) {
-	return rfc2047_decode( $subject );
+	return wp_decode_rfc2047( $subject );
 }
 
 /**

@@ -21,28 +21,28 @@
  * Example:
  *
  *     // Quoted forms have non-printable ASCII encoded as octets.
- *     'this is some text' === rfc2047_decode( '=?iso-8859-1?q?this=20is_some=20text?=' );
- *     '👌' === rfc2047_decode( '=?utf-8?q?=F0=9F=91=8C?=' );
+ *     'this is some text' === wp_decode_rfc2047( '=?iso-8859-1?q?this=20is_some=20text?=' );
+ *     '👌' === wp_decode_rfc2047( '=?utf-8?q?=F0=9F=91=8C?=' );
  *
  *     // Binary forms are base64-encoded.
- *     '👌' === rfc2047_decode( '=?utf-8?B??=8J+RjA==?=' );
- *     'םולש ןב ילטפנ' === rfc2047_decode( '=?iso-8859-8?b?7eXs+SDv4SDp7Oj08A==?=' );
+ *     '👌' === wp_decode_rfc2047( '=?utf-8?B??=8J+RjA==?=' );
+ *     'םולש ןב ילטפנ' === wp_decode_rfc2047( '=?iso-8859-8?b?7eXs+SDv4SDp7Oj08A==?=' );
  *
  *     // Character sets are re-encoded into UTF-8
- *     '100¥' === rfc2047_decode( '=?iso-8859-1?Q?500=A5?=' );
- *     '🏴󠁧󠁢󠁥󠁮󠁧󠁿' === rfc2047_decode( '=?GB-18030?Q?=949=C82=D36=A01=D36=9F6=D36=9F9=D36=A08=D36=A01=D36=A25?=' );
+ *     '100¥' === wp_decode_rfc2047( '=?iso-8859-1?Q?500=A5?=' );
+ *     '🏴󠁧󠁢󠁥󠁮󠁧󠁿' === wp_decode_rfc2047( '=?GB-18030?Q?=949=C82=D36=A01=D36=9F6=D36=9F9=D36=A08=D36=A01=D36=A25?=' );
  *
  *     // Linear white-space is collapsed.
- *     'ab c d e' === rfc2047_decode( '=?ASCII?Q?a?= =?ASCII?Q?b?= c d=?ASCII?Q?=20?==?ASCII?Q?e?=' )
+ *     'ab c d e' === wp_decode_rfc2047( '=?ASCII?Q?a?= =?ASCII?Q?b?= c d=?ASCII?Q?=20?==?ASCII?Q?e?=' )
  *
  *     // Error-handling is up to the call site.
- *     '=?UTF-8?Q?=6f?=' === rfc2047_decode( '=?UTF-8?Q?=6f?=' );
- *     '=?UTF-8?Q?=6f?=' === rfc2047_decode( '=?UTF-8?Q?=6f?=', 'preserve-errors' );
- *     '�' === rfc2047_decode( '=?UTF-8?Q?=6f?=', 'replace-errors' );
- *     null === rfc2047_decode( '=?UTF-8?Q?=6f?=', 'bail-on-error' );
+ *     '=?UTF-8?Q?=6f?=' === wp_decode_rfc2047( '=?UTF-8?Q?=6f?=' );
+ *     '=?UTF-8?Q?=6f?=' === wp_decode_rfc2047( '=?UTF-8?Q?=6f?=', 'preserve-errors' );
+ *     '�' === wp_decode_rfc2047( '=?UTF-8?Q?=6f?=', 'replace-errors' );
+ *     null === wp_decode_rfc2047( '=?UTF-8?Q?=6f?=', 'bail-on-error' );
  *
  *     // Invalid character encodings are errors.
- *     null === rfc2047_decode( '=?UTF-8?Q?=C0?=', 'bail-on-error' );
+ *     null === wp_decode_rfc2047( '=?UTF-8?Q?=C0?=', 'bail-on-error' );
  *
  * @see https://www.rfc-editor.org/rfc/rfc2047
  *
@@ -53,10 +53,10 @@
  *                                                                       Default is to preserve invalid encoded words as plaintext.
  * @return string Decoded string in UTF-8, if supported, else `null`.
  */
-function rfc2047_decode( $encoded, $errors = 'preserve-errors' ) {
+function wp_decode_rfc2047( $encoded, $errors = 'preserve-errors' ) {
 	/**
 	 * {@see iconv_mime_decode()} which does not give control over error-handling
-	 * at the granularity necessary for this decoder..
+	 * at the granularity necessary for this decoder.
 	 */
 
 	$decoded               = '';
@@ -237,7 +237,7 @@ function rfc2047_decode( $encoded, $errors = 'preserve-errors' ) {
 		}
 
 		// Verify the encoding.
-		if ( false === $decoded_chunk || ! seems_utf8( $decoded_chunk ) ) {
+		if ( false === $decoded_chunk || ! wp_is_valid_utf8( $decoded_chunk ) ) {
 			goto handle_invalid;
 		}
 
