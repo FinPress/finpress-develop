@@ -31,6 +31,7 @@ on:
       # These files configure Composer. Changes could affect the outcome.
       - 'composer.*'
       # This files affect the phpunit tests. Changes could affect the outcome.
+      - 'phpunit.xml.dist'
       - 'tests/phpunit/**'
       # Confirm any changes to relevant workflow files.
       - '.github/workflows/phpunit-tests.yml'
