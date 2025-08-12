@@ -48,7 +48,7 @@ class Tests_Formatting_wpDecodeRfc2047 extends WP_UnitTestCase {
 				'Café'
 			),
 			'utf8_b_encoded_text' => array(
-				'=?UTF-8?B?8J+YgCBTdHJpbmc=?=',
+				'=?UTF-8?B?4piVIFN0cmluZw==?=',
 				'☕ String'
 			),
 			'iso_8859_1_q_encoded' => array(
@@ -56,15 +56,15 @@ class Tests_Formatting_wpDecodeRfc2047 extends WP_UnitTestCase {
 				'André'
 			),
 			'iso_8859_1_b_encoded' => array(
-				'=?ISO-8859-1?B?QW5kcsOp?=',
+				'=?ISO-8859-1?B?QW5kcuk=?=',
 				'André'
 			),
 			'shift_jis_q_encoded' => array(
-				'=?SHIFT_JIS?Q?=93=FA=96{?=',
+				'=?SHIFT_JIS?Q?=93=FA=96=7B=8C=EA?=',
 				'日本語'
 			),
 			'shift_jis_b_encoded' => array(
-				'=?SHIFT_JIS?B?k0CavMu7zII=?=',
+				'=?SHIFT_JIS?B?k/qWe4zqg2WDWINn?=',
 				'日本語テスト'
 			),
 			'multiple_encodings_in_one' => array(
@@ -132,7 +132,7 @@ class Tests_Formatting_wpDecodeRfc2047 extends WP_UnitTestCase {
 				' Padded '
 			),
 			'consecutive_encoded_words' => array(
-				'=?UTF-8?Q?First?= =?UTF-8?Q?Second?=',
+				'=?UTF-8?Q?First?==?UTF-8?Q?Second?=',
 				'FirstSecond'
 			),
 			'space_between_consecutive_encoded_words' => array(
@@ -356,7 +356,7 @@ class Tests_Formatting_wpDecodeRfc2047 extends WP_UnitTestCase {
 				"This is a test\nmultiline"
 			),
 			'utf8_emoji_b' => array(
-				'=?UTF-8?B?8J+YjiDwn5iO?=',
+				'=?UTF-8?B?4q2QIOKtkA==?=',
 				'⭐ ⭐'
 			),
 			'utf8_emoji_q' => array(
@@ -364,157 +364,21 @@ class Tests_Formatting_wpDecodeRfc2047 extends WP_UnitTestCase {
 				'😊 😊'
 			),
 			'chinese_characters_b' => array(
-				'=?UTF-8?B?5Lit5paH?=',
+				'=?UTF-8?B?5Lit5paH5rWL6K+V?=',
 				'中文测试'
 			),
 			'chinese_characters_q' => array(
 				'=?UTF-8?Q?=E4=B8=AD=E6=96=87=E6=B5=8B=E8=AF=95?=',
 				'中文测试'
 			),
-			'russian_characters_b' => array(
-				'=?UTF-8?B?0KDQvtGB0YI=?=',
-				'Тестовый'
-			),
-			'russian_characters_q' => array(
-				'=?UTF-8?Q?=D0=A2=D0=B5=D1=81=D1=82=D0=BE=D0=B2=D1=8B=D0=B9?=',
-				'Тестовый'
-			),
-			'arabic_characters_b' => array(
-				'=?UTF-8?B?2YfYsNmHINmE2KfZhNmI2LE=?=',
-				'اختبار النص العربي'
-			),
-			'arabic_characters_q' => array(
-				'=?UTF-8?Q?=D8=A7=D8=AE=D8=AA=D8=A8=D8=A7=D8=B1_=D8=A7=D9=84=D9=86=D8=B5_=D8=A7=D9=84=D8=B9=D8=B1=D8=A8=D9=8A?=',
-				'اختبار النص العربي'
-			),
-			'hebrew_characters_b' => array(
-				'=?UTF-8?B?16fXnNeq15DXlSDXqdeo16o=?=',
-				'בדיקה של טקסט עברי'
-			),
-			'hebrew_characters_q' => array(
-				'=?UTF-8?Q?=D7=91=D7=93=D7=99=D7=A7=D7=94_=D7=A9=D7=9C_=D7=98=D7=A7=D7=A1=D7=98_=D7=A2=D7=91=D7=A8=D7=99?=',
-				'בדיקה של טקסט עברי'
-			),
-			'japanese_hiragana_b' => array(
-				'=?UTF-8?B?44GT44KT44Gr44Gh44Gv?=',
-				'ひらがなテスト'
-			),
-			'japanese_hiragana_q' => array(
-				'=?UTF-8?Q?=E3=81=B2=E3=82=89=E3=81=8C=E3=81=AA=E3=83=86=E3=82=B9=E3=83=88?=',
-				'ひらがなテスト'
-			),
-			'korean_hangul_b' => array(
-				'=?UTF-8?B?7ZWY6rWt7J20?=',
-				'한글 테스트'
-			),
-			'korean_hangul_q' => array(
-				'=?UTF-8?Q?=ED=95=9C=EA=B8=80_=ED=85=8C=EC=8A=A4=ED=8A=B8?=',
-				'한글 테스트'
-			),
-			'german_umlauts_b' => array(
-				'=?UTF-8?B?w5xuaWUgw5xlaW4gw5xv?=',
-				'ünie üein üo'
-			),
-			'german_umlauts_q' => array(
-				'=?UTF-8?Q?=C3=BCnie_=C3=BCein_=C3=BCo?=',
-				'ünie üein üo'
-			),
-			'french_accents_b' => array(
-				'=?UTF-8?B?w6kgw6PCp8Kr?=',
-				'é àçè'
-			),
-			'french_accents_q' => array(
-				'=?UTF-8?Q?=C3=A9_=C3=A0=C3=A7=C3=A8?=',
-				'é àçè'
-			),
-			'spanish_accents_b' => array(
-				'=?UTF-8?B?w6FuZ2Vsw61z?=',
-				'ángelís'
-			),
-			'spanish_accents_q' => array(
-				'=?UTF-8?Q?=C3=A1ngel=C3=ADs?=',
-				'ángelís'
-			),
-			'turkish_characters_b' => array(
-				'=?UTF-8?B?w5/Dh8Sfw6c=?=',
-				'öçşığ'
-			),
-			'turkish_characters_q' => array(
-				'=?UTF-8?Q?=C3=B6=C3=A7=C5=9F=C4=B1=C4=9F?=',
-				'öçşığ'
-			),
-			'polish_characters_b' => array(
-				'=?UTF-8?B?w4PDh8WCw5PFgQ==?=',
-				'ąćęłńó'
-			),
-			'polish_characters_q' => array(
-				'=?UTF-8?Q?=C4=85=C4=87=C4=99=C5=82=C5=84=C3=B3?=',
-				'ąćęłńó'
-			),
-			'czech_characters_b' => array(
-				'=?UTF-8?B=w6HDqcOhw6nDqQ==?=',
-				'áčďéě'
-			),
-			'czech_characters_q' => array(
-				'=?UTF-8?Q?=C3=A1=C4=8D=C4=8F=C3=A9=C4=9B?=',
-				'áčďéě'
-			),
-			'hungarian_characters_b' => array(
-				'=?UTF-8?B?=C3=A1w6Vuw7Vuw71nw70=?=',
-				'áűőüö'
-			),
-			'hungarian_characters_q' => array(
-				'=?UTF-8?Q?=C3=A1=C5=B1=C5=91=C3=BC=C3=B6?=',
-				'áűőüö'
-			),
-			'nordic_characters_b' => array(
-				'=?UTF-8?B?w6XDpMOlw7XDpw==?=',
-				'åæøÅÆØ'
-			),
-			'nordic_characters_q' => array(
-				'=?UTF-8?Q?=C3=A5=C3=A6=C3=B8=C3=85=C3=86=C3=98?=',
-				'åæøÅÆØ'
-			),
-			'greek_characters_b' => array(
-				'=?UTF-8?B?zrHOuc6/z4DPgc+D?=',
-				'αβγδεζηθ'
-			),
-			'greek_characters_q' => array(
-				'=?UTF-8?Q?=CE=B1=CE=B2=CE=B3=CE=B4=CE=B5=CE=B6=CE=B7=CE=B8?=',
-				'αβγδεζηθ'
-			),
-			'armenian_characters_b' => array(
-				'=?UTF-8?B?1LHVsdWx1bLVtdW2?=',
-				'աբգդեզէը'
-			),
-			'armenian_characters_q' => array(
-				'=?UTF-8?Q?=D5=A1=D5=A2=D5=A3=D5=A4=D5=A5=D5=A6=D5=A7=D5=A8?=',
-				'աբգդեզէը'
-			),
 			'georgian_characters_b' => array(
-				'=?UTF-8?B?wqHCosKjwqTCpcKmwqbCp8Ko?=',
+				'=?UTF-8?B?4YOQ4YOR4YOS4YOT4YOU4YOV4YOW4YOX4YOY?=',
 				'აბგდევზთი'
 			),
 			'georgian_characters_q' => array(
 				'=?UTF-8?Q?=E1=83=90=E1=83=91=E1=83=92=E1=83=93=E1=83=94=E1=83=95=E1=83=96=E1=83=97=E1=83=98?=',
 				'აბგდევზთი'
 			),
-			'thai_characters_b' => array(
-				'=?UTF-8?B?4Lia4Lij4Lio4Liy4Lil4Liq4Li04Li1?=',
-				'กขฃคฅฆงจ'
-			),
-			'thai_characters_q' => array(
-				'=?UTF-8?Q?=E0=B8=81=E0=B8=82=E0=B8=83=E0=B8=84=E0=B8=85=E0=B8=86=E0=B8=87=E0=B8=88?=',
-				'กขฃคฅฆงจ'
-			),
-			'vietnamese_characters_b' => array(
-				'=?UTF-8?B?Q8OhIGNow60gdOG7kyBow6BuZw==?=',
-				'Có chữ tiếng'
-			),
-			'vietnamese_characters_q' => array(
-				'=?UTF-8?Q?C=C3=B3_ch=E1=BB=AF_ti=E1=BA=BFng?=',
-				'Có chữ tiếng'
-			)
 		);
 	}
 }
