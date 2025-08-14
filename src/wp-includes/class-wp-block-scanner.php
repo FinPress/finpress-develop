@@ -15,6 +15,11 @@
  *
  * For usage, jump straight to {@see self::next_delimiter}.
  *
+ * @todo Add wildcard matching to namespace and name in ::opens_block(), ::is_block_type, etc…
+ * @todo Is "freeform" the best name since it can also appear inside blocks? Maybe "html" or "text" or "non-block content".
+ * @todo Add optimized lookup for blocks of a known name
+ * @todo Pass an options array to ::next_delimiter()? Find a better solution for options.
+ *
  * @since {WP_VERSION}
  */
 class WP_Block_Scanner {
@@ -45,7 +50,7 @@ class WP_Block_Scanner {
 	 *
 	 * @var string
 	 */
-	private $source_text;
+	protected $source_text;
 
 	/**
 	 * Byte offset into source text where entire delimiter begins.
@@ -149,7 +154,7 @@ class WP_Block_Scanner {
 	 *
 	 * @var string
 	 */
-	private $state = self::READY;
+	protected $state = self::READY;
 
 	/**
 	 * Indicates what kind of block comment delimiter this represents.
@@ -190,18 +195,7 @@ class WP_Block_Scanner {
 	 * @param string $source_text Input document potentially containing block content.
 	 * @return ?self Created block scanner, if successfully created.
 	 */
-	public static function create( $source_text ) {
-		if ( ! is_string( $source_text ) ) {
-			_doing_it_wrong(
-				__METHOD__,
-				isset( $source_text )
-					? __( 'Must pass a string when creating WP_Block_Scanner.' )
-					: __( 'Must pass a string when creating WP_Block_Scanner: consider adding `?? \'\'`' ),
-				'{WP_VERSION}'
-			);
-			return null;
-		}
-
+	public static function create( string $source_text ): ?self {
 		return new self( $source_text );
 	}
 
@@ -278,11 +272,13 @@ class WP_Block_Scanner {
 	 *
 	 * @since {WP_VERSION}
 	 *
+	 * @param string|null $block_name Optional. Keep searching until a block of this name is found.
+	 *                                Defaults to visit every block regardless of type.
 	 * @param string $freeform_blocks Optional. Pass `visit-freeform` to match freeform HTML content
 	 *                                not surrounded by block delimiters. Defaults to `skip-freeform`.
 	 * @return bool Whether a block delimiter was matched.
 	 */
-	public function next_delimiter( $freeform_blocks = 'skip-freeform' ) {
+	public function next_delimiter( $block_name = null, $freeform_blocks = 'skip-freeform' ) {
 		if ( $this->last_error ) {
 			return false;
 		}
@@ -567,6 +563,10 @@ class WP_Block_Scanner {
 			return true;
 		}
 
+		if ( isset( $block_name ) && ! $this->is_block_type( $block_name ) ) {
+			return $this->next_delimiter( $block_name, $freeform_blocks );
+		}
+
 		return true;
 	}
 
@@ -575,7 +575,7 @@ class WP_Block_Scanner {
 	 *
 	 * @since {WP_VERSION}
 	 */
-	private function __construct( $source_text ) {
+	protected function __construct( string $source_text ) {
 		$this->source_text = $source_text;
 	}
 
@@ -587,9 +587,9 @@ class WP_Block_Scanner {
 	 *
 	 * @param int $comment_starting_at Where the HTML comment started, the leading `<`.
 	 * @param int $search_end          Last offset in which to search, for limiting search span.
-	 * @return int Offset after the current HTML comment ends, or `$end` if no end was found.
+	 * @return int Offset after the current HTML comment ends, or `$search_end` if no end was found.
 	 */
-	private function find_html_comment_end( $comment_starting_at, $search_end ) {
+	private function find_html_comment_end( int $comment_starting_at, int $search_end ): int {
 		$text = $this->source_text;
 
 		// Find span-of-dashes comments which look like `<!----->`.
@@ -620,6 +620,8 @@ class WP_Block_Scanner {
 
 			$now_at++;
 		}
+
+		return $search_end;
 	}
 
 	/**
@@ -631,7 +633,7 @@ class WP_Block_Scanner {
 	 * @return string|null Error from last attempt at parsing next block delimiter,
 	 *                     or `NULL` if last attempt succeeded.
 	 */
-	public function get_last_error() {
+	public function get_last_error(): ?string {
 		return $this->last_error;
 	}
 
@@ -644,7 +646,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return int JSON_ERROR_ code from last attempt to parse block JSON attributes.
 	 */
-	public function get_last_json_error() {
+	public function get_last_json_error(): int {
 		return $this->last_json_error;
 	}
 
@@ -662,7 +664,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return string|null type of the block comment delimiter, if currently matched.
 	 */
-	public function get_delimiter_type() {
+	public function get_delimiter_type(): ?string {
 		switch ( $this->state ) {
 			case static::IMPLICIT_OPEN:
 				return static::OPENER;
@@ -689,7 +691,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return bool Whether the currently-matched block delimiter contains the closing flag.
 	 */
-	public function has_closing_flag() {
+	public function has_closing_flag(): bool {
 		return $this->has_closing_flag;
 	}
 
@@ -711,7 +713,7 @@ class WP_Block_Scanner {
 	 *                           E.g. "paragraph", "core/paragraph", "math-blocks/formula".
 	 * @return bool Whether this delimiter represents a block of the given type.
 	 */
-	public function is_block_type( $block_type ) {
+	public function is_block_type( string $block_type ): bool {
 		// This is a core/freeform text block, it’s special.
 		if ( $this->is_freeform() ) {
 			return (
@@ -789,7 +791,7 @@ class WP_Block_Scanner {
 	 * @return bool Whether the matched block delimiter opens a block, and whether it
 	 *              opens a block of one of the given block types, if provided.
 	 */
-	public function opens_block( ...$block_type ) {
+	public function opens_block( array ...$block_type ): bool {
 		if ( static::IMPLICIT_CLOSE === $this->state ) {
 			return false;
 		}
@@ -821,7 +823,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return bool Whether or not the matched delimiter is implied as `core/freeform`.
 	 */
-	public function is_freeform() {
+	public function is_freeform(): bool {
 		return (
 			static::IMPLICIT_OPEN === $this->state ||
 			static::IMPLICIT_CLOSE === $this->state
@@ -843,7 +845,7 @@ class WP_Block_Scanner {
 	 * @return bool Whether the currently-matched delimiter is implicit and surround
 	 *              top-level non-block content containing non-whitespace text.
 	 */
-	public function is_non_whitespace_freeform() {
+	public function is_non_whitespace_freeform(): bool {
 		if ( ! $this->is_freeform() ) {
 			return false;
 		}
@@ -858,6 +860,32 @@ class WP_Block_Scanner {
 		);
 
 		return $whitespace_length !== $length;
+	}
+
+	/**
+	 * Returns the string content of a freeform span and advances the parser so that
+	 * the next delimiter will be after the (implicit) freeform closer.
+	 *
+	 * @since {WP_VERSION}
+	 *
+	 * @return string|null Freeform content, or `NULL` if not currently matched on
+	 *                     a freeform delimiter.
+	 */
+	public function get_freeform_content_and_advance(): ?string {
+		if ( ! $this->is_freeform() ) {
+			return null;
+		}
+
+		// Finish on the (implicit) freeform closing delimiter.
+		if ( static::IMPLICIT_OPEN === $this->state ) {
+			$this->next_delimiter( null, 'visit-freeform' );
+		}
+
+		return substr(
+			$this->source_text,
+			$this->last_delimiter_ended_before,
+			$this->delimiter_at - $this->last_delimiter_ended_before
+		);
 	}
 
 	/**
@@ -880,10 +908,11 @@ class WP_Block_Scanner {
 	 *     $scanner->is_block_type( 'paragraph' );
 	 *
 	 * @since {WP_VERSION}
+	 * @todo What if there’s no matched block?
 	 *
 	 * @return string Fully-qualified block namespace and type, e.g. "core/paragraph".
 	 */
-	public function get_block_type() {
+	public function get_block_type(): ?string {
 		// This is a core/freeform text block, it’s special.
 		if ( $this->is_freeform() ) {
 			return 'core/freeform';
@@ -967,7 +996,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return array|null Parsed JSON attributes, if present and valid, otherwise `null`.
 	 */
-	public function allocate_and_return_parsed_attributes() {
+	public function allocate_and_return_parsed_attributes(): ?array {
 		$this->last_json_error = JSON_ERROR_NONE;
 
 		if ( static::CLOSER === $this->type || $this->is_freeform() || 0 === $this->json_length ) {
@@ -1004,7 +1033,7 @@ class WP_Block_Scanner {
 	 *
 	 * @return WP_HTML_Span|null Span of text in source text spanning matched delimiter.
 	 */
-	public function get_span() {
+	public function get_span(): ?WP_HTML_Span {
 		switch ( $this->state ) {
 			case static::IMPLICIT_OPEN:
 				return new WP_HTML_Span( $this->last_delimiter_ended_before, 0 );
