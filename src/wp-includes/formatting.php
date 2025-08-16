@@ -1282,28 +1282,207 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
 		return $text;
 	}
 
-	// Check for support for utf8 in the installed PCRE library once and store the result in a static.
-	static $utf8_pcre = null;
-	if ( ! isset( $utf8_pcre ) ) {
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
-		$utf8_pcre = @preg_match( '/^./u', 'a' );
-	}
-	// We can't demand utf8 in the PCRE installation, so just return the string in those cases.
-	if ( ! $utf8_pcre ) {
+	if ( wp_is_valid_utf8( $text ) ) {
 		return $text;
 	}
 
-	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- preg_match fails when it encounters invalid UTF8 in $text.
-	if ( 1 === @preg_match( '/^./us', $text ) ) {
-		return $text;
+	if ( ! $strip ) {
+		return '';
 	}
 
-	// Attempt to strip the bad chars if requested (not recommended).
-	if ( $strip && function_exists( 'iconv' ) ) {
-		return iconv( 'utf-8', 'utf-8', $text );
+	/*
+	 * Return a copy of the string whose invalid byte sequences are
+	 * swapped with the Unicode replacement character.
+	 */
+
+	if ( function_exists( 'mb_scrub' ) && function_exists( 'mb_substitute_character' ) ) {
+		$prev_replacement_character = mb_substitute_character();
+		mb_substitute_character( 0xFFFD );
+		$scrubbed = mb_scrub( $text, 'UTF-8' );
+		mb_substitute_character( $prev_replacement_character );
+
+		return $scrubbed;
 	}
 
-	return '';
+	return _wp_utf8_scrub( $text );
+}
+
+/**
+ * Fallback mechanism for replacing invalid spans of UTF-8 bytes.
+ *
+ * By implementing a raw method here the code will behave in the same way on
+ * all installed systems, regardless of what extensions are installed.
+ *
+ * Example:
+ *
+ *     'Pi�a' === _wp_utf8_scrub( mb_convert_encoding( 'Piña', 'Windows-1252', 'UTF-8' ) );
+ *
+ * @see wp_check_invalid_utf8
+ *
+ * @since 6.9.0
+ * @access private
+ *
+ * @param string $bytes UTF-8 encoded string which might include invalid spans of bytes.
+ * @return string Input string with spans of invalid bytes swapped with the replacement character.
+ */
+function _wp_utf8_scrub( string $bytes ): string {
+	$end                 = strlen( $bytes );
+	$next_copy_starts_at = 0;
+	$scrubbed            = '';
+
+	for ( $i = 0; $i < $end; $i++ ) {
+		/*
+		 * Quickly skip past US-ASCII bytes, all of which are valid UTF-8.
+		 *
+		 * This optimization step improves the speed from 10x to 100x
+		 * depending on whether the JIT has optimized the function.
+		 */
+		$i += strspn(
+			$bytes,
+			"\x00\x01\x02\x03\x04\x05\x06\x07\x08\x09\x0a\x0b\x0c\x0d\x0e\x0f" .
+			"\x10\x11\x12\x13\x14\x15\x16\x17\x18\x19\x1a\x1b\x1c\x1d\x1e\x1f" .
+			" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~\x7f",
+			$i
+		);
+		if ( $i >= $end ) {
+			break;
+		}
+
+		/**
+		 * The above fast-track handled all single-byte UTF-8 characters. What
+		 * follows MUST be a multibyte sequence otherwise there’s invalid UTF-8.
+		 *
+		 * Therefore everything past here is checking those multibyte sequences.
+		 * Because it’s possible that there are truncated characters, the use of
+		 * the null-coalescing operator with "\xC0" is a convenience for skipping
+		 * length checks on every continuation bytes. This works because 0xC0 is
+		 * always invalid in a UTF-8 string, meaning that if the string has been
+		 * truncated, it will find 0xC0 and reject as invalid UTF-8.
+		 *
+		 *  > [The following table] lists all of the byte sequences that are well-formed
+		 * > in UTF-8. A range of byte values such as A0..BF indicates that any byte
+		 * > from A0 to BF (inclusive) is well-formed in that position. Any byte value
+		 * > outside of the ranges listed is ill-formed.
+		 *
+		 * > Table 3-7. Well-Formed UTF-8 Byte Sequences
+		 *  ╭─────────────────────┬────────────┬──────────────┬─────────────┬──────────────╮
+		 *  │ Code Points         │ First Byte │ Second Byte  │ Third Byte  │ Fourth Byte  │
+		 *  ├─────────────────────┼────────────┼──────────────┼─────────────┼──────────────┤
+		 *  │ U+0000..U+007F      │ 00..7F     │              │             │              │
+		 *  │ U+0080..U+07FF      │ C2..DF     │ 80..BF       │             │              │
+		 *  │ U+0800..U+0FFF      │ E0         │ A0..BF       │ 80..BF      │              │
+		 *  │ U+1000..U+CFFF      │ E1..EC     │ 80..BF       │ 80..BF      │              │
+		 *  │ U+D000..U+D7FF      │ ED         │ 80..9F       │ 80..BF      │              │
+		 *  │ U+E000..U+FFFF      │ EE..EF     │ 80..BF       │ 80..BF      │              │
+		 *  │ U+10000..U+3FFFF    │ F0         │ 90..BF       │ 80..BF      │ 80..BF       │
+		 *  │ U+40000..U+FFFFF    │ F1..F3     │ 80..BF       │ 80..BF      │ 80..BF       │
+		 *  │ U+100000..U+10FFFF  │ F4         │ 80..8F       │ 80..BF      │ 80..BF       │
+		 *  ╰─────────────────────┴────────────┴──────────────┴─────────────┴──────────────╯
+		 *
+		 * @see https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/#G27506
+		 */
+
+		// Valid two-byte code points.
+		$b1 = ord( $bytes[ $i ] );
+		$b2 = ord( $bytes[ $i + 1 ] ?? "\xC0" );
+
+		if ( $b1 >= 0xC2 && $b1 <= 0xDF && $b2 >= 0x80 && $b2 <= 0xBF ) {
+			$i++;
+			continue;
+		}
+
+		// Valid three-byte code points.
+		$b3 = ord( $bytes[ $i + 2 ] ?? "\xC0" );
+
+		if ( $b3 < 0x80 || $b3 > 0xBF ) {
+			goto invalid_utf8;
+		}
+
+		if (
+			( 0xE0 === $b1 && $b2 >= 0xA0 && $b2 <= 0xBF ) ||
+			( $b1 >= 0xE1 && $b1 <= 0xEC && $b2 >= 0x80 && $b2 <= 0xBF ) ||
+			( 0xED === $b1 && $b2 >= 0x80 && $b2 <= 0x9F ) ||
+			( $b1 >= 0xEE && $b1 <= 0xEF && $b2 >= 0x80 && $b2 <= 0xBF )
+		) {
+			$i += 2;
+			continue;
+		}
+
+		// Valid four-byte code points.
+		$b4 = ord( $bytes[ $i + 3 ] ?? "\xC0" );
+
+		if ( $b4 < 0x80 || $b4 > 0xBF ) {
+			goto invalid_utf8;
+		}
+
+		if (
+			( 0xF0 === $b1 && $b2 >= 0x90 && $b2 <= 0xBF ) ||
+			( $b1 >= 0xF1 && $b1 <= 0xF3 && $b2 >= 0x80 && $b2 <= 0xBF ) ||
+			( 0xF4 === $b1 && $b2 >= 0x80 && $b2 <= 0x8F )
+		) {
+			$i += 3;
+			continue;
+		}
+
+		/**
+		 * When encountering invalid byte sequences, Unicode suggests finding the
+		 * maximal subpart of a text and replacing that subpart with a single
+		 * replacement character.
+		 *
+		 * > This practice is more secure because it does not result in the
+		 * > conversion consuming parts of valid sequences as though they were
+		 * > invalid. It also guarantees at least one replacement character will
+		 * > occur for each instance of an invalid sequence in the original text.
+		 * > Furthermore, this practice can be defined consistently for better
+		 * > interoperability between different implementations of conversion.
+		 *
+		 * @see https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-5/#G40630
+		 */
+
+		invalid_utf8:
+		$scrubbed .= substr( $bytes, $next_copy_starts_at, $i - $next_copy_starts_at );
+		$scrubbed .= "\u{FFFD}";
+
+		if ( 0x00 === ( $b1 & 0x80 ) || 0x80 === ( $b1 & 0xC0 ) ) {
+			$next_copy_starts_at = $i + 1;
+			continue;
+		}
+
+		$b2 = ord( $bytes[ $i + 1 ] ?? "\xC0" );
+		$b3 = ord( $bytes[ $i + 2 ] ?? "\xC0" );
+
+		// Find the maximal subpart and skip past it.
+		if ( 0xE0 === ( $b1 & 0xF0 ) ) {
+			// Three-byte characters.
+			$b2_valid = (
+				( 0xE0 === $b1 && $b2 >= 0xA0 && $b2 <= 0xBF ) ||
+				( $b1 >= 0xE1 && $b1 <= 0xEC && $b2 >= 0x80 && $b2 <= 0xBF ) ||
+				( 0xED === $b1 && $b2 >= 0x80 && $b2 <= 0x9F ) ||
+				( $b1 >= 0xEE && $b1 <= 0xEF && $b2 >= 0x80 && $b2 <= 0xBF )
+			);
+
+			$i += $b2_valid ? 1 : 0;
+		} elseif ( 0xF0 === ( $b1 & 0xF8 ) ) {
+			// Four-byte characters.
+			$b2_valid = (
+				( 0xF0 === $b1 && $b2 >= 0x90 && $b2 <= 0xBF ) ||
+				( $b1 >= 0xF1 && $b1 <= 0xF3 && $b2 >= 0x80 && $b2 <= 0xBF ) ||
+				( 0xF4 === $b1 && $b2 >= 0x80 && $b2 <= 0x8F )
+			);
+
+			$b3_valid = $b3 >= 0x80 && $b3 <= 0xBF;
+
+			$i += $b2_valid ? ( $b3_valid ? 2 : 1 ) : 0;
+		}
+
+		$next_copy_starts_at = $i + 1;
+	}
+
+	if ( 0 === $next_copy_starts_at ) {
+		return $bytes;
+	}
+
+	return $scrubbed . substr( $bytes, $next_copy_starts_at );
 }
 
 /**
