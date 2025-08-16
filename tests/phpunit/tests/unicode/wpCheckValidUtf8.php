@@ -22,12 +22,24 @@ class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
 			$this->assertSame(
 				$bytes,
 				wp_check_invalid_utf8( $bytes ),
-				'Should have returned the unchanged string for valid UTF-8 input.'
+				'Should have returned the unchanged string for valid UTF-8 input when not stripping invalid bytes.'
+			);
+
+			$this->assertSame(
+				$bytes,
+				wp_check_invalid_utf8( $bytes, true ),
+				'Should have returned the unchanged string for valid UTF-8 input when stripping invalid bytes.'
 			);
 		} else {
 			$this->assertSame(
-				$scrubbed,
+				'',
 				wp_check_invalid_utf8( $bytes ),
+				'Should have rejected invalid input, returning an empty string when not stripping invalid bytes.'
+			);
+
+			$this->assertSame(
+				$scrubbed,
+				wp_check_invalid_utf8( $bytes, true ),
 				'Failed to properly scrub the invalid spans of UTF-8 from the input string.'
 			);
 		}
