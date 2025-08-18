@@ -1260,10 +1260,38 @@ function wp_specialchars_decode( $text, $quote_style = ENT_NOQUOTES ) {
 /**
  * Checks for invalid UTF8 in a string.
  *
+ * Note! This function only performs its work if the `blog_charset` is set
+ * to UTF-8. For all other values it returns the input text unchanged.
+ *
+ * Note! Unless requested, this returns an empty string if the input contains
+ * any sequences of invalid UTF-8. To replace invalid byte sequences, pass
+ * `true` as the optional `$strip` parameter.
+ *
+ * Consider using {@see wp_scrub_utf8()} instead which does not depend on
+ * the value of `blog_charset`.
+ *
+ * Example:
+ *
+ *     // The `blog_charset` is `latin1`, so this does nothing.
+ *     $every_possible_input === wp_check_invalid_utf8( $every_possible_input );
+ *
+ *     // Valid strings come through unchanged.
+ *     'test' === wp_check_invalid_utf8( 'test' );
+ *
+ *     $invalid = "the byte \xC0 is never allowed in a UTF-8 string.";
+ *
+ *     // Invalid strings are rejected outright.
+ *     '' === wp_check_invalid_utf8( $invalid );
+ *
+ *     // “Stripping” invalid sequences produces the replacement character instead.
+ *     "the byte \u{FFFD} is never allowed in a UTF-8 string." === wp_check_invalid_utf8( $invalid, true );
+ *     'the byte � is never allowed in a UTF-8 string.' === wp_check_invalid_utf8( $invalid, true );
+ *
  * @since 2.8.0
  *
- * @param string $text   The text which is to be checked.
- * @param bool   $strip  Optional. Whether to attempt to strip out invalid UTF8. Default false.
+ * @param string $text   String which is expected to be encoded as UTF-8 unless `blog_charset` is another encoding.
+ * @param bool   $strip  Optional. Whether to replace invalid sequences of bytes with the Unicode replacement
+ *                       character (U+FFFD `�`). Default `false` returns an empty string for invalid UTF-8 inputs.
  * @return string The checked text.
  */
 function wp_check_invalid_utf8( $text, $strip = false ) {
@@ -1278,33 +1306,79 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
 	if ( ! isset( $is_utf8 ) ) {
 		$is_utf8 = is_utf8_charset();
 	}
-	if ( ! $is_utf8 ) {
+
+	if ( ! $is_utf8 || wp_is_valid_utf8( $text ) ) {
 		return $text;
 	}
 
-	if ( wp_is_valid_utf8( $text ) ) {
-		return $text;
-	}
+	return $strip
+		? wp_scrub_utf8( $text )
+		: '';
+}
 
-	if ( ! $strip ) {
-		return '';
+/**
+ * Replaces ill-formed UTF-8 byte sequences with the Unicode Replacement Character.
+ *
+ * While it’s usually safe to ignore invalid UTF-8, there are cases where it’s necessary
+ * to work only with a valid string, such as when producing XML or feeding data into a
+ * large language model. In these cases, calling this function will produce such a valid
+ * string where the invalid segments are replaced with the Unicode Replacement Character.
+ *
+ * Replacement follows the “maximal subpart” algorithm which provides more-secure and
+ * interoperable strings than other algorithms. This can lead to sequences of multiple
+ * replacement characters in a row.
+ *
+ * Note! The Unicode Replacement Character is itself a Unicode character. It will not
+ * be possible to determine if its purpose in a string is intentional or if it comes
+ * as a result of replacing invalid bytes.
+ *
+ * Example:
+ *
+ *     // Valid strings come through unchanged.
+ *     'test' === wp_scrub_utf8( 'test' );
+ *
+ *     // Invalid sequences of bytes are replaced.
+ *     $invalid = "the byte \xC0 is never allowed in a UTF-8 string.";
+ *     "the byte \u{FFFD} is never allowed in a UTF-8 string." === wp_scrub_utf8( $invalid, true );
+ *     'the byte � is never allowed in a UTF-8 string.' === wp_scrub_utf8( $invalid, true );
+ *
+ *     // Maximal subparts are replaced individually.
+ *     '.�.' === wp_scrub_utf8( ".\xC0." );              // C0 is never valid.
+ *     '.�.' === wp_scrub_utf8( ".\xE2\x8C." );          // Missing A3 at end.
+ *     '.��.' === wp_scrub_utf8( ".\xE2\x8C\xE2\x8C." ); // Maximal subparts replaced separately.
+ *     '.��.' === wp_scrub_utf8( ".\xC1\xBF." );         // Overlong sequence.
+ *     '.���.' === wp_scrub_utf8( ".\xED\xA0\x80." );    // Surrogate half.
+ *
+ * @see https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-5/#G40630
+ *
+ * @since 6.9.0
+ *
+ * @param string $text String which is assumed to be UTF-8 but may contain invalid sequences of bytes.
+ * @return string Input text with invalid sequences of bytes replaced with the Unicode replacement character.
+ */
+function wp_scrub_utf8( $text ) {
+	if ( ! extension_loaded( 'mbstring' ) ) {
+		return _wp_scrub_utf8_fallback( $text );
 	}
 
 	/*
-	 * Return a copy of the string whose invalid byte sequences are
-	 * swapped with the Unicode replacement character.
+	 * While it looks like setting the substitute character could fail,
+	 * the internal PHP code will never fail when provided a valid
+	 * code point as a number. In this case, there’s no need to check
+	 * its return value to see if it succeeded.
 	 */
+	$prev_replacement_character = mb_substitute_character();
+	mb_substitute_character( 0xFFFD );
+	$scrubbed = mb_scrub( $text, 'UTF-8' );
+	mb_substitute_character( $prev_replacement_character );
 
-	if ( function_exists( 'mb_scrub' ) && function_exists( 'mb_substitute_character' ) ) {
-		$prev_replacement_character = mb_substitute_character();
-		mb_substitute_character( 0xFFFD );
-		$scrubbed = mb_scrub( $text, 'UTF-8' );
-		mb_substitute_character( $prev_replacement_character );
-
-		return $scrubbed;
-	}
-
-	return _wp_utf8_scrub( $text );
+	/*
+	 * In PHP 8.0, `mb_scrub()` only returns a valid string. Once WordPress
+	 * depends on PHP 8.0 or above, this check will not be necessary.
+	 */
+	return false === $scrubbed
+		? _wp_scrub_utf8_fallback( $text )
+		: $scrubbed;
 }
 
 /**
@@ -1313,11 +1387,15 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
  * By implementing a raw method here the code will behave in the same way on
  * all installed systems, regardless of what extensions are installed.
  *
+ * This function largely duplicates the logic from {@see _wp_is_valid_utf8_fallback()}
+ * but where that function returns `false` when encountering invalid bytes, this
+ * function translates the invalid sequence of bytes starting at that offset.
+ *
  * Example:
  *
- *     'Pi�a' === _wp_utf8_scrub( mb_convert_encoding( 'Piña', 'Windows-1252', 'UTF-8' ) );
+ *     'Pi�a' === _wp_scrub_utf8_fallback( mb_convert_encoding( 'Piña', 'Windows-1252', 'UTF-8' ) );
  *
- * @see wp_check_invalid_utf8
+ * @see wp_scrub_utf8()
  *
  * @since 6.9.0
  * @access private
@@ -1325,7 +1403,7 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
  * @param string $bytes UTF-8 encoded string which might include invalid spans of bytes.
  * @return string Input string with spans of invalid bytes swapped with the replacement character.
  */
-function _wp_utf8_scrub( string $bytes ): string {
+function _wp_scrub_utf8_fallback( string $bytes ): string {
 	$end                 = strlen( $bytes );
 	$next_copy_starts_at = 0;
 	$scrubbed            = '';

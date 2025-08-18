@@ -6,7 +6,7 @@
  * @group unicode
  */
 
-class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
+class Tests_WpScrubUtf8 extends WP_UnitTestCase {
 	/**
 	 * Verifies that WordPress can properly detect valid and invalid UTF-8.
 	 *
@@ -46,8 +46,34 @@ class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verifies that WordPress can properly detect valid and invalid UTF-8;
-	 * forces testing with the fallback mechanism in pure PHP code.
+	 * Verifies that WordPress can properly detect valid UTF-8 while replacing invalid byte sequences.
+	 *
+	 * @ticket 63837
+	 *
+	 * @dataProvider data_utf8_test_data
+	 *
+	 * @param string      $bytes    Bytes as a PHP string.
+	 * @param string|null $scrubbed Expected checked value, if string isn’t valid UTF-8.
+	 */
+	public function test_properly_scrubs_utf8( string $bytes, ?string $scrubbed = null ) {
+		if ( null === $scrubbed ) {
+			$this->assertSame(
+				$bytes,
+				wp_scrub_utf8( $bytes ),
+				'Should have returned the unchanged string for valid UTF-8 input.'
+			);
+		} else {
+			$this->assertSame(
+				$scrubbed,
+				wp_scrub_utf8( $bytes ),
+				'Failed to properly scrub the invalid spans of UTF-8 from the input string.'
+			);
+		}
+	}
+
+	/**
+	 * Verifies that WordPress’ fallback code can properly detect valid UTF-8
+	 * while replacing invalid byte sequences.
 	 *
 	 * @ticket 63837
 	 *
@@ -60,13 +86,13 @@ class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
 		if ( null === $scrubbed ) {
 			$this->assertSame(
 				$bytes,
-				_wp_utf8_scrub( $bytes ),
+				_wp_scrub_utf8_fallback( $bytes ),
 				'Should have returned the unchanged string for valid UTF-8 input.'
 			);
 		} else {
 			$this->assertSame(
 				$scrubbed,
-				_wp_utf8_scrub( $bytes ),
+				_wp_scrub_utf8_fallback( $bytes ),
 				'Failed to properly scrub the invalid spans of UTF-8 from the input string.'
 			);
 		}
