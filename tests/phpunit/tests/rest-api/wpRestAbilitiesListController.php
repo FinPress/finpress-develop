@@ -43,7 +43,9 @@ class Tests_REST_API_WpRestAbilitiesListController extends WP_UnitTestCase {
 
 		// Set up REST server
 		global $wp_rest_server;
-		$this->server = $wp_rest_server = new WP_REST_Server();
+		$wp_rest_server = new WP_REST_Server();
+		$this->server   = $wp_rest_server;
+
 		do_action( 'rest_api_init' );
 
 		// Initialize abilities API
@@ -107,7 +109,7 @@ class Tests_REST_API_WpRestAbilitiesListController extends WP_UnitTestCase {
 						case 'multiply':
 							return $input['a'] * $input['b'];
 						case 'divide':
-							return $input['b'] !== 0 ? $input['a'] / $input['b'] : null;
+							return 0 !== $input['b'] ? $input['a'] / $input['b'] : null;
 						default:
 							return null;
 					}

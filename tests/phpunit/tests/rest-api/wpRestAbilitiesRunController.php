@@ -54,7 +54,9 @@ class Tests_REST_API_WpRestAbilitiesRunController extends WP_UnitTestCase {
 		parent::set_up();
 
 		global $wp_rest_server;
-		$this->server = $wp_rest_server = new WP_REST_Server();
+		$wp_rest_server = new WP_REST_Server();
+		$this->server   = $wp_rest_server;
+
 		do_action( 'rest_api_init' );
 
 		do_action( 'abilities_api_init' );
