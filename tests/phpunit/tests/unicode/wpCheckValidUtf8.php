@@ -10,7 +10,7 @@ class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
 	/**
 	 * Verifies that WordPress can properly detect valid and invalid UTF-8.
 	 *
-	 * @ticket 38044
+	 * @ticket 63837
 	 *
 	 * @dataProvider data_utf8_test_data
 	 *
@@ -49,7 +49,7 @@ class Tests_WpCheckValidUtf8 extends WP_UnitTestCase {
 	 * Verifies that WordPress can properly detect valid and invalid UTF-8;
 	 * forces testing with the fallback mechanism in pure PHP code.
 	 *
-	 * @ticket 38044
+	 * @ticket 63837
 	 *
 	 * @dataProvider data_utf8_test_data
 	 *
