@@ -197,7 +197,7 @@ class WP_Test_REST_Schema_Initialization extends WP_Test_REST_TestCase {
 			'/wp/v2/font-families/(?P<id>[\d]+)',
 			'/wp/v2/abilities/(?P<name>[a-zA-Z0-9\-\/]+?)/run',
 			'/wp/v2/abilities/(?P<name>[a-zA-Z0-9\-\/]+)',
-			'/wp/v2/abilities'
+			'/wp/v2/abilities',
 		);
 
 		$this->assertSameSets( $expected_routes, $routes );
