@@ -1357,7 +1357,17 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
  * @return string Input text with invalid sequences of bytes replaced with the Unicode replacement character.
  */
 function wp_scrub_utf8( $text ) {
-	if ( ! extension_loaded( 'mbstring' ) ) {
+	static $use_fallback = null;
+
+	if ( null === $use_fallback ) {
+		$use_fallback = (
+			! extension_loaded( 'mbstring' ) ||
+			// Maximal subpart substitution introduced by php/php-src@04e59c916f12b322ac55f22314e31bd0176d01cb.
+			version_compare( PHP_VERSION, '8.1.6', '<' )
+		);
+	}
+
+	if ( $use_fallback ) {
 		return _wp_scrub_utf8_fallback( $text );
 	}
 
@@ -1374,7 +1384,7 @@ function wp_scrub_utf8( $text ) {
 
 	/*
 	 * In PHP 8.0, `mb_scrub()` only returns a valid string. Once WordPress
-	 * depends on PHP 8.0 or above, this check will not be necessary.
+	 * depends on PHP 8.0.0 or above, this check will not be necessary.
 	 */
 	return false === $scrubbed
 		? _wp_scrub_utf8_fallback( $text )
