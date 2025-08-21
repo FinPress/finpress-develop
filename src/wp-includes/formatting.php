@@ -1382,13 +1382,7 @@ function wp_scrub_utf8( $text ) {
 	$scrubbed = mb_scrub( $text, 'UTF-8' );
 	mb_substitute_character( $prev_replacement_character );
 
-	/*
-	 * In PHP 8.0, `mb_scrub()` only returns a valid string. Once WordPress
-	 * depends on PHP 8.0.0 or above, this check will not be necessary.
-	 */
-	return false === $scrubbed
-		? _wp_scrub_utf8_fallback( $text )
-		: $scrubbed;
+	return $scrubbed;
 }
 
 /**
