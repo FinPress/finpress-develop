@@ -2191,7 +2191,7 @@ function wp_normalize_path( $path ) {
 	}
 
 	// Standardize all paths to use '/'.
-	$path = str_replace( '\\', '/', $path );
+	$path = str_replace('\\', '/', $path ?? '');
 
 	// Replace multiple slashes down to a singular, allowing for network shares having two slashes.
 	$path = preg_replace( '|(?<=.)/+|', '/', $path );
@@ -7358,7 +7358,7 @@ function _device_can_upload() {
  * @return bool True if the path is a stream URL.
  */
 function wp_is_stream( $path ) {
-	$scheme_separator = strpos( $path, '://' );
+	$scheme_separator = strpos($path ?? '', '://');
 
 	if ( false === $scheme_separator ) {
 		// $path isn't a stream.
