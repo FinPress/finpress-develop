@@ -1042,6 +1042,9 @@ function wp_redirect_admin_locations() {
 		return;
 	}
 
+	// Strip query string from REQUEST_URI
+	$request_uri = untrailingslashit( preg_replace( '/\?.*$/', '', $_SERVER['REQUEST_URI'] ) );
+
 	$admins = array(
 		home_url( 'wp-admin', 'relative' ),
 		home_url( 'dashboard', 'relative' ),
@@ -1050,7 +1053,7 @@ function wp_redirect_admin_locations() {
 		site_url( 'admin', 'relative' ),
 	);
 
-	if ( in_array( untrailingslashit( $_SERVER['REQUEST_URI'] ), $admins, true ) ) {
+	if ( in_array( $request_uri, $admins, true ) ) {
 		wp_redirect( admin_url() );
 		exit;
 	}
@@ -1062,7 +1065,7 @@ function wp_redirect_admin_locations() {
 		site_url( 'login', 'relative' ),
 	);
 
-	if ( in_array( untrailingslashit( $_SERVER['REQUEST_URI'] ), $logins, true ) ) {
+	if ( in_array( $request_uri, $logins, true ) ) {
 		wp_redirect( wp_login_url() );
 		exit;
 	}
