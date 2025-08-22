@@ -402,7 +402,8 @@ mockedApiResponse.Schema = {
                                 "relevance",
                                 "slug",
                                 "include_slugs",
-                                "title"
+                                "title",
+                                "comment_count"
                             ],
                             "required": false
                         },
@@ -1795,6 +1796,7 @@ mockedApiResponse.Schema = {
                                 "slug",
                                 "include_slugs",
                                 "title",
+                                "comment_count",
                                 "menu_order"
                             ],
                             "required": false
@@ -2903,7 +2905,8 @@ mockedApiResponse.Schema = {
                                 "relevance",
                                 "slug",
                                 "include_slugs",
-                                "title"
+                                "title",
+                                "comment_count"
                             ],
                             "required": false
                         },
@@ -4481,7 +4484,8 @@ mockedApiResponse.Schema = {
                                 "relevance",
                                 "slug",
                                 "include_slugs",
-                                "title"
+                                "title",
+                                "comment_count"
                             ],
                             "required": false
                         },
@@ -7102,7 +7106,8 @@ mockedApiResponse.Schema = {
                                 "relevance",
                                 "slug",
                                 "include_slugs",
-                                "title"
+                                "title",
+                                "comment_count"
                             ],
                             "required": false
                         },
