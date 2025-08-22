@@ -172,3 +172,28 @@ function wp_utf8_chunks( string $text, ?bool &$is_valid = null ): Generator {
 		$was_at  = $at;
 	}
 }
+
+/**
+ * Returns whether the given string contains Unicode noncharacters.
+ *
+ * Noncharacters:
+ *  - U+FDD0–U+FDEF
+ *  - U+FFFE–U+FFFF
+ *  - U+1FFFx, U+2FFFx, …, U+FFFFx, U+10FFFx (where x is either E or F)
+ *
+ * @param string $text Are there noncharacters in this string?
+ * @return bool Whether noncharacters were found in the string.
+ *@todo link to Unicode noncharacter spec.
+ *
+ */
+function wp_has_noncharacters( string $text ): bool {
+	$at = $invalid_length = $has_noncharacters = null;
+	$end = strlen( $text );
+
+	while ( $at < $end && ! $has_noncharacters ) {
+		_wp_scan_utf8( $text, $at, $invalid_length, null, $has_noncharacters );
+		$at += $invalid_length;
+	}
+
+	return $has_noncharacters;
+}
