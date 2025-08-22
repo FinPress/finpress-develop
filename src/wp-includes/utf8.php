@@ -150,13 +150,14 @@ endif;
  *                   When negative, indicates invalid bytes of given length.
  */
 function wp_utf8_chunks( string $text, ?bool &$is_valid = null ): Generator {
-	$at             = 0;
-	$was_at         = 0;
-	$end            = strlen( $text );
-	$invalid_length = 0;
+	$at                = 0;
+	$was_at            = 0;
+	$end               = strlen( $text );
+	$invalid_length    = 0;
+	$has_noncharacters = null;
 
 	while ( $at < $end ) {
-		_wp_scan_utf8( $text, $at, $invalid_length );
+		_wp_scan_utf8( $text, $at, $invalid_length, null, $has_noncharacters );
 
 		if ( $at > $was_at ) {
 			$is_valid = true;
