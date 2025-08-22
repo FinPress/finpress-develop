@@ -37,17 +37,20 @@
  *
  * @todo This should probably have a max byte length too: “validate this portion of a string”.
  *
- * @param string $bytes           UTF-8 encoded string which might include invalid spans of bytes.
- * @param int    $at              Where to start scanning.
- * @param int    $invalid_length  Will be set to how many bytes are to be ignored after `$at`.
- * @param ?int   $max_code_points Stop scanning after this many code points has been seen.
+ * @param string    $bytes             UTF-8 encoded string which might include invalid spans of bytes.
+ * @param int|null  $at                Where to start scanning.
+ * @param int|null  $invalid_length    Will be set to how many bytes are to be ignored after `$at`.
+ * @param int|null  $max_code_points   Stop scanning after this many code points has been seen.
+ * @param bool|null $has_noncharacters Set to indicate if scanned string contained noncharacters.
  * @return int How many code points were successfully scanned.
  */
-function _wp_scan_utf8( string $bytes, int &$at, int &$invalid_length, ?int $max_code_points = null ): int {
-	$end            = strlen( $bytes );
-	$invalid_length = 0;
-	$count          = 0;
-	$max_count      = $max_code_points ?? PHP_INT_MAX;
+function _wp_scan_utf8( string $bytes, int &$at = null, int &$invalid_length = null, int $max_code_points = null, bool &$has_noncharacters = null ): int {
+	$at                = $at ?? 0;
+	$end               = strlen( $bytes );
+	$invalid_length    = 0;
+	$count             = 0;
+	$max_count         = $max_code_points ?? PHP_INT_MAX;
+	$has_noncharacters = false;
 
 	for ( $i = $at; $i < $end && $count <= $max_count; $i++ ) {
 		/*
@@ -137,6 +140,18 @@ function _wp_scan_utf8( string $bytes, int &$at, int &$invalid_length, ?int $max
 		) {
 			++$count;
 			$i += 2;
+
+			// Covers the range U+FDD0–U+FDEF, U+FD.
+			$is_noncharacter = (
+				0xEF === $b1 &&
+				(
+					( 0xB7 === $b2 && $b3 >= 0x90 && $b3 <= 0xAF ) ||
+					( 0xBF === $b2 && ( 0xBE === $b3 || 0xBF === $b3 ) )
+				)
+			);
+
+			$has_noncharacters = $has_noncharacters || $is_noncharacter;
+
 			continue;
 		}
 
@@ -154,6 +169,14 @@ function _wp_scan_utf8( string $bytes, int &$at, int &$invalid_length, ?int $max
 		) {
 			++$count;
 			$i += 3;
+
+			$is_noncharacter = (
+				( 0x0F === ( $b2 & 0x0F ) ) &&
+				0xBF === $b3 &&
+				( 0xBE === $b4 || 0xBF === $b4 )
+			);
+			$has_noncharacters = $has_noncharacters || $is_noncharacter;
+
 			continue;
 		}
 
@@ -311,7 +334,7 @@ function _wp_utf8_code_point_count( string $text, ?int $at = 0 ): int {
 	$invalid_length = 0;
 
 	while ( $at < $end ) {
-		$count += _wp_scan_utf8( $text, $at, $invalid_length );
+		$count += _wp_scan_utf8( $text, $at, $invalid_length, null, null );
 		$count += $invalid_length > 0 ? 1 : 0;
 		$at    += $invalid_length;
 	}
