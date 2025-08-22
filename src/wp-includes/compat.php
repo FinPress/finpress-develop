@@ -199,31 +199,23 @@ endif;
 /**
  * Internal compat function to mimic mb_strlen().
  *
- * Only understands UTF-8 and 8bit. All other character sets will be treated as 8bit.
- * For `$encoding === UTF-8`, the `$str` input is expected to be a valid UTF-8 byte
- * sequence. The behavior of this function for invalid inputs is undefined.
+ * Only supports UTF-8 and non-shifting single-byte encodings. For all other
+ * encodings expect the counts to be wrong. When the given encoding (or the
+ * `blog_charset` if none is provided) isn’t UTF-8 then the function returns
+ * the byte-count of the provided string.
  *
  * @ignore
  * @since 4.2.0
  *
  * @param string      $str      The string to retrieve the character length from.
- * @param string|null $encoding Optional. Character encoding to use. Default null.
- * @return int String length of `$str`.
+ * @param string|null $encoding Optional. Count characters according to this encoding.
+ *                              Default is to consult `blog_charset`.
+ * @return int Count of code points if UTF-8, byte length otherwise.
  */
 function _mb_strlen( $str, $encoding = null ) {
-	if ( null === $encoding ) {
-		$encoding = get_option( 'blog_charset' );
-	}
-
-	/*
-	 * The solution below works only for UTF-8, so in case of a different charset
-	 * just use built-in strlen().
-	 */
-	if ( ! _is_utf8_charset( $encoding ) ) {
-		return strlen( $str );
-	}
-
-	return _wp_codepoint_count( $str );
+	return _is_utf8_charset( $encoding ?? get_option( 'blog_charset' ) )
+		? _wp_codepoint_count( $str )
+		: strlen( $str );
 }
 
 // sodium_crypto_box() was introduced in PHP 7.2.
