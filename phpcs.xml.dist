@@ -267,7 +267,7 @@
 		<!-- Goto is an effective way to handle errors in decoders which expect valid bytes
 		     without impacting the fast path while avoiding bloating the code with redundant
 		     and risky handling code. Exclude forbidding goto in UTF-8 fallback code. -->
-		<exclude-pattern>/wp-includes/utf8\.php</exclude-pattern>
+		<exclude-pattern>/wp-includes/compat-utf8\.php</exclude-pattern>
 	</rule>
 
 	<!-- Exclude sample config from modernization to prevent breaking CI workflows based on WP-CLI scaffold.

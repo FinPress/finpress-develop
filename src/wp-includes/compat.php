@@ -48,8 +48,16 @@ function _wp_can_use_pcre_u( $set = null ) {
 	}
 
 	if ( 'reset' === $utf8_pcre ) {
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentional error generated to detect PCRE/u support.
-		$utf8_pcre = @preg_match( '/^./u', 'a' );
+		$utf8_pcre = true;
+		set_error_handler( function () use ( &$utf8_pcre ) {
+			$utf8_pcre = false;
+			return true;
+		} );
+
+		$did_match = 1 === preg_match( '/^./u', 'a' );
+		$utf8_pcre = $did_match && $utf8_pcre;
+
+		restore_error_handler();
 	}
 
 	return $utf8_pcre;
@@ -147,44 +155,13 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
-	if ( _wp_can_use_pcre_u() ) {
-		// Use the regex unicode support to separate the UTF-8 characters into an array.
-		preg_match_all( '/./us', $str, $match );
-		$chars = is_null( $length ) ? array_slice( $match[0], $start ) : array_slice( $match[0], $start, $length );
-		return implode( '', $chars );
+	$starting_byte_offset = _wp_codepoint_span( $str, 0, $start );
+	if ( isset( $length ) ) {
+		$byte_span = _wp_codepoint_span( $str, $starting_byte_offset, $length );
+		return substr( $str, $starting_byte_offset, $byte_span );
 	}
 
-	$regex = '/(
-		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-		| [\xE1-\xEC][\x80-\xBF]{2}
-		| \xED[\x80-\x9F][\x80-\xBF]
-		| [\xEE-\xEF][\x80-\xBF]{2}
-		| \xF0[\x90-\xBF][\x80-\xBF]{2} # four-byte sequences   11110xxx 10xxxxxx * 3
-		| [\xF1-\xF3][\x80-\xBF]{3}
-		| \xF4[\x80-\x8F][\x80-\xBF]{2}
-	)/x';
-
-	// Start with 1 element instead of 0 since the first thing we do is pop.
-	$chars = array( '' );
-
-	do {
-		// We had some string left over from the last round, but we counted it in that last round.
-		array_pop( $chars );
-
-		/*
-		 * Split by UTF-8 character, limit to 1000 characters (last array element will contain
-		 * the rest of the string).
-		 */
-		$pieces = preg_split( $regex, $str, 1000, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
-
-		$chars = array_merge( $chars, $pieces );
-
-		// If there's anything left over, repeat the loop.
-	} while ( count( $pieces ) > 1 && $str = array_pop( $pieces ) );
-
-	return implode( '', array_slice( $chars, $start, $length ) );
+	return substr( $str, $starting_byte_offset );
 }
 
 if ( ! function_exists( 'mb_strlen' ) ) :
@@ -232,45 +209,7 @@ function _mb_strlen( $str, $encoding = null ) {
 		return strlen( $str );
 	}
 
-	if ( _wp_can_use_pcre_u() ) {
-		// Use the regex unicode support to separate the UTF-8 characters into an array.
-		preg_match_all( '/./us', $str, $match );
-		return count( $match[0] );
-	}
-
-	$regex = '/(?:
-		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-		| [\xE1-\xEC][\x80-\xBF]{2}
-		| \xED[\x80-\x9F][\x80-\xBF]
-		| [\xEE-\xEF][\x80-\xBF]{2}
-		| \xF0[\x90-\xBF][\x80-\xBF]{2} # four-byte sequences   11110xxx 10xxxxxx * 3
-		| [\xF1-\xF3][\x80-\xBF]{3}
-		| \xF4[\x80-\x8F][\x80-\xBF]{2}
-	)/x';
-
-	// Start at 1 instead of 0 since the first thing we do is decrement.
-	$count = 1;
-
-	do {
-		// We had some string left over from the last round, but we counted it in that last round.
-		--$count;
-
-		/*
-		 * Split by UTF-8 character, limit to 1000 characters (last array element will contain
-		 * the rest of the string).
-		 */
-		$pieces = preg_split( $regex, $str, 1000 );
-
-		// Increment.
-		$count += count( $pieces );
-
-		// If there's anything left over, repeat the loop.
-	} while ( $str = array_pop( $pieces ) );
-
-	// Fencepost: preg_split() always returns one extra item in the array.
-	return --$count;
+	return _wp_utf8_code_point_count( $str );
 }
 
 // sodium_crypto_box() was introduced in PHP 7.2.
