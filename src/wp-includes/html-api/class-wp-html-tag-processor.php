@@ -3843,9 +3843,6 @@ class WP_HTML_Tag_Processor {
 		}
 
 		$name_length = strlen( $name );
-		if ( 0 === $name_length ) {
-			return false;
-		}
 
 		/**
 		 * WordPress rejects more characters than are strictly forbidden
@@ -3856,6 +3853,7 @@ class WP_HTML_Tag_Processor {
 		 * @see https://html.spec.whatwg.org/#attributes-2
 		 */
 		if (
+			0 === $name_length ||
 			// Syntax-like characters.
 			strcspn( $name, '"\'>&</ =' ) !== $name_length ||
 			// Control characters.

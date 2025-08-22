@@ -346,7 +346,7 @@ class Tests_HtmlApi_WpHtmlTagProcessor extends WP_UnitTestCase {
 
 		for ( $b = 0; $b <= 16; $b++ ) {
 			for ( $x = 0xFFFE; $x <= 0xFFFF; $x++ ) {
-				$i                                       = ( $b << 32 ) + $x;
+				$i                                       = ( $b << 16 ) + $x;
 				$h                                       = dechex( $i );
 				$c                                       = mb_chr( $i );
 				$invalid_names[ "Noncharacter: U+{$h}" ] = array( "shut{$c}down" );
