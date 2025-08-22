@@ -91,8 +91,8 @@ class Tests_WpScrubUtf8 extends WP_UnitTestCase {
 			);
 		} else {
 			$this->assertSame(
-				$scrubbed,
-				_wp_scrub_utf8_fallback( $bytes ),
+				bin2hex( $scrubbed ),
+				bin2hex( _wp_scrub_utf8_fallback( $bytes ) ),
 				'Failed to properly scrub the invalid spans of UTF-8 from the input string.'
 			);
 		}

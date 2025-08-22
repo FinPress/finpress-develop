@@ -229,7 +229,7 @@
 	#############################################################################
 	SELECTIVE EXCLUSIONS
 	Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
-	
+
 	These exclusions are listed ordered by alphabetic sniff name.
 	#############################################################################
 	-->
@@ -266,8 +266,8 @@
 
 		<!-- Goto is an effective way to handle errors in decoders which expect valid bytes
 		     without impacting the fast path while avoiding bloating the code with redundant
-		     and risky handling code. Exclude forbidding goto in wp_check_invalid_utf8() -->
-		<exclude-pattern>/wp-includes/formatting\.php</exclude-pattern>
+		     and risky handling code. Exclude forbidding goto in UTF-8 fallback code. -->
+		<exclude-pattern>/wp-includes/utf8\.php</exclude-pattern>
 	</rule>
 
 	<!-- Exclude sample config from modernization to prevent breaking CI workflows based on WP-CLI scaffold.
