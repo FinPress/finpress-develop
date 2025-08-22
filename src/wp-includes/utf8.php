@@ -32,7 +32,7 @@ if ( extension_loaded( 'mbstring' ) ) :
 	function wp_is_valid_utf8( string $bytes ): bool {
 		return mb_check_encoding( $bytes, 'UTF-8' );
 	}
-else:
+else :
 	/**
 	 * Fallback function for validating UTF-8.
 	 *
@@ -105,7 +105,7 @@ if (
 
 		return $scrubbed;
 	}
-else:
+else :
 	/**
 	 * Fallback function for scrubbing UTF-8.
 	 *
@@ -187,8 +187,10 @@ function wp_utf8_chunks( string $text, ?bool &$is_valid = null ): Generator {
  *
  */
 function wp_has_noncharacters( string $text ): bool {
-	$at = $invalid_length = $has_noncharacters = null;
-	$end = strlen( $text );
+	$at                = null;
+	$invalid_length    = null;
+	$has_noncharacters = null;
+	$end               = strlen( $text );
 
 	while ( $at < $end && ! $has_noncharacters ) {
 		_wp_scan_utf8( $text, $at, $invalid_length, null, $has_noncharacters );

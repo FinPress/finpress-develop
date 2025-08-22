@@ -49,10 +49,12 @@ function _wp_can_use_pcre_u( $set = null ) {
 
 	if ( 'reset' === $utf8_pcre ) {
 		$utf8_pcre = true;
-		set_error_handler( function () use ( &$utf8_pcre ) {
-			$utf8_pcre = false;
-			return true;
-		} );
+		set_error_handler(
+			function () use ( &$utf8_pcre ) {
+				$utf8_pcre = false;
+				return true;
+			}
+		);
 
 		$did_match = 1 === preg_match( '/^./u', 'a' );
 		$utf8_pcre = $did_match && $utf8_pcre;

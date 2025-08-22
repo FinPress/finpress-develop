@@ -292,7 +292,7 @@ function _wp_scrub_utf8_fallback( string $bytes ): string {
 		_wp_scan_utf8( $bytes, $at, $invalid_length );
 
 		if ( $at >= $end ) {
-			if ( $was_at === 0 ) {
+			if ( 0 === $was_at ) {
 				return $bytes;
 			}
 

@@ -331,23 +331,23 @@ class Tests_HtmlApi_WpHtmlTagProcessor extends WP_UnitTestCase {
 
 		// C0 controls.
 		for ( $i = 0; $i <= 0x1F; $i++ ) {
-			$c                                  = chr( $i );
-			$invalid_names["C0 Controls: {$i}"] = array( "shut{$c}down" );
+			$c                                    = chr( $i );
+			$invalid_names[ "C0 Controls: {$i}" ] = array( "shut{$c}down" );
 		}
 
 		// Noncharacters.
 		for ( $i = 0xFDD0; $i <= 0xFDEF; $i++ ) {
-			$h                                     = dechex( $i );
-			$c                                     = mb_chr( $i );
-			$invalid_names["Noncharacter: U+{$h}"] = array( "shut{$c}down" );
+			$h                                       = dechex( $i );
+			$c                                       = mb_chr( $i );
+			$invalid_names[ "Noncharacter: U+{$h}" ] = array( "shut{$c}down" );
 		}
 
 		for ( $b = 0; $b <= 16; $b++ ) {
 			for ( $x = 0xFFFE; $x <= 0xFFFF; $x++ ) {
-				$i                                     = ( $b << 32 ) + $x;
-				$h                                     = dechex( $i );
-				$c                                     = mb_chr( $i );
-				$invalid_names["Noncharacter: U+{$h}"] = array( "shut{$c}down" );
+				$i                                       = ( $b << 32 ) + $x;
+				$h                                       = dechex( $i );
+				$c                                       = mb_chr( $i );
+				$invalid_names[ "Noncharacter: U+{$h}" ] = array( "shut{$c}down" );
 			}
 		}
 
