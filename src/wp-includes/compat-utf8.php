@@ -252,7 +252,7 @@ function _wp_scan_utf8( string $bytes, int &$at, int &$invalid_length, ?int $max
 function _wp_is_valid_utf8_fallback( string $bytes ): bool {
 	$at                = 0;
 	$invalid_length    = 0;
-	$has_noncharacters = null;
+	$has_noncharacters = false;
 
 	_wp_scan_utf8( $bytes, $at, $invalid_length, null, $has_noncharacters );
 
@@ -287,7 +287,7 @@ function _wp_scrub_utf8_fallback( string $bytes ): string {
 	$invalid_length    = 0;
 	$scrubbed          = '';
 	$end               = strlen( $bytes );
-	$has_noncharacters = null;
+	$has_noncharacters = false;
 
 	while ( $at <= $end ) {
 		_wp_scan_utf8( $bytes, $at, $invalid_length, null, $has_noncharacters );
@@ -333,7 +333,7 @@ function _wp_codepoint_count( string $text, ?int $at = 0 ): int {
 	$at                = 0;
 	$end               = strlen( $text );
 	$invalid_length    = 0;
-	$has_noncharacters = null;
+	$has_noncharacters = false;
 
 	while ( $at < $end ) {
 		$count += _wp_scan_utf8( $text, $at, $invalid_length, null, $has_noncharacters );
@@ -365,7 +365,7 @@ function _wp_codepoint_span( string $text, int $at, int $max_code_points, ?int $
 	$was_at            = $at;
 	$invalid_length    = 0;
 	$end               = strlen( $text );
-	$has_noncharacters = null;
+	$has_noncharacters = false;
 
 	while ( $at < $end && $found_code_points < $max_code_points ) {
 		$needed      = $max_code_points - $found_code_points;

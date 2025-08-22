@@ -154,7 +154,7 @@ function wp_utf8_chunks( string $text, ?bool &$is_valid = null ): Generator {
 	$was_at            = 0;
 	$end               = strlen( $text );
 	$invalid_length    = 0;
-	$has_noncharacters = null;
+	$has_noncharacters = false;
 
 	while ( $at < $end ) {
 		_wp_scan_utf8( $text, $at, $invalid_length, null, $has_noncharacters );
@@ -188,9 +188,9 @@ function wp_utf8_chunks( string $text, ?bool &$is_valid = null ): Generator {
  *
  */
 function wp_has_noncharacters( string $text ): bool {
-	$at                = null;
-	$invalid_length    = null;
-	$has_noncharacters = null;
+	$at                = 0;
+	$invalid_length    = 0;
+	$has_noncharacters = false;
 	$end               = strlen( $text );
 
 	while ( $at < $end && ! $has_noncharacters ) {
