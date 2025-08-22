@@ -141,7 +141,7 @@ endif;
  * @return string Extracted substring.
  */
 function _mb_substr( $str, $start, $length = null, $encoding = null ) {
-	if ( null === $str || ( isset( $length ) && $length <= 0 ) ) {
+	if ( null === $str ) {
 		return '';
 	}
 
@@ -157,17 +157,25 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
-	if ( $start < 0 ) {
-		$total_length = _wp_codepoint_count( $str );
-		$start        = max( 0, $total_length + $start );
-	}
-	$starting_byte_offset = _wp_codepoint_span( $str, 0, $start );
-	if ( isset( $length ) ) {
-		$byte_span = _wp_codepoint_span( $str, $starting_byte_offset, $length );
-		return substr( $str, $starting_byte_offset, $byte_span );
-	}
+	$total_length = ( $start < 0 || $length < 0 )
+		? _wp_codepoint_count( $str )
+		: null;
 
-	return substr( $str, $starting_byte_offset );
+	$normalized_start = $start < 0
+		? max( 0, $total_length + $start )
+		: $start;
+
+	$starting_byte_offset = _wp_codepoint_span( $str, 0, $normalized_start );
+
+	$normalized_length = $length < 0
+		? max( 0, $total_length - $normalized_start + $length )
+		: $length;
+
+	$byte_length = isset( $normalized_length )
+		? _wp_codepoint_span( $str, $starting_byte_offset, $normalized_length )
+		: ( strlen( $str ) - $starting_byte_offset );
+
+	return substr( $str, $starting_byte_offset, $byte_length );
 }
 
 if ( ! function_exists( 'mb_strlen' ) ) :
