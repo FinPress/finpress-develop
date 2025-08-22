@@ -139,7 +139,7 @@ endif;
  * @return string Extracted substring.
  */
 function _mb_substr( $str, $start, $length = null, $encoding = null ) {
-	if ( null === $str ) {
+	if ( null === $str || $length <= 0 ) {
 		return '';
 	}
 
@@ -155,6 +155,10 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
+	if ( $start < 0 ) {
+		$total_length = _wp_codepoint_count( $str );
+		$start        = max( 0, $total_length + $start );
+	}
 	$starting_byte_offset = _wp_codepoint_span( $str, 0, $start );
 	if ( isset( $length ) ) {
 		$byte_span = _wp_codepoint_span( $str, $starting_byte_offset, $length );
@@ -209,7 +213,7 @@ function _mb_strlen( $str, $encoding = null ) {
 		return strlen( $str );
 	}
 
-	return _wp_utf8_code_point_count( $str );
+	return _wp_codepoint_count( $str );
 }
 
 // sodium_crypto_box() was introduced in PHP 7.2.

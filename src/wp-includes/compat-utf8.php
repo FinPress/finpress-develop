@@ -327,7 +327,7 @@ function _wp_scrub_utf8_fallback( string $bytes ): string {
  * @param ?int   $at   Start counting after this many bytes in `$text`.
  * @return int How many code points were found.
  */
-function _wp_utf8_code_point_count( string $text, ?int $at = 0 ): int {
+function _wp_codepoint_count( string $text, ?int $at = 0 ): int {
 	$count          = 0;
 	$at             = 0;
 	$end            = strlen( $text );
