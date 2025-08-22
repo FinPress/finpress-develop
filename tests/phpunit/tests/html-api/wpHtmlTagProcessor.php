@@ -300,6 +300,8 @@ class Tests_HtmlApi_WpHtmlTagProcessor extends WP_UnitTestCase {
 	 *
 	 * @ticket {TICKET_NUMBER}
 	 *
+	 * @expectedIncorrectUsage WP_HTML_Tag_Processor::set_attribute
+	 *
 	 * @dataProvider data_invalid_attribute_names
 	 *
 	 * @param string $invalid_name Invalid attribute name.
