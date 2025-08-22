@@ -328,13 +328,13 @@ function _wp_scrub_utf8_fallback( string $bytes ): string {
  * @return int How many code points were found.
  */
 function _wp_codepoint_count( string $text, ?int $at = 0 ): int {
-	$count          = 0;
-	$at             = 0;
-	$end            = strlen( $text );
-	$invalid_length = 0;
+	$count             = 0;
+	$at                = 0;
+	$end               = strlen( $text );
+	$invalid_length    = 0;
 
 	while ( $at < $end ) {
-		$count += _wp_scan_utf8( $text, $at, $invalid_length, null, null );
+		$count += _wp_scan_utf8( $text, $at, $invalid_length );
 		$count += $invalid_length > 0 ? 1 : 0;
 		$at    += $invalid_length;
 	}
