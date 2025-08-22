@@ -139,7 +139,7 @@ endif;
  * @return string Extracted substring.
  */
 function _mb_substr( $str, $start, $length = null, $encoding = null ) {
-	if ( null === $str || $length <= 0 ) {
+	if ( null === $str || ( isset( $length ) && $length <= 0 ) ) {
 		return '';
 	}
 
