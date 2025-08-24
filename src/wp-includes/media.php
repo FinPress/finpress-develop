@@ -4853,10 +4853,11 @@ function wp_enqueue_media( $args = array() ) {
 	/**
 	 * Allows overriding the list of months displayed in the media library.
 	 *
-	 * By default (if this filter does not return an array), a query will be
-	 * run to determine the months that have media items.  This query can be
-	 * expensive for large media libraries, so it may be desirable for sites to
-	 * override this behavior.
+	 * By default, if this filter does not return an array, the function
+	 * `get_media_library_months_with_files()` wil run a query to determine
+	 * the months that have media items. This query can be expensive for large
+	 * media libraries, so it may be desirable for sites to override this
+	 * behavior for example by using a transient.
 	 *
 	 * @since 4.7.4
 	 *
@@ -4867,16 +4868,9 @@ function wp_enqueue_media( $args = array() ) {
 	 */
 	$months = apply_filters( 'media_library_months_with_files', null );
 	if ( ! is_array( $months ) ) {
-		$months = $wpdb->get_results(
-			$wpdb->prepare(
-				"SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
-				FROM $wpdb->posts
-				WHERE post_type = %s
-				ORDER BY post_date DESC",
-				'attachment'
-			)
-		);
+		$months = get_media_library_months_with_files();
 	}
+
 	foreach ( $months as $month_year ) {
 		$month_year->text = sprintf(
 			/* translators: 1: Month, 2: Year. */
@@ -5134,6 +5128,30 @@ function wp_enqueue_media( $args = array() ) {
 	 * @since 3.5.0
 	 */
 	do_action( 'wp_enqueue_media' );
+}
+
+/**
+ * Retrieves the months that have media items.
+ * Fires right after `media_library_months_with_files` if not overridden by it.
+ * Use this function if you intend to store it's result in a transient or similar.
+ *
+ * @since 6.9.0
+ *
+ * @global wpdb $wpdb WordPress database abstraction object.
+ *
+ * @return array Array of objects with `month` and `year` properties.
+ */
+function get_media_library_months_with_files(): array {
+	global $wpdb;
+	return $wpdb->get_results(
+		$wpdb->prepare(
+			"SELECT DISTINCT YEAR( post_date ) AS year, MONTH( post_date ) AS month
+				FROM $wpdb->posts
+				WHERE post_type = %s
+				ORDER BY post_date DESC",
+			'attachment'
+		)
+	);
 }
 
 /**
