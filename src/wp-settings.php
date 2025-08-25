@@ -14,7 +14,6 @@
  * @since 1.0.0
  */
 define( 'WPINC', 'wp-includes' );
-
 /**
  * Version information for the current WordPress release.
  *
@@ -414,6 +413,7 @@ require ABSPATH . WPINC . '/speculative-loading.php';
 add_action( 'after_setup_theme', array( wp_script_modules(), 'add_hooks' ) );
 add_action( 'after_setup_theme', array( wp_interactivity(), 'add_hooks' ) );
 
+
 /**
  * @since 3.3.0
  *
@@ -736,7 +736,6 @@ if ( is_multisite() ) {
 	}
 	unset( $file );
 }
-
 /**
  * This hook is fired once WP, all plugins, and the theme are fully loaded and instantiated.
  *
@@ -748,3 +747,4 @@ if ( is_multisite() ) {
  * @since 3.0.0
  */
 do_action( 'wp_loaded' );
+
