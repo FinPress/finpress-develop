@@ -36,27 +36,6 @@ function wpmu_update_blogs_date() {
 }
 
 /**
- * Gets a full site URL, given a site ID.
- *
- * @since MU (3.0.0)
- *
- * @param int $blog_id Site ID.
- * @return string Full site URL if found. Empty string if not.
- */
-function get_blogaddress_by_id( $blog_id ) {
-	$bloginfo = get_site( (int) $blog_id );
-
-	if ( empty( $bloginfo ) ) {
-		return '';
-	}
-
-	$scheme = parse_url( $bloginfo->home, PHP_URL_SCHEME );
-	$scheme = empty( $scheme ) ? 'http' : $scheme;
-
-	return esc_url( $scheme . '://' . $bloginfo->domain . $bloginfo->path );
-}
-
-/**
  * Gets a full site URL, given a site name.
  *
  * @since MU (3.0.0)
