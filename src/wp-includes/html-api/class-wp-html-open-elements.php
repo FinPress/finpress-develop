@@ -280,6 +280,7 @@ class WP_HTML_Open_Elements {
 	 * >   - th
 	 * >   - marquee
 	 * >   - object
+	 * >   - select
 	 * >   - template
 	 * >   - MathML mi
 	 * >   - MathML mo
@@ -311,6 +312,7 @@ class WP_HTML_Open_Elements {
 				'TH',
 				'MARQUEE',
 				'OBJECT',
+				'SELECT',
 				'TEMPLATE',
 
 				'math MI',
@@ -470,12 +472,14 @@ class WP_HTML_Open_Elements {
 	 * @since 6.4.0 Stub implementation (throws).
 	 * @since 6.7.0 Full implementation.
 	 *
-	 * @see https://html.spec.whatwg.org/#has-an-element-in-select-scope
+	 * @deprecated {WP_VERSION} This method is no longer part of the HTML standard.
 	 *
 	 * @param string $tag_name Name of tag to check.
 	 * @return bool Whether the given element is in SELECT scope.
 	 */
 	public function has_element_in_select_scope( string $tag_name ): bool {
+		_deprecated_function( __METHOD__, '{WP_VERSION}' );
+
 		foreach ( $this->walk_up() as $node ) {
 			if ( $node->node_name === $tag_name ) {
 				return true;
