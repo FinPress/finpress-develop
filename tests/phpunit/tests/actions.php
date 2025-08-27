@@ -209,24 +209,27 @@ class Tests_Actions extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Tests PHP 4 notation for calling actions while passing in an object by reference.
+	 * One hook which is passed an array containing one object. This test ensures it will stay an array and not become an object.
 	 *
 	 * @ticket 48312
+	 * @ticket 60190
 	 *
 	 * @covers ::do_action
 	 */
-	public function test_action_args_with_php4_syntax() {
+	public function test_action_array_of_object_arg() {
 		$a         = new MockAction();
 		$hook_name = __FUNCTION__;
 		$val       = new stdClass();
+		$arg       = array( $val );
 
-		add_action( $hook_name, array( &$a, 'action' ) );
-		// Call the action with PHP 4 notation for passing object by reference.
-		do_action( $hook_name, array( &$val ) );
+		add_action( $hook_name, array( $a, 'action3' ) );
+		do_action( $hook_name, $arg );
 
 		$call_count = $a->get_call_count();
 		$argsvar    = $a->get_args();
-		$this->assertSame( array( $val ), array_pop( $argsvar ) );
+
+		// nested since func_get_args() returns the args as an array
+		$this->assertSame( array( $arg ), array_pop( $argsvar ) );
 	}
 
 	/**
