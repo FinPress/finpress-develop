@@ -471,6 +471,56 @@ class WP_Debug_Data {
 			'debug' => $imagick_loaded,
 		);
 
+		// Opcode Cache.
+		if ( function_exists( 'opcache_get_status' ) ) {
+			$opcache_status = @opcache_get_status( false );
+
+			if ( false === $opcache_status ) {
+				$fields['opcode_cache'] = array(
+					'label' => __( 'Opcode cache' ),
+					'value' => __( 'Disabled by configuration' ),
+					'debug' => 'not available',
+				);
+			} else {
+				$fields['opcode_cache'] = array(
+					'label' => __( 'Opcode cache' ),
+					'value' => ( $opcache_status['opcache_enabled'] ? __( 'Enabled' ) : __( 'Disabled' ) ),
+					'debug' => $opcache_status['opcache_enabled'],
+				);
+
+				$fields['opcode_cache_memory_usage'] = array(
+					'label' => __( 'Opcode cache memory usage' ),
+					'value' => sprintf(
+						/* translators: 1: Used memory, 2: Total memory */
+						__( '%1$s of %2$s' ),
+						size_format( $opcache_status['memory_usage']['used_memory'] ),
+						size_format( $opcache_status['memory_usage']['free_memory'] + $opcache_status['memory_usage']['used_memory'] )
+					),
+					'debug' => sprintf(
+						'%s of %s',
+						$opcache_status['memory_usage']['used_memory'],
+						$opcache_status['memory_usage']['free_memory'] + $opcache_status['memory_usage']['used_memory']
+					),
+				);
+
+				$fields['opcode_cache_hit_rate'] = array(
+					'label' => __( 'Opcode cache hit rate' ),
+					'value' => sprintf(
+						/* translators: %s: Hit rate percentage */
+						__( '%s%%' ),
+						round( $opcache_status['opcache_statistics']['opcache_hit_rate'], 2 )
+					),
+					'debug' => $opcache_status['opcache_statistics']['opcache_hit_rate'],
+				);
+			}
+		} else {
+			$fields['opcode_cache'] = array(
+				'label' => __( 'Opcode cache' ),
+				'value' => __( 'Disabled' ),
+				'debug' => 'not available',
+			);
+		}
+
 		// Pretty permalinks.
 		$pretty_permalinks_supported = got_url_rewrite();
 

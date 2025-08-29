@@ -2731,6 +2731,50 @@ class WP_Site_Health {
 	}
 
 	/**
+	 * Tests if opcode cache is enabled and available.
+	 *
+	 * @since 6.9.0
+	 *
+	 * @return array The test result.
+	 */
+	public function get_test_opcode_cache() {
+		$opcode_cache_enabled = false;
+		if ( function_exists( 'opcache_get_status' ) ) {
+			$status               = opcache_get_status( false );
+			$opcode_cache_enabled = $status['opcache_enabled'];
+		}
+
+		$result = array(
+			'label'       => __( 'Opcode cache is enabled' ),
+			'status'      => 'good',
+			'badge'       => array(
+				'label' => __( 'Performance' ),
+				'color' => 'blue',
+			),
+			'description' => sprintf(
+				'<p>%s</p>',
+				__( 'Opcode cache improves PHP performance by storing precompiled script bytecode in memory, reducing the need for PHP to load and parse scripts on each request.' )
+			),
+			'actions'     => sprintf(
+				'<p><a href="%s" target="_blank">%s<span class="screen-reader-text"> %s</span><span aria-hidden="true" class="dashicons dashicons-external"></span></a></p>',
+				'https://www.php.net/manual/en/book.opcache.php',
+				__( 'Learn more about OPcache.' ),
+				/* translators: Hidden accessibility text. */
+				__( '(opens in a new tab)' )
+			),
+			'test'        => 'opcache',
+		);
+
+		if ( ! $opcode_cache_enabled ) {
+			$result['status']       = 'recommended';
+			$result['label']        = __( 'Opcode cache is not enabled' );
+			$result['description'] .= '<p>' . __( 'Opcode cache is not enabled. Enabling this cache can significantly improve the performance of your site.' ) . '</p>';
+		}
+
+		return $result;
+	}
+
+	/**
 	 * Returns a set of tests that belong to the site status page.
 	 *
 	 * Each site status test is defined here, they may be `direct` tests, that run on page load, or `async` tests
@@ -2821,6 +2865,10 @@ class WP_Site_Health {
 				'search_engine_visibility'     => array(
 					'label' => __( 'Search Engine Visibility' ),
 					'test'  => 'search_engine_visibility',
+				),
+				'opcode_cache'                 => array(
+					'label' => __( 'Opcode cache' ),
+					'test'  => 'opcode_cache',
 				),
 			),
 			'async'  => array(
