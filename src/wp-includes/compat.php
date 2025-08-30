@@ -48,8 +48,18 @@ function _wp_can_use_pcre_u( $set = null ) {
 	}
 
 	if ( 'reset' === $utf8_pcre ) {
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- intentional error generated to detect PCRE/u support.
-		$utf8_pcre = @preg_match( '/^./u', 'a' );
+		$utf8_pcre = true;
+		set_error_handler(
+			function () use ( &$utf8_pcre ) {
+				$utf8_pcre = false;
+				return true;
+			}
+		);
+
+		$did_match = 1 === preg_match( '/^./u', 'a' );
+		$utf8_pcre = $did_match && $utf8_pcre;
+
+		restore_error_handler();
 	}
 
 	return $utf8_pcre;
@@ -147,44 +157,25 @@ function _mb_substr( $str, $start, $length = null, $encoding = null ) {
 		return is_null( $length ) ? substr( $str, $start ) : substr( $str, $start, $length );
 	}
 
-	if ( _wp_can_use_pcre_u() ) {
-		// Use the regex unicode support to separate the UTF-8 characters into an array.
-		preg_match_all( '/./us', $str, $match );
-		$chars = is_null( $length ) ? array_slice( $match[0], $start ) : array_slice( $match[0], $start, $length );
-		return implode( '', $chars );
-	}
+	$total_length = ( $start < 0 || $length < 0 )
+		? _wp_codepoint_count( $str )
+		: null;
 
-	$regex = '/(
-		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-		| [\xE1-\xEC][\x80-\xBF]{2}
-		| \xED[\x80-\x9F][\x80-\xBF]
-		| [\xEE-\xEF][\x80-\xBF]{2}
-		| \xF0[\x90-\xBF][\x80-\xBF]{2} # four-byte sequences   11110xxx 10xxxxxx * 3
-		| [\xF1-\xF3][\x80-\xBF]{3}
-		| \xF4[\x80-\x8F][\x80-\xBF]{2}
-	)/x';
+	$normalized_start = $start < 0
+		? max( 0, $total_length + $start )
+		: $start;
 
-	// Start with 1 element instead of 0 since the first thing we do is pop.
-	$chars = array( '' );
+	$starting_byte_offset = _wp_codepoint_span( $str, 0, $normalized_start );
 
-	do {
-		// We had some string left over from the last round, but we counted it in that last round.
-		array_pop( $chars );
+	$normalized_length = $length < 0
+		? max( 0, $total_length - $normalized_start + $length )
+		: $length;
 
-		/*
-		 * Split by UTF-8 character, limit to 1000 characters (last array element will contain
-		 * the rest of the string).
-		 */
-		$pieces = preg_split( $regex, $str, 1000, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY );
+	$byte_length = isset( $normalized_length )
+		? _wp_codepoint_span( $str, $starting_byte_offset, $normalized_length )
+		: ( strlen( $str ) - $starting_byte_offset );
 
-		$chars = array_merge( $chars, $pieces );
-
-		// If there's anything left over, repeat the loop.
-	} while ( count( $pieces ) > 1 && $str = array_pop( $pieces ) );
-
-	return implode( '', array_slice( $chars, $start, $length ) );
+	return substr( $str, $starting_byte_offset, $byte_length );
 }
 
 if ( ! function_exists( 'mb_strlen' ) ) :
@@ -208,69 +199,23 @@ endif;
 /**
  * Internal compat function to mimic mb_strlen().
  *
- * Only understands UTF-8 and 8bit. All other character sets will be treated as 8bit.
- * For `$encoding === UTF-8`, the `$str` input is expected to be a valid UTF-8 byte
- * sequence. The behavior of this function for invalid inputs is undefined.
+ * Only supports UTF-8 and non-shifting single-byte encodings. For all other
+ * encodings expect the counts to be wrong. When the given encoding (or the
+ * `blog_charset` if none is provided) isn’t UTF-8 then the function returns
+ * the byte-count of the provided string.
  *
  * @ignore
  * @since 4.2.0
  *
  * @param string      $str      The string to retrieve the character length from.
- * @param string|null $encoding Optional. Character encoding to use. Default null.
- * @return int String length of `$str`.
+ * @param string|null $encoding Optional. Count characters according to this encoding.
+ *                              Default is to consult `blog_charset`.
+ * @return int Count of code points if UTF-8, byte length otherwise.
  */
 function _mb_strlen( $str, $encoding = null ) {
-	if ( null === $encoding ) {
-		$encoding = get_option( 'blog_charset' );
-	}
-
-	/*
-	 * The solution below works only for UTF-8, so in case of a different charset
-	 * just use built-in strlen().
-	 */
-	if ( ! _is_utf8_charset( $encoding ) ) {
-		return strlen( $str );
-	}
-
-	if ( _wp_can_use_pcre_u() ) {
-		// Use the regex unicode support to separate the UTF-8 characters into an array.
-		preg_match_all( '/./us', $str, $match );
-		return count( $match[0] );
-	}
-
-	$regex = '/(?:
-		[\x00-\x7F]                  # single-byte sequences   0xxxxxxx
-		| [\xC2-\xDF][\x80-\xBF]       # double-byte sequences   110xxxxx 10xxxxxx
-		| \xE0[\xA0-\xBF][\x80-\xBF]   # triple-byte sequences   1110xxxx 10xxxxxx * 2
-		| [\xE1-\xEC][\x80-\xBF]{2}
-		| \xED[\x80-\x9F][\x80-\xBF]
-		| [\xEE-\xEF][\x80-\xBF]{2}
-		| \xF0[\x90-\xBF][\x80-\xBF]{2} # four-byte sequences   11110xxx 10xxxxxx * 3
-		| [\xF1-\xF3][\x80-\xBF]{3}
-		| \xF4[\x80-\x8F][\x80-\xBF]{2}
-	)/x';
-
-	// Start at 1 instead of 0 since the first thing we do is decrement.
-	$count = 1;
-
-	do {
-		// We had some string left over from the last round, but we counted it in that last round.
-		--$count;
-
-		/*
-		 * Split by UTF-8 character, limit to 1000 characters (last array element will contain
-		 * the rest of the string).
-		 */
-		$pieces = preg_split( $regex, $str, 1000 );
-
-		// Increment.
-		$count += count( $pieces );
-
-		// If there's anything left over, repeat the loop.
-	} while ( $str = array_pop( $pieces ) );
-
-	// Fencepost: preg_split() always returns one extra item in the array.
-	return --$count;
+	return _is_utf8_charset( $encoding ?? get_option( 'blog_charset' ) )
+		? _wp_codepoint_count( $str )
+		: strlen( $str );
 }
 
 // sodium_crypto_box() was introduced in PHP 7.2.
