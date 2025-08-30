@@ -371,6 +371,7 @@ class Tests_Query_Conditionals extends WP_UnitTestCase {
 				'post_type'    => 'page',
 				'post_title'   => 'about',
 				'post_content' => 'Page 1 <!--nextpage--> Page 2',
+				'post_status'  => 'publish',
 			)
 		);
 		update_option( 'show_on_front', 'page' );
