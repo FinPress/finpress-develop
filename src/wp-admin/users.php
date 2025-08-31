@@ -138,6 +138,11 @@ switch ( $wp_list_table->current_action() ) {
 		$user_ids = array_map( 'intval', (array) $_REQUEST['users'] );
 		$update   = 'promote';
 
+		$current_user_id = get_current_user_id();
+		if ( in_array( $current_user_id, $user_ids, false ) && '' === $role ) {
+			wp_die( __( 'Sorry, you cannot remove your own role.' ), 403 );
+		}
+
 		foreach ( $user_ids as $id ) {
 			if ( ! current_user_can( 'promote_user', $id ) ) {
 				wp_die( __( 'Sorry, you are not allowed to edit this user.' ), 403 );
