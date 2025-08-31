@@ -356,8 +356,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		$phpmailer->clearAttachments();
 		$phpmailer->clearCustomHeaders();
 		$phpmailer->clearReplyTos();
-		$phpmailer->Body    = '';
-		$phpmailer->AltBody = '';
+		$phpmailer->Body     = '';
+		$phpmailer->AltBody  = '';
+		$phpmailer->Encoding = '';
 
 		// Set "From" name and email.
 
