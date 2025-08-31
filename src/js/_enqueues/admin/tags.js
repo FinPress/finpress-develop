@@ -42,7 +42,25 @@ jQuery( function($) {
 			$.post(ajaxurl, data, function(r){
 				if ( '1' == r ) {
 					$('#ajax-response').empty();
-					tr.fadeOut('normal', function(){ tr.remove(); });
+					tr.fadeOut('normal', function() {
+						tr.remove();
+
+						if ( $('#the-list tr').length === 0 ) {
+							$('#the-list').append(
+								'<tr class="no-items"><td class="colspanchange" colspan="5">' +
+								wp.i18n.__( 'No tags found.' ) +
+								'</td></tr>'
+							);
+
+							$('.tablenav').hide();
+							$('p.search-box').hide();
+						}
+
+						var currentCount = parseInt( $('.tablenav-pages .displaying-num').first().text().match(/\d+/) ) || 0;
+						var itemCount = currentCount - 1 || 0;
+						var itemText = itemCount === 1 ? wp.i18n.__('item') : wp.i18n.__('items');
+						$('.tablenav-pages .displaying-num').text( itemCount + ' ' + itemText);
+					});
 
 					/**
 					 * Removes the term from the parent box and the tag cloud.
@@ -159,6 +177,16 @@ jQuery( function($) {
 			}
 
 			$('input:not([type="checkbox"]):not([type="radio"]):not([type="button"]):not([type="submit"]):not([type="reset"]):visible, textarea:visible', form).val('');
+
+			var currentCount = parseInt( $('.tablenav-pages .displaying-num').first().text().match(/\d+/) ) || 0;
+			var itemCount = currentCount + 1 || 0;
+			var itemText = itemCount === 1 ? wp.i18n.__('item') : wp.i18n.__('items');
+			$('.tablenav-pages .displaying-num').text( itemCount + ' ' + itemText);
+
+			if ( itemCount === 1 ) {
+				$('.tablenav').show();
+				$('p.search-box').show();
+			}
 		});
 
 		return false;
