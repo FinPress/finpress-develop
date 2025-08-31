@@ -25,6 +25,17 @@
 class WP_Object_Cache {
 
 	/**
+	 * Whether the cache is enabled.
+	 *
+	 * This property is used within the core WP_Object_Cache implementation.
+	 * Custom cache implementations may handle caching behavior differently.
+	 *
+	 * @since 2.0.0
+	 * @var bool
+	 */
+	public $cache_enabled = true;
+
+	/**
 	 * Holds the cached objects.
 	 *
 	 * @since 2.0.0
