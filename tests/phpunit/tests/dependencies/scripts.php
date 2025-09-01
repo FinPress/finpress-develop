@@ -1631,38 +1631,17 @@ HTML
 	/**
 	 * Testing `wp_script_add_data` with the conditional key.
 	 *
-	 * @ticket 16024
-	 */
-	public function test_wp_script_add_data_with_conditional_key() {
-		// Enqueue and add conditional comments.
-		wp_enqueue_script( 'test-only-conditional', 'example.com', array(), null );
-		wp_script_add_data( 'test-only-conditional', 'conditional', 'gt IE 7' );
-		$expected = "<!--[if gt IE 7]>\n<script type=\"text/javascript\" src=\"http://example.com\" id=\"test-only-conditional-js\"></script>\n<![endif]-->\n";
-
-		// Go!
-		$this->assertEqualHTML( $expected, get_echo( 'wp_print_scripts' ) );
-
-		// No scripts left to print.
-		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
-	}
-
-	/**
-	 * Testing `wp_script_add_data` with both the data & conditional keys.
+	 * @since 6.9.0 Conditional comments should now return an empty string.
 	 *
 	 * @ticket 16024
 	 */
-	public function test_wp_script_add_data_with_data_and_conditional_keys() {
-		// Enqueue and add data plus conditional comments for both.
-		wp_enqueue_script( 'test-conditional-with-data', 'example.com', array(), null );
-		wp_script_add_data( 'test-conditional-with-data', 'data', 'testing' );
-		wp_script_add_data( 'test-conditional-with-data', 'conditional', 'lt IE 9' );
-		$expected  = "<!--[if lt IE 9]>\n<script type='text/javascript' id='test-conditional-with-data-js-extra'>\n/* <![CDATA[ */\ntesting\n/* ]]> */\n</script>\n<![endif]-->\n";
-		$expected .= "<!--[if lt IE 9]>\n<script type='text/javascript' src='http://example.com' id='test-conditional-with-data-js'></script>\n<![endif]-->\n";
-		$expected  = str_replace( "'", '"', $expected );
+	public function test_wp_script_add_data_with_conditional_key() {
+		$this->expectDeprecation();
+		$this->expectDeprecationMessageMatches( 'Function WP_Dependencies->add_data() was called with an argument that is deprecated since version 6.9.0! The conditional argument is no longer supported for inline scripts or styles.' );
 
-		// Go!
-		$this->assertEqualHTML( $expected, get_echo( 'wp_print_scripts' ) );
-
+		// Enqueue and add conditional comments.
+		wp_enqueue_script( 'test-only-conditional', 'example.com', array(), null );
+		wp_script_add_data( 'test-only-conditional', 'conditional', 'gt IE 7' );
 		// No scripts left to print.
 		$this->assertSame( '', get_echo( 'wp_print_scripts' ) );
 	}
@@ -2074,6 +2053,7 @@ HTML;
 
 	/**
 	 * @ticket 14853
+	 * @ticket 63821
 	 */
 	public function test_wp_add_inline_script_after_and_before_with_concat_and_conditional() {
 		global $wp_scripts;
@@ -2081,17 +2061,12 @@ HTML;
 		$wp_scripts->do_concat    = true;
 		$wp_scripts->default_dirs = array( '/wp-admin/js/', '/wp-includes/js/' ); // Default dirs as in wp-includes/script-loader.php.
 
-		$expected_localized  = "<!--[if gte IE 9]>\n";
-		$expected_localized .= "<script type='text/javascript' id='test-example-js-extra'>\n/* <![CDATA[ */\nvar testExample = {\"foo\":\"bar\"};\n/* ]]> */\n</script>\n";
-		$expected_localized .= "<![endif]-->\n";
-		$expected_localized  = str_replace( "'", '"', $expected_localized );
+		$this->expectDeprecation();
+		$this->expectDeprecationMessageMatches( 'Function WP_Dependencies->add_data() was called with an argument that is deprecated since version 6.9.0! The conditional argument is no longer supported for inline scripts or styles.' );
 
-		$expected  = "<!--[if gte IE 9]>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-before'>\n/* <![CDATA[ */\nconsole.log(\"before\");\n/* ]]> */\n</script>\n";
-		$expected .= "<script type='text/javascript' src='http://example.com' id='test-example-js'></script>\n";
-		$expected .= "<script type='text/javascript' id='test-example-js-after'>\n/* <![CDATA[ */\nconsole.log(\"after\");\n/* ]]> */\n</script>\n";
-		$expected .= "<![endif]-->\n";
-		$expected  = str_replace( "'", '"', $expected );
+		// Conditional scripts should not output.
+		$expected_localized = '';
+		$expected           = '';
 
 		wp_enqueue_script( 'test-example', 'example.com', array(), null );
 		wp_localize_script( 'test-example', 'testExample', array( 'foo' => 'bar' ) );
@@ -2130,20 +2105,18 @@ HTML;
 
 	/**
 	 * @ticket 36392
+	 * @ticket 63821
 	 */
 	public function test_wp_add_inline_script_after_with_concat_and_conditional_and_core_dependency() {
-		global $wp_scripts, $wp_version;
+		global $wp_scripts;
+		$this->expectDeprecation();
+		$this->expectDeprecationMessageMatches( 'Function WP_Dependencies->add_data() was called with an argument that is deprecated since version 6.9.0! The conditional argument is no longer supported for inline scripts or styles.' );
 
 		wp_default_scripts( $wp_scripts );
 
 		$wp_scripts->base_url  = '';
 		$wp_scripts->do_concat = true;
-
-		$expected  = "<script type='text/javascript' src='/wp-admin/load-scripts.php?c=0&amp;load%5Bchunk_0%5D=jquery-core,jquery-migrate&amp;ver={$wp_version}'></script>\n";
-		$expected .= "<!--[if gte IE 9]>\n";
-		$expected .= "<script type=\"text/javascript\" src=\"http://example.com\" id=\"test-example-js\"></script>\n";
-		$expected .= "<script type=\"text/javascript\" id=\"test-example-js-after\">\n/* <![CDATA[ */\nconsole.log(\"after\");\n/* ]]> */\n</script>\n";
-		$expected .= "<![endif]-->\n";
+		$expected              = '';
 
 		wp_enqueue_script( 'test-example', 'http://example.com', array( 'jquery' ), null );
 		wp_add_inline_script( 'test-example', 'console.log("after");' );
