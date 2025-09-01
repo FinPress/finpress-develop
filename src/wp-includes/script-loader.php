@@ -3458,3 +3458,15 @@ function wp_remove_surrounding_empty_script_tags( $contents ) {
 		);
 	}
 }
+
+/**
+ * Enqueues the assets required for the Command Palette.
+ *
+ * @since 6.9.0
+ */
+function wp_enqueue_command_palette_assets() {
+	wp_enqueue_script( 'wp-commands' );
+	wp_enqueue_style( 'wp-commands' );
+	wp_enqueue_script( 'wp-core-commands' );
+	wp_add_inline_script( 'wp-core-commands', 'wp.coreCommands.initializeCommandPalette();' );
+}
