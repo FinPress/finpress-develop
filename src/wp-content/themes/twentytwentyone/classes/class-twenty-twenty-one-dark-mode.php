@@ -72,13 +72,15 @@ class Twenty_Twenty_One_Dark_Mode {
 			array( 'in_footer' => true )
 		);
 
-		wp_enqueue_script(
-			'twentytwentyone-editor-dark-mode-support',
-			get_template_directory_uri() . '/assets/js/editor-dark-mode-support.js',
-			array( 'twentytwentyone-dark-mode-support-toggle' ),
-			'1.0.0',
-			array( 'in_footer' => true )
-		);
+		if ( is_admin() ) {
+			wp_enqueue_script(
+				'twentytwentyone-editor-dark-mode-support',
+				get_template_directory_uri() . '/assets/js/editor-dark-mode-support.js',
+				array( 'twentytwentyone-dark-mode-support-toggle' ),
+				'1.0.0',
+				array( 'in_footer' => true )
+			);
+		}
 	}
 
 	/**
@@ -292,7 +294,6 @@ class Twenty_Twenty_One_Dark_Mode {
 			return;
 		}
 		$this->the_html();
-		$this->the_script();
 	}
 
 	/**
@@ -353,19 +354,6 @@ class Twenty_Twenty_One_Dark_Mode {
 		</style>
 
 		<?php
-	}
-
-	/**
-	 * Prints the dark-mode switch script.
-	 *
-	 * @since Twenty Twenty-One 1.0
-	 *
-	 * @return void
-	 */
-	public function the_script() {
-		echo '<script>';
-		include get_template_directory() . '/assets/js/dark-mode-toggler.js'; // phpcs:ignore WPThemeReview.CoreFunctionality.FileInclude
-		echo '</script>';
 	}
 
 	/**
