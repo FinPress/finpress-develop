@@ -266,6 +266,9 @@ require ABSPATH . WPINC . '/html-api/class-wp-html-token.php';
 require ABSPATH . WPINC . '/html-api/class-wp-html-stack-event.php';
 require ABSPATH . WPINC . '/html-api/class-wp-html-processor-state.php';
 require ABSPATH . WPINC . '/html-api/class-wp-html-processor.php';
+require ABSPATH . WPINC . '/abilities-api/class-wp-ability.php';
+require ABSPATH . WPINC . '/abilities-api/class-wp-abilities-registry.php';
+require ABSPATH . WPINC . '/abilities-api.php';
 require ABSPATH . WPINC . '/class-wp-http.php';
 require ABSPATH . WPINC . '/class-wp-http-streams.php';
 require ABSPATH . WPINC . '/class-wp-http-curl.php';
@@ -327,6 +330,8 @@ require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-navigation-fallback
 require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-font-families-controller.php';
 require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-font-faces-controller.php';
 require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-font-collections-controller.php';
+require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-abilities-list-controller.php';
+require ABSPATH . WPINC . '/rest-api/endpoints/class-wp-rest-abilities-run-controller.php';
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-meta-fields.php';
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-comment-meta-fields.php';
 require ABSPATH . WPINC . '/rest-api/fields/class-wp-rest-post-meta-fields.php';
