@@ -109,10 +109,12 @@ if ( ! CUSTOM_TAGS ) {
 		),
 		'br'         => array(),
 		'button'     => array(
-			'disabled' => true,
-			'name'     => true,
-			'type'     => true,
-			'value'    => true,
+			'disabled'            => true,
+			'name'                => true,
+			'type'                => true,
+			'value'               => true,
+			'popovertarget'       => true,
+			'popovertargetaction' => true,
 		),
 		'caption'    => array(
 			'align' => true,
@@ -145,7 +147,11 @@ if ( ! CUSTOM_TAGS ) {
 			'open'  => true,
 		),
 		'div'        => array(
-			'align' => true,
+			'align'   => true,
+			'popover' => true,
+		),
+		'dialog'     => array(
+			'popover' => true,
 		),
 		'dl'         => array(),
 		'dt'         => array(),
@@ -362,7 +368,8 @@ if ( ! CUSTOM_TAGS ) {
 		'tt'         => array(),
 		'u'          => array(),
 		'ul'         => array(
-			'type' => true,
+			'type'    => true,
+			'popover' => true,
 		),
 		'ol'         => array(
 			'start'    => true,
