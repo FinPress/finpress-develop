@@ -1932,6 +1932,44 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Check array is a sequential.
+	 *
+	 * @param array $arr array.
+	 *
+	 * @ticket 63427
+	 *
+	 * @return bool
+	 */
+	private function is_sequential( array $arr ) {
+		return array_keys( $arr ) === range( 0, count( $arr ) - 1 );
+	}
+
+	/**
+	 * Tests that the `roles` property is an sequential array.
+	 *
+	 * @ticket 63427
+	 *
+	 * @return void
+	 */
+	public function test_user_roles_property_is_sequential_array() {
+		$user = new WP_User( self::$author_id );
+		$this->assertTrue( $this->is_sequential( $user->roles ) );
+
+		$user->remove_role( 'author' );
+		$this->assertIsArray( $user->roles );
+		$this->assertSame( array(), $user->roles );
+
+		$user->add_role( 'author' );
+		$this->assertSame( array( 'author' ), $user->roles );
+		$this->assertTrue( $this->is_sequential( $user->roles ) );
+
+		$user->add_role( 'custom_role' );
+		$user->add_role( 'subscriber' );
+		$this->assertSame( array( 'author', 'subscriber' ), $user->roles );
+		$this->assertTrue( $this->is_sequential( $user->roles ) );
+	}
+
+	/**
 	 * @ticket 42564
 	 */
 	public function test_edit_user_role_update() {
