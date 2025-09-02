@@ -1718,10 +1718,9 @@ function do_robots() {
 	$output = "User-agent: *\n";
 	$public = (bool) get_option( 'blog_public' );
 
-	$site_url = parse_url( site_url() );
-	$path     = ( ! empty( $site_url['path'] ) ) ? $site_url['path'] : '';
-	$output  .= "Disallow: $path/wp-admin/\n";
-	$output  .= "Allow: $path/wp-admin/admin-ajax.php\n";
+	$admin_path = wp_make_link_relative( admin_url() );
+	$output    .= sprintf( 'Disallow: %1$s%2$s', $admin_path, PHP_EOL );
+	$output    .= sprintf( 'Allow: %1$s%2$s', $admin_path . 'admin-ajax.php', PHP_EOL );
 
 	/**
 	 * Filters the robots.txt output.
