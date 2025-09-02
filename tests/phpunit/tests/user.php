@@ -849,6 +849,40 @@ class Tests_User extends WP_UnitTestCase {
 	}
 
 	/**
+	 * Check that single-script usernames work, mixed-script ones
+	 * don't, and really strange ones don't.
+	 *
+	 * Since validate_username() uses strict sanitization, this
+	 * test checks some codepoints strictly, rejecting some that
+	 * are less readable than confusable.
+	 *
+	 * @ticket 31992
+	 */
+	public function test_validate_utf8_usernames() {
+		if ( ! function_exists( 'mb_str_split' ) ) {
+			$this->markTestSkipped( 'PHP 7.2/3 lacks mb_str_split' );
+		}
+		/* WordPress approves of drab grey (grå) Norwegian weather */
+		$this->assertTrue( validate_username( 'grå' ) );
+		/* Latin I, Cyrillic V like latin B, Latin M */
+		$this->assertFalse( validate_username( 'IВM' ) );
+		/* Three Cyrillic letters */
+		$this->assertTrue( validate_username( 'ІВМ' ) );
+		/* A metal umlaut fails because validate_username is
+		 * strict and n̈ is unfamiliar in every language
+		 */
+		$this->assertFalse( validate_username( 'spın̈altap' ) );
+		/* Emoji skintones fail because usernames should be
+		 * easily distinguishable
+		 */
+		$this->assertFalse( validate_username( '👱🏼' ) );
+		$this->assertFalse( validate_username( '👱🏾' ) );
+		/* Many plain emoji also are barely distinguishable */
+		$this->assertFalse( validate_username( '😊' ) );
+		$this->assertFalse( validate_username( '☺️' ) );
+	}
+
+	/**
 	 * @ticket 29880
 	 */
 	public function test_wp_insert_user_should_not_wipe_existing_password() {

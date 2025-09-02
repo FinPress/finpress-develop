@@ -2289,6 +2289,134 @@ function sanitize_file_name( $filename ) {
 }
 
 /**
+ * Validates that a string contains only characters from a single unicode script.
+ *
+ * The function only considers alphabetic characters. It returns true if a string
+ * contains no more than one unicode script, and false if it contains two or more.
+ * An empty string is considered to contain no scripts, and thus returns true.
+ *
+ * IntlChar does not support returning the script property defined by
+ * https://www.unicode.org/reports/tr24/, so this implementation uses a workaround.
+ * It maps the known extension blocks ("latin extended a" etc) to the first block
+ * for that script, and then checks that the string uses only a single block.
+ *
+ * This works for the scripts currently in Unicode, and should continue to work for
+ * future scripts as long as each new script needs a single code block. While older
+ * scripts may have multiple blocks, the Unicode committee has grown better at
+ * estimating sizes high enough so that only one block is needed.
+ *
+ * @since 6.9.0
+ *
+ * @param string $input A string to check.
+ * @return bool True if all letters in the string belong to the same unicode
+ *              script or if the string is empty.
+ *              False if letters from two more more scripts are included.
+ */
+function uses_single_unicode_script( string $input ): bool {
+	if ( '' === $input ) {
+		return true;
+	}
+
+	if ( version_compare( PHP_VERSION, '7.4.0', '<' ) ) {
+		// Since mb_str_split is not available in PHP < 7.4 we can only check ASCII characters.
+		return (bool) preg_match( '/^[a-zA-Z0-9 _.\-@]+$/i', $input );
+	}
+
+	$block = 0;
+	// phpcs:ignore PHPCompatibility.FunctionUse.NewFunctions.mb_str_splitFound -- old versions of PHP are handled above
+	foreach ( mb_str_split( $input ) as $cp ) {
+		if ( IntlChar::isalpha( $cp ) ) {
+			$b = IntlChar::getBlockCode( $cp );
+			switch ( $b ) {
+				case IntlChar::BLOCK_CODE_LATIN_1_SUPPLEMENT:
+					// fall through
+				case IntlChar::BLOCK_CODE_LATIN_EXTENDED_A:
+					// fall through
+				case IntlChar::BLOCK_CODE_LATIN_EXTENDED_B:
+				case IntlChar::BLOCK_CODE_LATIN_EXTENDED_C:
+				case IntlChar::BLOCK_CODE_LATIN_EXTENDED_D:
+				case IntlChar::BLOCK_CODE_IPA_EXTENSIONS: // used in Ghana etc
+				case IntlChar::BLOCK_CODE_LATIN_EXTENDED_ADDITIONAL:
+					$b = IntlChar::BLOCK_CODE_BASIC_LATIN;
+					break;
+				case IntlChar::BLOCK_CODE_GREEK_EXTENDED:
+				case IntlChar::BLOCK_CODE_COPTIC:
+				case IntlChar::BLOCK_CODE_COPTIC_EPACT_NUMBERS:
+					// Greek and coptic overlap. Coptic
+					// looks like Greek upper case, so
+					// readers of Greek can read Coptic,
+					// but readers of Coptic can't
+					// necessarily read Greek. This led to
+					// an unfortunate situation in
+					// Unicode, where the two can't be
+					// properly distinguished by
+					// block. However, because of the
+					// overlap, this isn't really a
+					// problem.
+					$b = IntlChar::BLOCK_CODE_GREEK;
+					break;
+				case IntlChar::BLOCK_CODE_ETHIOPIC_EXTENDED:
+				case IntlChar::BLOCK_CODE_ETHIOPIC_EXTENDED_A:
+				case IntlChar::BLOCK_CODE_ETHIOPIC_SUPPLEMENT:
+					$b = IntlChar::BLOCK_CODE_ETHIOPIC;
+					break;
+				case IntlChar::BLOCK_CODE_ARABIC_EXTENDED_A:
+				case IntlChar::BLOCK_CODE_ARABIC_SUPPLEMENT:
+				case IntlChar::BLOCK_CODE_ARABIC_PRESENTATION_FORMS_A:
+				case IntlChar::BLOCK_CODE_ARABIC_PRESENTATION_FORMS_B:
+				case IntlChar::BLOCK_CODE_ARABIC_SUPPLEMENT:
+					$b = IntlChar::BLOCK_CODE_ARABIC;
+					break;
+				case IntlChar::BLOCK_CODE_CYRILLIC_EXTENDED_A:
+				case IntlChar::BLOCK_CODE_CYRILLIC_EXTENDED_B:
+					$b = IntlChar::BLOCK_CODE_CYRILLIC;
+					break;
+				case IntlChar::BLOCK_CODE_BOPOMOFO_EXTENDED:
+					$b = IntlChar::BLOCK_CODE_BOPOMOFO;
+					break;
+				case IntlChar::BLOCK_CODE_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS_EXTENDED:
+					$b = IntlChar::BLOCK_CODE_UNIFIED_CANADIAN_ABORIGINAL_SYLLABICS;
+					break;
+				case IntlChar::BLOCK_CODE_DEVANAGARI_EXTENDED:
+					$b = IntlChar::BLOCK_CODE_DEVANAGARI;
+					break;
+				case IntlChar::BLOCK_CODE_HANGUL_COMPATIBILITY_JAMO:
+				case IntlChar::BLOCK_CODE_HANGUL_JAMO_EXTENDED_A:
+				case IntlChar::BLOCK_CODE_HANGUL_JAMO_EXTENDED_B:
+				case IntlChar::BLOCK_CODE_HANGUL_SYLLABLES:
+					$b = IntlChar::BLOCK_CODE_HANGUL_JAMO;
+					break;
+				case IntlChar::BLOCK_CODE_MYANMAR_EXTENDED_A:
+				case IntlChar::BLOCK_CODE_MYANMAR_EXTENDED_B:
+					$b = IntlChar::BLOCK_CODE_MYANMAR;
+					break;
+				case IntlChar::BLOCK_CODE_CJK_STROKES:
+				case IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS:
+				case IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_A:
+				case IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_B:
+				case IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_C:
+				case IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS_EXTENSION_D:
+				case IntlChar::BLOCK_CODE_CJK_COMPATIBILITY_IDEOGRAPHS:
+				case IntlChar::BLOCK_CODE_CJK_RADICALS_SUPPLEMENT:
+				case IntlChar::BLOCK_CODE_ENCLOSED_CJK_LETTERS_AND_MONTHS:
+				case IntlChar::BLOCK_CODE_CJK_COMPATIBILITY_FORMS:
+				case IntlChar::BLOCK_CODE_CJK_COMPATIBILITY_IDEOGRAPHS_SUPPLEMENT:
+					$b = IntlChar::BLOCK_CODE_CJK_UNIFIED_IDEOGRAPHS;
+					break;
+			}
+			if ( 0 === $block ) {
+				$block = $b;
+			}
+			if ( $block !== $b ) {
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+/**
  * Sanitizes a username, stripping out unsafe characters.
  *
  * Removes tags, percent-encoded characters, HTML entities, and if strict is enabled,
@@ -2306,15 +2434,19 @@ function sanitize_file_name( $filename ) {
 function sanitize_user( $username, $strict = false ) {
 	$raw_username = $username;
 	$username     = wp_strip_all_tags( $username );
-	$username     = remove_accents( $username );
 	// Remove percent-encoded characters.
-	$username = preg_replace( '|%([a-fA-F0-9][a-fA-F0-9])|', '', $username );
+	$username = urldecode( $username );
 	// Remove HTML entities.
 	$username = preg_replace( '/&.+?;/', '', $username );
 
-	// If strict, reduce to ASCII for max portability.
-	if ( $strict ) {
+	// If mixing different scripts, remove all but ASCII.
+	if ( ! uses_single_unicode_script( $username ) ) {
 		$username = preg_replace( '|[^a-z0-9 _.\-@]|i', '', $username );
+	}
+
+	// If strict, remove reduce to letters and numbers.
+	if ( $strict ) {
+		$username = preg_replace( '|[^a-z0-9 _.\-@\p{L}\p{N}]|iu', '', $username );
 	}
 
 	$username = trim( $username );
@@ -3084,7 +3216,9 @@ function antispambot( $email_address, $hex_encoding = 0 ) {
 	for ( $i = 0, $len = strlen( $email_address ); $i < $len; $i++ ) {
 		$j = rand( 0, 1 + $hex_encoding );
 
-		if ( 0 === $j ) {
+		if ( ord( $email_address[ $i ] ) > 127 ) {
+			$email_no_spam_address .= $email_address[ $i ];
+		} elseif ( 0 === $j ) {
 			$email_no_spam_address .= '&#' . ord( $email_address[ $i ] ) . ';';
 		} elseif ( 1 === $j ) {
 			$email_no_spam_address .= $email_address[ $i ];
@@ -3700,7 +3834,21 @@ function convert_smilies( $text ) {
 /**
  * Verifies that an email is valid.
  *
- * Does not grok i18n domains. Not RFC compliant.
+ * The mostly matches what people think is the format of email
+ * addresses, and is close to all three current specifications.
+ *
+ * Email address syntax is specified in RFC 5322 for ASCII-only email
+ * and in RFC 6532 for unicode email (both unicode domains and
+ * localparts). In addition, the HTML WHATWG specification contains a
+ * third syntax which is used for HTML form input (except that major
+ * browsers deviate a little from the WHATWG specification).
+ *
+ * This function matches the WHATWG and RFC 6532 specifications fairly
+ * well, although there are some differences.  " "@example.com (quote
+ * space quote at ...) is allowed by the RFCs and rejected by this
+ * code, while ..@example.com is allowed by this code and prohibited
+ * by the RFCs. info@grå.org is allowed by this code and major
+ * browsers, but prohibited by WHATWG's regex (as of April 2023).
  *
  * @since 0.71
  *
@@ -3744,7 +3892,7 @@ function is_email( $email, $deprecated = false ) {
 	 * LOCAL PART
 	 * Test for invalid characters.
 	 */
-	if ( ! preg_match( '/^[a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.-]+$/', $local ) ) {
+	if ( ! ( preg_match( '/^[a-zA-Z0-9\x80-\xff!#$%&\'*+\/=?^_`{|}~\.-]+$/', $local ) && preg_match( '/^\X+$/', $local ) ) ) {
 		/** This filter is documented in wp-includes/formatting.php */
 		return apply_filters( 'is_email', false, $email, 'local_invalid_chars' );
 	}
@@ -3782,7 +3930,7 @@ function is_email( $email, $deprecated = false ) {
 		}
 
 		// Test for invalid characters.
-		if ( ! preg_match( '/^[a-z0-9-]+$/i', $sub ) ) {
+		if ( ! ( preg_match( '/^[a-z0-9\x80-\xff-]+$/i', $sub ) && preg_match( '/^\X+$/', $sub ) ) ) {
 			/** This filter is documented in wp-includes/formatting.php */
 			return apply_filters( 'is_email', false, $email, 'sub_invalid_chars' );
 		}
@@ -3958,7 +4106,7 @@ function sanitize_email( $email ) {
 	 * LOCAL PART
 	 * Test for invalid characters.
 	 */
-	$local = preg_replace( '/[^a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.-]/', '', $local );
+	$local = preg_replace( '/[^a-zA-Z0-9!#$%&\'*+\/=?^_`{|}~\.\x80-\xff-]/', '', $local );
 	if ( '' === $local ) {
 		/** This filter is documented in wp-includes/formatting.php */
 		return apply_filters( 'sanitize_email', '', $email, 'local_invalid_chars' );
@@ -3999,7 +4147,7 @@ function sanitize_email( $email ) {
 		$sub = trim( $sub, " \t\n\r\0\x0B-" );
 
 		// Test for invalid characters.
-		$sub = preg_replace( '/[^a-z0-9-]+/i', '', $sub );
+		$sub = preg_replace( '/[^a-z0-9\x80-\xff-]+/i', '', $sub );
 
 		// If there's anything left, add it to the valid subs.
 		if ( '' !== $sub ) {
