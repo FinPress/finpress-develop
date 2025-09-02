@@ -20,7 +20,9 @@
 		$form,
 		originalFormContent,
 		$passwordWrapper,
-		successTimeout;
+		successTimeout,
+		isMac = window.navigator.platform ? window.navigator.platform.indexOf( 'Mac' ) !== -1 : false, 
+		ua = navigator.userAgent.toLowerCase();
 
 	function generatePassword() {
 		if ( typeof zxcvbn !== 'function' ) {
@@ -80,6 +82,8 @@
 			$pass1.removeClass( 'short bad good strong' );
 			showOrHideWeakPasswordCheckbox();
 		} );
+
+		bindCapsLockWarning( $pass1 );
 	}
 
 	function resetToggle( show ) {
@@ -213,6 +217,8 @@
 		} else {
 			// Password field for the login form.
 			$pass1 = $( '#user_pass' );
+
+			bindCapsLockWarning( $pass1 );
 		}
 
 		/*
@@ -329,6 +335,53 @@
 				break;
 			default:
 				$('#pass-strength-result').addClass('short').html( pwsL10n.short );
+		}
+	}
+
+	/**
+	 * Binds Caps Lock detection to a given password input field.
+	 *
+	 * @param {jQuery} $input The password input field.
+	 */
+	function bindCapsLockWarning( $input ) {
+		var $capsWarning = $( '#caps-warning' );
+
+		$input.on( 'keydown', function( e ) {
+			if ( isCapsLockOn( e.originalEvent || e ) ) {
+				$capsWarning.show();
+				wp.a11y.speak( __( 'Caps lock is on.' ) );
+			} else {
+				$capsWarning.hide();
+			}
+		} );
+
+		$input.on( 'blur', function() {
+			$capsWarning.hide();
+		} );
+	}
+
+	/**
+	 * Determines if Caps Lock is currently enabled.
+	 *
+	 * Uses `KeyboardEvent.getModifierState()` when available, with a fallback
+	 * for older browsers. On macOS Safari, the native warning is preferred,
+	 * so this function returns false to suppress custom warnings.
+	 *
+	 * @param {KeyboardEvent} e The keydown event object.
+	 *
+	 * @return {boolean} True if Caps Lock is on, false otherwise. 
+	 */
+	function isCapsLockOn( e ) {
+		// Skip warning on macOS Safari (they show native indicators).
+		if (
+			isMac &&
+			( ua.indexOf( 'safari' ) !== -1 )
+		) {
+			return false;
+		}
+
+		if ( typeof e.getModifierState === 'function' ) {
+			return e.getModifierState( 'CapsLock' );
 		}
 	}
 
