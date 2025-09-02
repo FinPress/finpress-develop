@@ -495,7 +495,17 @@ if ( ! function_exists( 'twentythirteen_paging_nav' ) ) :
 		if ( $wp_query->max_num_pages < 2 ) {
 			return;
 		}
+
+		$order   = get_query_var( 'order', 'DESC' );
+		$is_desc = 'DESC' === $order;
+
+		$new_posts_text = __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentythirteen' );
+		$old_posts_text = __( '<span class="meta-nav">&larr;</span> Older posts', 'twentythirteen' );
+
+		$prev_link = $is_desc ? get_next_posts_link( $old_posts_text ) : get_previous_posts_link( $old_posts_text );
+		$next_link = $is_desc ? get_previous_posts_link( $new_posts_text ) : get_next_posts_link( $new_posts_text );
 		?>
+
 		<nav class="navigation paging-navigation">
 		<h1 class="screen-reader-text">
 			<?php
@@ -504,14 +514,19 @@ if ( ! function_exists( 'twentythirteen_paging_nav' ) ) :
 			?>
 		</h1>
 		<div class="nav-links">
+		<?php if ( $prev_link ) : ?>
+			<div class="nav-previous">
+				<?php echo wp_kses_post( $prev_link ); ?>
+			</div>
+			<?php
+		endif;
 
-			<?php if ( get_next_posts_link() ) : ?>
-			<div class="nav-previous"><?php next_posts_link( __( '<span class="meta-nav">&larr;</span> Older posts', 'twentythirteen' ) ); ?></div>
-			<?php endif; ?>
-
-			<?php if ( get_previous_posts_link() ) : ?>
-			<div class="nav-next"><?php previous_posts_link( __( 'Newer posts <span class="meta-nav">&rarr;</span>', 'twentythirteen' ) ); ?></div>
-			<?php endif; ?>
+		if ( $next_link ) :
+			?>
+			<div class="nav-next">
+				<?php echo wp_kses_post( $next_link ); ?>
+			</div>
+		<?php endif; ?>
 
 		</div><!-- .nav-links -->
 	</nav><!-- .navigation -->
