@@ -303,6 +303,25 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			}
 			$headers = array();
 
+			$parse_email_addresses = function ( $content ) use ( $phpmailer ) {
+				try {
+					$parsed_addresses = $phpmailer->parseAddresses( $content );
+					$addresses        = array();
+
+					foreach ( $parsed_addresses as $address ) {
+						if ( ! empty( $address['name'] ) ) {
+							$addresses[] = $address['name'] . ' <' . $address['address'] . '>';
+						} else {
+							$addresses[] = $address['address'];
+						}
+					}
+					return $addresses;
+				} catch ( PHPMailer\PHPMailer\Exception $e ) {
+					// Fallback to naive implementation.
+					return array_map( 'trim', explode( ',', $content ) );
+				}
+			};
+
 			// If it's actually got contents.
 			if ( ! empty( $tempheaders ) ) {
 				// Iterate through the raw headers.
@@ -359,13 +378,13 @@ if ( ! function_exists( 'wp_mail' ) ) :
 							}
 							break;
 						case 'cc':
-							$cc = array_merge( (array) $cc, explode( ',', $content ) );
+							$cc = array_merge( (array) $cc, $parse_email_addresses( $content ) );
 							break;
 						case 'bcc':
-							$bcc = array_merge( (array) $bcc, explode( ',', $content ) );
+							$bcc = array_merge( (array) $bcc, $parse_email_addresses( $content ) );
 							break;
 						case 'reply-to':
-							$reply_to = array_merge( (array) $reply_to, explode( ',', $content ) );
+							$reply_to = array_merge( (array) $reply_to, $parse_email_addresses( $content ) );
 							break;
 						default:
 							// Add it to our grand headers array.
