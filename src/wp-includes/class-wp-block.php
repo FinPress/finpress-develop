@@ -109,7 +109,7 @@ class WP_Block {
 	private const BLOCK_BINDINGS_SUPPORTED_ATTRIBUTES = array(
 		'core/paragraph' => array( 'content' ),
 		'core/heading'   => array( 'content' ),
-		'core/image'     => array( 'id', 'url', 'title', 'alt' ),
+		'core/image'     => array( 'id', 'url', 'title', 'alt', 'caption' ),
 		'core/button'    => array( 'url', 'text', 'linkTarget', 'rel' ),
 		'core/post-date' => array( 'datetime' ),
 	);
@@ -434,7 +434,18 @@ class WP_Block {
 					) ) {
 						// TODO: Use `WP_HTML_Processor::set_inner_html` method once it's available.
 						$block_reader->release_bookmark( 'iterate-selectors' );
-						$block_reader->replace_rich_text( wp_kses_post( $source_value ) );
+						/*
+						 * If the value returned from the Block Bindings source is empty
+						 * for a block attribute that whose selector is `rich-text` or `html`,
+						 * we remove the HTML node denoted by its selector. For example, this
+						 * means removing an Image block's `<figcaption>` node if there's no
+						 * caption supplied.
+						 */
+						if ( empty( $source_value ) ) {
+							$block_reader->remove_node();
+						} else {
+							$block_reader->replace_rich_text( wp_kses_post( $source_value ) );
+						}
 						return $block_reader->get_updated_html();
 					} else {
 						$block_reader->seek( 'iterate-selectors' );
@@ -498,6 +509,37 @@ class WP_Block {
 					$start,
 					$end - $start,
 					$rich_text
+				);
+
+				return true;
+			}
+
+			public function remove_node() {
+				if ( $this->is_tag_closer() ) {
+					return false;
+				}
+
+				$depth = $this->get_current_depth();
+
+				$this->set_bookmark( '_wp_block_bindings_tag_opener' );
+				// The bookmark names are prefixed with `_` so the key below has an extra `_`.
+				$tag_opener = $this->bookmarks['__wp_block_bindings_tag_opener'];
+				$start      = $tag_opener->start;
+				$this->release_bookmark( '_wp_block_bindings_tag_opener' );
+
+				// Find matching tag closer.
+				while ( $this->next_token() && $this->get_current_depth() >= $depth ) {
+				}
+
+				$this->set_bookmark( '_wp_block_bindings_tag_closer' );
+				$tag_closer = $this->bookmarks['__wp_block_bindings_tag_closer'];
+				$end        = $tag_closer->start + $tag_closer->length;
+				$this->release_bookmark( '_wp_block_bindings_tag_closer' );
+
+				$this->lexical_updates[] = new WP_HTML_Text_Replacement(
+					$start,
+					$end - $start,
+					''
 				);
 
 				return true;
