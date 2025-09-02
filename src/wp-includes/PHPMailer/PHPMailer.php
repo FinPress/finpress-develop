@@ -2006,7 +2006,9 @@ class PHPMailer
                 $params = sprintf('-f%s', $this->Sender);
             }
             $old_from = ini_get('sendmail_from');
-            ini_set('sendmail_from', $this->Sender);
+				if ( function_exists('ini_set') ) {
+            	ini_set('sendmail_from', $this->Sender);
+				}
         }
         $result = false;
         if ($this->SingleTo && count($toArr) > 1) {
@@ -2029,7 +2031,9 @@ class PHPMailer
             $this->doCallback($result, $this->to, $this->cc, $this->bcc, $this->Subject, $body, $this->From, []);
         }
         if (isset($old_from)) {
-            ini_set('sendmail_from', $old_from);
+				if ( function_exists('ini_set') ) {
+            	ini_set('sendmail_from', $old_from);
+				}
         }
         if (!$result) {
             throw new Exception($this->lang('instantiate'), self::STOP_CRITICAL);
