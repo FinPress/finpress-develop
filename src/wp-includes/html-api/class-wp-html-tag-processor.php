@@ -2828,7 +2828,7 @@ class WP_HTML_Tag_Processor {
 	public function get_attribute_names_with_prefix( $prefix ): ?array {
 		if (
 			self::STATE_MATCHED_TAG !== $this->parser_state ||
-			$this->is_closing_tag
+			$this->is_tag_closer()
 		) {
 			return null;
 		}
@@ -4313,7 +4313,7 @@ class WP_HTML_Tag_Processor {
 	 * @return bool Whether the given tag and its attribute match the search criteria.
 	 */
 	private function matches(): bool {
-		if ( $this->is_closing_tag && ! $this->stop_on_tag_closers ) {
+		if ( $this->is_tag_closer() && ! $this->stop_on_tag_closers ) {
 			return false;
 		}
 
