@@ -135,6 +135,7 @@ if ( ! CUSTOM_TAGS ) {
 			'valign'  => true,
 			'width'   => true,
 		),
+		'data'       => array(),
 		'del'        => array(
 			'datetime' => true,
 		),
@@ -143,6 +144,10 @@ if ( ! CUSTOM_TAGS ) {
 		'details'    => array(
 			'align' => true,
 			'open'  => true,
+		),
+		'dialog'     => array(
+			'closedby' => true,
+			'open' => true,
 		),
 		'div'        => array(
 			'align' => true,
@@ -234,6 +239,14 @@ if ( ! CUSTOM_TAGS ) {
 		'menu'       => array(
 			'type' => true,
 		),
+		'meter'      => array(
+			'min' => true,
+			'max' => true,
+			'low' => true,
+			'high' => true,
+			'optimum' => true,
+			'value' => true,
+		),
 		'nav'        => array(
 			'align' => true,
 		),
@@ -253,6 +266,10 @@ if ( ! CUSTOM_TAGS ) {
 		'pre'        => array(
 			'width' => true,
 		),
+		'progress'   => array(
+			'max' => true,
+			'value' => true,
+		),
 		'q'          => array(
 			'cite' => true,
 		),
@@ -263,6 +280,7 @@ if ( ! CUSTOM_TAGS ) {
 		'ruby'       => array(),
 		's'          => array(),
 		'samp'       => array(),
+		'search'     => array(),
 		'span'       => array(
 			'align' => true,
 		),
@@ -344,6 +362,9 @@ if ( ! CUSTOM_TAGS ) {
 			'charoff' => true,
 			'valign'  => true,
 		),
+		'time'       => array(
+			'datetime' => true,
+		),
 		'title'      => array(),
 		'tr'         => array(
 			'align'   => true,
@@ -382,6 +403,7 @@ if ( ! CUSTOM_TAGS ) {
 			'src'         => true,
 			'width'       => true,
 		),
+		'wbr'        => array(),
 	);
 
 	/**
