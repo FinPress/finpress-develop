@@ -15,12 +15,12 @@ on:
       - '3.[7-9]'
       - '[4-9].[0-9]'
     paths:
-      # Any change to a PHP, CSS, JavaScript, JSON, HTML, or otherwise tested file should run checks.
-      - '**.css'
-      - '**.html'
-      - '**.js'
-      - '**.json'
-      - '**.php'
+      # Any change to a source PHP, CSS, JavaScript, JSON, HTML, or otherwise tested file should run checks.
+      - 'src/**.css'
+      - 'src/**.html'
+      - 'src/**.js'
+      - 'src/**.json'
+      - 'src/**.php'
       - 'src/license.txt'
       - 'src/SECURITY.md'
       # These files configure npm and the task runner. Changes could affect the outcome.
@@ -30,7 +30,8 @@ on:
       - 'Gruntfile.js'
       # These files configure Composer. Changes could affect the outcome.
       - 'composer.*'
-      # This files affect the phpunit tests. Changes could affect the outcome.
+      # These files affect the phpunit tests. Changes could affect the outcome.
+      - 'phpunit.xml.dist'
       - 'tests/phpunit/**'
       # Confirm any changes to relevant workflow files.
       - '.github/workflows/phpunit-tests.yml'

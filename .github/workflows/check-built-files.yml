@@ -12,11 +12,10 @@ on:
       - '6.[8-9]'
       - '[7-9].[0-9]'
     paths:
-      # Any change to a CSS, JavaScript, JSON, or SASS file should run checks.
-      - '**.css'
-      - '**.js'
-      - '**.json'
-      - '**.sass'
+      # Any change to a source CSS, JavaScript, or JSON file should run checks.
+      - 'src/**.css'
+      - 'src/**.js'
+      - 'src/**.json'
       # These files configure npm and the task runner. Changes could affect the outcome.
       - 'package*.json'
       - '.npmrc'
