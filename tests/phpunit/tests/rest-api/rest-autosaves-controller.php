@@ -24,6 +24,7 @@ class WP_Test_REST_Autosaves_Controller extends WP_Test_REST_Post_Type_Controlle
 	protected static $child_draft_page_id;
 
 	private $post_autosave;
+	protected static $extra_users;
 
 	protected function set_post_data( $args = array() ) {
 		$defaults = array(
@@ -108,6 +109,15 @@ class WP_Test_REST_Autosaves_Controller extends WP_Test_REST_Post_Type_Controlle
 				'post_author' => self::$editor_id,
 			)
 		);
+		self::$extra_users         = array();
+		for ( $i = 0; $i < 3; $i++ ) {
+			// Set a random user ID to ensure a new autosave is created.
+			self::$extra_users[] = $factory->user->create(
+				array(
+					'role' => 'editor',
+				)
+			);
+		}
 	}
 
 	public static function wpTearDownAfterClass() {
@@ -117,6 +127,10 @@ class WP_Test_REST_Autosaves_Controller extends WP_Test_REST_Post_Type_Controlle
 
 		self::delete_user( self::$editor_id );
 		self::delete_user( self::$contributor_id );
+
+		foreach ( self::$extra_users as $user_id ) {
+			self::delete_user( $user_id );
+		}
 	}
 
 	public function set_up() {
@@ -161,6 +175,7 @@ class WP_Test_REST_Autosaves_Controller extends WP_Test_REST_Post_Type_Controlle
 			array(
 				'context',
 				'parent',
+				'per_page',
 			),
 			$keys
 		);
@@ -919,5 +934,49 @@ class WP_Test_REST_Autosaves_Controller extends WP_Test_REST_Post_Type_Controlle
 			'get_item request'  => array( '/wp/v2/posts/%d/autosaves/%d' ),
 			'get_items request' => array( '/wp/v2/posts/%d' ),
 		);
+	}
+
+	/**
+	 * Test that the [per_page] parameter works as expected with the autosaves endpoint.
+	 *
+	 * @ticket 62057
+	 */
+	public function test_per_page_param() {
+		$autosave_ids = array( self::$autosave_post_id );
+		for ( $i = 0; $i < 3; $i++ ) {
+			wp_set_current_user( self::$extra_users[ $i ] );
+			$autosave_ids[] = wp_create_post_autosave(
+				array(
+					'post_content' => "Autosave content {$i}",
+					'post_ID'      => self::$post_id,
+					'post_type'    => 'post',
+				)
+			);
+		}
+
+		// Test default per_page (should return all autosaves)
+		$request  = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/autosaves' );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertCount( count( $autosave_ids ), $data );
+
+		// Test custom per_page parameter
+		$per_page = 2;
+		$request  = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/autosaves' );
+		$request->set_param( 'per_page', $per_page );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertCount( $per_page, $data );
+
+		// Test getting one record
+		$per_page = 1;
+		$request  = new WP_REST_Request( 'GET', '/wp/v2/posts/' . self::$post_id . '/autosaves' );
+		$request->set_param( 'per_page', $per_page );
+		$response = rest_get_server()->dispatch( $request );
+		$data     = $response->get_data();
+		$this->assertSame( 200, $response->get_status() );
+		$this->assertCount( $per_page, $data );
 	}
 }

@@ -309,9 +309,22 @@ class WP_REST_Autosaves_Controller extends WP_REST_Revisions_Controller {
 			// Return early as this handler doesn't add any response headers.
 			return new WP_REST_Response( array() );
 		}
+
+		$posts_per_page = 100;
+		$per_page       = $request['per_page'];
+		if ( ! empty( $per_page ) ) {
+			$posts_per_page = $per_page;
+		}
+
 		$response  = array();
 		$parent_id = $parent->ID;
-		$revisions = wp_get_post_revisions( $parent_id, array( 'check_enabled' => false ) );
+		$revisions = wp_get_post_revisions(
+			$parent_id,
+			array(
+				'check_enabled'  => false,
+				'posts_per_page' => $posts_per_page,
+			)
+		);
 
 		foreach ( $revisions as $revision ) {
 			if ( str_contains( $revision->post_name, "{$parent_id}-autosave" ) ) {
@@ -321,6 +334,12 @@ class WP_REST_Autosaves_Controller extends WP_REST_Revisions_Controller {
 		}
 
 		return rest_ensure_response( $response );
+
+		// Add pagination headers.
+		$response->header( 'X-WP-Total', (int) $total_autosaves );
+		$response->header( 'X-WP-TotalPages', (int) $max_pages );
+
+		return $response;
 	}
 
 
@@ -500,7 +519,16 @@ class WP_REST_Autosaves_Controller extends WP_REST_Revisions_Controller {
 	 */
 	public function get_collection_params() {
 		return array(
-			'context' => $this->get_context_param( array( 'default' => 'view' ) ),
+			'context'  => $this->get_context_param( array( 'default' => 'view' ) ),
+			'per_page' => array(
+				'description'       => __( 'Maximum number of autosaves to return.' ),
+				'type'              => 'integer',
+				'default'           => 100,
+				'minimum'           => 1,
+				'maximum'           => 100,
+				'sanitize_callback' => 'absint',
+				'validate_callback' => 'rest_validate_request_arg',
+			),
 		);
 	}
 }
