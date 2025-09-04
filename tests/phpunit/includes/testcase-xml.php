@@ -60,16 +60,16 @@ abstract class WP_Test_XML_TestCase extends WP_UnitTestCase {
 	 *
 	 * This is similar to {@link https://phpunit.de/manual/6.5/en/appendixes.assertions.html#appendixes.assertions.assertXmlStringEqualsXmlString assertXmlStringEqualsXmlString()}
 	 * except that differences in namespace prefixes are normalized away, such that given
-	 * `$actualXml = "<root xmlns='urn:wordpress.org'><child/></root>";` and
-	 * `$expectedXml = "<ns0:root xmlns:ns0='urn:wordpress.org'><ns0:child></ns0:root>";`
+	 * `$actualXml = "<root xmlns='urn:finpress.org'><child/></root>";` and
+	 * `$expectedXml = "<ns0:root xmlns:ns0='urn:finpress.org'><ns0:child></ns0:root>";`
 	 * then `$this->assertXMLEquals( $expectedXml, $actualXml )` will succeed.
 	 *
 	 * @param string $expectedXml
 	 * @param string $actualXml
 	 * @param string $message   Optional. Message to display when the assertion fails.
 	 */
-	public function assertXMLEquals( $expectedXml, $actualXml, $message = '' ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		$this->assertSame( $this->normalizeXML( $expectedXml ), $this->normalizeXML( $actualXml ), $message ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+	public function assertXMLEquals( $expectedXml, $actualXml, $message = '' ) { // phpcs:ignore FinPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		$this->assertSame( $this->normalizeXML( $expectedXml ), $this->normalizeXML( $actualXml ), $message ); // phpcs:ignore FinPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 	}
 
 	/**
@@ -78,15 +78,15 @@ abstract class WP_Test_XML_TestCase extends WP_UnitTestCase {
 	 *
 	 * This is similar to {@link https://phpunit.de/manual/6.5/en/appendixes.assertions.html#appendixes.assertions.assertXmlStringEqualsXmlString assertXmlStringNotEqualsXmlString()}
 	 * except that differences in namespace prefixes are normalized away, such that given
-	 * `$actualXml = "<root xmlns='urn:wordpress.org'><child></root>";` and
-	 * `$expectedXml = "<ns0:root xmlns:ns0='urn:wordpress.org'><ns0:child/></ns0:root>";`
+	 * `$actualXml = "<root xmlns='urn:finpress.org'><child></root>";` and
+	 * `$expectedXml = "<ns0:root xmlns:ns0='urn:finpress.org'><ns0:child/></ns0:root>";`
 	 * then `$this->assertXMLNotEquals( $expectedXml, $actualXml )` will fail.
 	 *
 	 * @param string $expectedXml
 	 * @param string $actualXml
 	 * @param string $message   Optional. Message to display when the assertion fails.
 	 */
-	public function assertXMLNotEquals( $expectedXml, $actualXml, $message = '' ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
-		$this->assertNotEquals( $this->normalizeXML( $expectedXml ), $this->normalizeXML( $actualXml ), $message ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+	public function assertXMLNotEquals( $expectedXml, $actualXml, $message = '' ) { // phpcs:ignore FinPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
+		$this->assertNotEquals( $this->normalizeXML( $expectedXml ), $this->normalizeXML( $actualXml ), $message ); // phpcs:ignore FinPress.NamingConventions.ValidVariableName.VariableNotSnakeCase
 	}
 }

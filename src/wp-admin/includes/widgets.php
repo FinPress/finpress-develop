@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Widgets Administration API
+ * FinPress Widgets Administration API
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 

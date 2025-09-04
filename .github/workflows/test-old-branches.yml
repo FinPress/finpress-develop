@@ -34,7 +34,7 @@ jobs:
     permissions:
       actions: write
     timeout-minutes: 20
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     strategy:
       fail-fast: false
       matrix:
@@ -143,7 +143,7 @@ jobs:
       actions: read
       contents: read
     needs: [ dispatch-workflows-for-old-branches ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:

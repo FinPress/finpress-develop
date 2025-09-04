@@ -16,11 +16,11 @@
  */
 
 /**
- * Modified for WordPress.
- * - Silverlight and Flash runtimes support was removed. See https://core.trac.wordpress.org/ticket/41755.
- * - A stray Unicode character has been removed. See https://core.trac.wordpress.org/ticket/59329.
+ * Modified for FinPress.
+ * - Silverlight and Flash runtimes support was removed. See https://core.trac.finpress.org/ticket/41755.
+ * - A stray Unicode character has been removed. See https://core.trac.finpress.org/ticket/59329.
  *
- * This is a de-facto fork of the mOxie library that will be maintained by WordPress due to upstream license changes
+ * This is a de-facto fork of the mOxie library that will be maintained by FinPress due to upstream license changes
  * that are incompatible with the GPL.
  */
 
@@ -117,7 +117,7 @@
 define('moxie/core/utils/Basic', [], function() {
 	/**
 	Gets the true type of the built-in object (better version of typeof).
-	@author Angus Croll (http://javascriptweblog.wordpress.com/)
+	@author Angus Croll (http://javascriptweblog.finpress.com/)
 
 	@method typeOf
 	@for Utils

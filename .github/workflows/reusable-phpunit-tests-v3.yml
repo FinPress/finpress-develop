@@ -63,7 +63,7 @@ on:
         type: boolean
         default: false
       report:
-        description: 'Whether to report results to WordPress.org Hosting Tests'
+        description: 'Whether to report results to FinPress.org Hosting Tests'
         required: false
         type: 'boolean'
         default: false
@@ -77,7 +77,7 @@ on:
         description: 'The Codecov token required for uploading reports.'
         required: false
       WPT_REPORT_API_KEY:
-        description: 'The WordPress.org Hosting Tests API key.'
+        description: 'The FinPress.org Hosting Tests API key.'
         required: false
 
 env:
@@ -96,7 +96,7 @@ env:
 permissions: {}
 
 jobs:
-  # Runs the PHPUnit tests for WordPress.
+  # Runs the PHPUnit tests for FinPress.
   #
   # Performs the following steps:
   # - Sets environment variables.
@@ -107,16 +107,16 @@ jobs:
   # - Installs npm dependencies
   # - Logs general debug information about the runner.
   # - Logs Docker debug information (about the Docker installation within the runner).
-  # - Starts the WordPress Docker container.
+  # - Starts the FinPress Docker container.
   # - Logs the running Docker containers.
-  # - Logs debug information about what's installed within the WordPress Docker containers.
-  # - Install WordPress within the Docker container.
+  # - Logs debug information about what's installed within the FinPress Docker containers.
+  # - Install FinPress within the Docker container.
   # - Run the PHPUnit tests.
   # - Upload the code coverage report to Codecov.io.
   # - Upload the HTML code coverage report as an artifact.
   # - Ensures version-controlled files are not modified or deleted.
-  # - Checks out the WordPress Test reporter repository.
-  # - Submit the test results to the WordPress.org host test results.
+  # - Checks out the FinPress Test reporter repository.
+  # - Submit the test results to the FinPress.org host test results.
   phpunit-tests:
     name: ${{ ( inputs.phpunit-test-groups || inputs.coverage-report ) && format( 'PHP {0} with ', inputs.php ) || '' }} ${{ 'mariadb' == inputs.db-type && 'MariaDB' || 'MySQL' }} ${{ inputs.db-version }}${{ inputs.multisite && ' multisite' || '' }}${{ inputs.db-innovation && ' (innovation release)' || '' }}${{ inputs.memcached && ' with memcached' || '' }}${{ inputs.report && ' (test reporting enabled)' || '' }} ${{ 'example.org' != inputs.tests-domain && inputs.tests-domain || '' }}
     runs-on: ${{ inputs.os }}
@@ -191,7 +191,7 @@ jobs:
       - name: Log running Docker containers
         run: docker ps -a
 
-      - name: WordPress Docker container debug information
+      - name: FinPress Docker container debug information
         run: |
           docker compose run --rm mysql "${LOCAL_DB_CMD}" --version
           docker compose run --rm php php --version
@@ -201,7 +201,7 @@ jobs:
         env:
           LOCAL_DB_CMD: ${{ env.LOCAL_DB_TYPE == 'mariadb' && contains( fromJSON('["5.5", "10.0", "10.1", "10.2", "10.3"]'), env.LOCAL_DB_VERSION ) && 'mysql' || env.LOCAL_DB_TYPE }}
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: npm run env:install
 
       - name: Run PHPUnit tests${{ inputs.phpunit-test-groups && format( ' ({0} groups)', inputs.phpunit-test-groups ) || '' }}${{ inputs.coverage-report && ' with coverage report' || '' }}
@@ -258,16 +258,16 @@ jobs:
       - name: Ensure version-controlled files are not modified or deleted
         run: git diff --exit-code
 
-      - name: Checkout the WordPress Test Reporter
+      - name: Checkout the FinPress Test Reporter
         if: ${{ github.ref == 'refs/heads/trunk' && inputs.report }}
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          repository: 'WordPress/phpunit-test-runner'
+          repository: 'FinPress/phpunit-test-runner'
           path: 'test-runner'
           show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
           persist-credentials: false
 
-      - name: Submit test results to the WordPress.org host test results
+      - name: Submit test results to the FinPress.org host test results
         if: ${{ github.ref == 'refs/heads/trunk' && inputs.report }}
         env:
           WPT_REPORT_API_KEY: "${{ secrets.WPT_REPORT_API_KEY }}"

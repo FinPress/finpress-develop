@@ -53,7 +53,7 @@ jobs:
   determine-matrix:
     name: Determine Matrix
     runs-on: ubuntu-24.04
-    if: ${{ ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) && ! contains( github.event.before, '00000000' ) }}
+    if: ${{ ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) && ! contains( github.event.before, '00000000' ) }}
     permissions:
       actions: read
     env:
@@ -75,7 +75,7 @@ jobs:
             const artifacts = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'wordpress-build-' + process.env.TARGET_SHA,
+              name: 'finpress-build-' + process.env.TARGET_SHA,
             });
             const has_previous_build = !! artifacts.data.artifacts[0];
 
@@ -138,7 +138,7 @@ jobs:
       actions: read
       contents: read
     needs: [ performance ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -155,7 +155,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

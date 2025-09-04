@@ -1,5 +1,5 @@
 ##
-# A reusable workflow that tests the Gutenberg plugin build process when run within a wordpress-develop checkout.
+# A reusable workflow that tests the Gutenberg plugin build process when run within a finpress-develop checkout.
 ##
 name: Test the Gutenberg plugin Build Process
 
@@ -12,7 +12,7 @@ on:
         type: 'string'
         default: 'ubuntu-24.04'
       directory:
-        description: 'Directory to run WordPress from. Valid values are `src` or `build`'
+        description: 'Directory to run FinPress from. Valid values are `src` or `build`'
         required: false
         type: 'string'
         default: 'src'
@@ -37,7 +37,7 @@ jobs:
   # - Installs Core npm dependencies.
   # - Installs Gutenberg npm dependencies.
   # - Runs the Gutenberg build process.
-  # - Builds WordPress to run from the relevant location (src or build).
+  # - Builds FinPress to run from the relevant location (src or build).
   # - Builds Gutenberg.
   # - Ensures version-controlled files are not modified or deleted.
   build-process-tests:
@@ -57,7 +57,7 @@ jobs:
       - name: Checkout Gutenberg plugin
         uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5.0.0
         with:
-          repository: 'WordPress/gutenberg'
+          repository: 'FinPress/gutenberg'
           path: ${{ env.GUTENBERG_DIRECTORY }}
           show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
           persist-credentials: false
@@ -89,7 +89,7 @@ jobs:
         run: npm run build
         working-directory: ${{ env.GUTENBERG_DIRECTORY }}
 
-      - name: Build WordPress to run from ${{ inputs.directory }}
+      - name: Build FinPress to run from ${{ inputs.directory }}
         run: npm run ${{ inputs.directory == 'src' && 'build:dev' || 'build' }}
 
       - name: Run Gutenberg build script after building Core to run from ${{ inputs.directory }}

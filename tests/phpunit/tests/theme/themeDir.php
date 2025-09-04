@@ -55,16 +55,16 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 	 */
 	public function test_theme_default() {
 		$themes = get_themes();
-		$theme  = get_theme( 'WordPress Default' );
-		$this->assertSame( $themes['WordPress Default'], $theme );
+		$theme  = get_theme( 'FinPress Default' );
+		$this->assertSame( $themes['FinPress Default'], $theme );
 
 		$this->assertNotEmpty( $theme );
 
 		// echo gen_tests_array( 'theme', $theme );
 
-		$this->assertSame( 'WordPress Default', $theme['Name'] );
-		$this->assertSame( 'WordPress Default', $theme['Title'] );
-		$this->assertSame( 'The default WordPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
+		$this->assertSame( 'FinPress Default', $theme['Name'] );
+		$this->assertSame( 'FinPress Default', $theme['Title'] );
+		$this->assertSame( 'The default FinPress theme based on the famous <a href="http://binarybonsai.com/kubrick/">Kubrick</a>.', $theme['Description'] );
 		$this->assertSame( '<a href="http://binarybonsai.com/">Michael Heilemann</a>', $theme['Author'] );
 		$this->assertSame( '1.6', $theme['Version'] );
 		$this->assertSame( 'default', $theme['Template'] );
@@ -94,7 +94,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( 'Sandbox', $theme['Name'] );
 		$this->assertSame( 'Sandbox', $theme['Title'] );
 		$this->assertSame( 'A theme with powerful, semantic CSS selectors and the ability to add new skins.', $theme['Description'] );
-		$this->assertSame( '<a href="http://andy.wordpress.com/">Andy Skelton</a> &amp; <a href="http://www.plaintxt.org/">Scott Allan Wallick</a>', $theme['Author'] );
+		$this->assertSame( '<a href="http://andy.finpress.com/">Andy Skelton</a> &amp; <a href="http://www.plaintxt.org/">Scott Allan Wallick</a>', $theme['Author'] );
 		$this->assertSame( '0.6.1-wpcom', $theme['Version'] );
 		$this->assertSame( 'sandbox', $theme['Template'] );
 		$this->assertSame( 'sandbox', $theme['Stylesheet'] );
@@ -160,7 +160,7 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 
 		$theme_names = array_keys( $themes );
 		$expected    = array(
-			'WordPress Default',
+			'FinPress Default',
 			'Default Child Theme with no theme.json',
 			'Sandbox',
 			'Stylesheet Only',
@@ -266,14 +266,14 @@ class Tests_Theme_ThemeDir extends WP_UnitTestCase {
 		$this->assertSame( 'My Subdir Theme', $theme_data['Name'] );
 		$this->assertSame( 'http://example.org/', $theme_data['URI'] );
 		$this->assertSame( 'An example theme in a sub directory', $theme_data['Description'] );
-		$this->assertSame( '<a href="http://wordpress.org/">Mr. WordPress</a>', $theme_data['Author'] );
-		$this->assertSame( 'http://wordpress.org/', $theme_data['AuthorURI'] );
+		$this->assertSame( '<a href="http://finpress.org/">Mr. FinPress</a>', $theme_data['Author'] );
+		$this->assertSame( 'http://finpress.org/', $theme_data['AuthorURI'] );
 		$this->assertSame( '0.1', $theme_data['Version'] );
 		$this->assertSame( '', $theme_data['Template'] );
 		$this->assertSame( 'publish', $theme_data['Status'] );
 		$this->assertSame( array(), $theme_data['Tags'] );
 		$this->assertSame( 'My Subdir Theme', $theme_data['Title'] );
-		$this->assertSame( 'Mr. WordPress', $theme_data['AuthorName'] );
+		$this->assertSame( 'Mr. FinPress', $theme_data['AuthorName'] );
 	}
 
 	/**

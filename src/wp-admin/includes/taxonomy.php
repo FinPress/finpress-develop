@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Taxonomy Administration API.
+ * FinPress Taxonomy Administration API.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 

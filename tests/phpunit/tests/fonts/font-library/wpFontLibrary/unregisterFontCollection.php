@@ -2,7 +2,7 @@
 /**
  * Test WP_Font_Library::unregister_font_collection().
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Font Library
  *
  * @group fonts

@@ -13,47 +13,47 @@ class WP_Filesystem_Find_Folder_Test extends WP_Filesystem_UnitTestCase {
 		$fs = $wp_filesystem;
 		$fs->init(
 			'
-			/var/www/wordpress/
-			/var/www/wordpress/wp-includes/
-			/var/www/wordpress/index.php
+			/var/www/finpress/
+			/var/www/finpress/wp-includes/
+			/var/www/finpress/index.php
 		'
 		);
 
-		$path = $fs->find_folder( '/var/www/wordpress/' );
-		$this->assertSame( '/var/www/wordpress/', $path );
+		$path = $fs->find_folder( '/var/www/finpress/' );
+		$this->assertSame( '/var/www/finpress/', $path );
 
 		$path = $fs->find_folder( '/this/directory/doesnt/exist/' );
 		$this->assertFalse( $path );
 	}
 
-	public function test_sibling_wordpress_in_subdir() {
+	public function test_sibling_finpress_in_subdir() {
 		global $wp_filesystem;
 		$fs = $wp_filesystem;
 		$fs->init(
 			'
-			/www/example.com/wordpress/
-			/www/example.com/wordpress/wp-includes/
-			/www/example.com/wordpress/index.php
-			/www/wp.example.com/wordpress/
-			/www/wp.example.com/wordpress/wp-includes/
-			/www/wp.example.com/wordpress/wp-content/
-			/www/wp.example.com/wordpress/index.php
+			/www/example.com/finpress/
+			/www/example.com/finpress/wp-includes/
+			/www/example.com/finpress/index.php
+			/www/wp.example.com/finpress/
+			/www/wp.example.com/finpress/wp-includes/
+			/www/wp.example.com/finpress/wp-content/
+			/www/wp.example.com/finpress/index.php
 			/www/index.php
 		'
 		);
 
-		$path = $fs->find_folder( '/var/www/example.com/wordpress/' );
-		$this->assertSame( '/www/example.com/wordpress/', $path );
+		$path = $fs->find_folder( '/var/www/example.com/finpress/' );
+		$this->assertSame( '/www/example.com/finpress/', $path );
 
-		$path = $fs->find_folder( '/var/www/wp.example.com/wordpress/wp-content/' );
-		$this->assertSame( '/www/wp.example.com/wordpress/wp-content/', $path );
+		$path = $fs->find_folder( '/var/www/wp.example.com/finpress/wp-content/' );
+		$this->assertSame( '/www/wp.example.com/finpress/wp-content/', $path );
 	}
 
 	/**
-	 * Two WordPress installations, with one contained within the other
+	 * Two FinPress installations, with one contained within the other
 	 * FTP / = /var/www/example.com/ on Disk
 	 * example.com at /
-	 * wp.example.com at /wp.example.com/wordpress/
+	 * wp.example.com at /wp.example.com/finpress/
 	 */
 	public function test_subdir_of_another() {
 		global $wp_filesystem;
@@ -61,23 +61,23 @@ class WP_Filesystem_Find_Folder_Test extends WP_Filesystem_UnitTestCase {
 		$fs->init(
 			'
 			/wp.example.com/index.php
-			/wp.example.com/wordpress/
-			/wp.example.com/wordpress/wp-includes/
-			/wp.example.com/wordpress/index.php
+			/wp.example.com/finpress/
+			/wp.example.com/finpress/wp-includes/
+			/wp.example.com/finpress/index.php
 			/wp-includes/
 			/index.php
 		'
 		);
 
-		$path = $fs->abspath( '/var/www/example.com/wp.example.com/wordpress/' );
-		$this->assertSame( '/wp.example.com/wordpress/', $path );
+		$path = $fs->abspath( '/var/www/example.com/wp.example.com/finpress/' );
+		$this->assertSame( '/wp.example.com/finpress/', $path );
 
 		$path = $fs->abspath( '/var/www/example.com/' );
 		$this->assertSame( '/', $path );
 	}
 
 	/**
-	 * Test the WordPress ABSPATH containing TWO tokens (www) of which exists in the current FTP home.
+	 * Test the FinPress ABSPATH containing TWO tokens (www) of which exists in the current FTP home.
 	 *
 	 * @ticket 20934
 	 */

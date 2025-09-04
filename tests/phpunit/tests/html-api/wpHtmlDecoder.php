@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_HTML_Decoder functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage HTML-API
  */
 
@@ -128,14 +128,14 @@ class Tests_HtmlApi_WpHtmlDecoder extends WP_UnitTestCase {
 	 */
 	public static function data_attributes_with_prefix_and_case_sensitive_match() {
 		return array(
-			array( 'http://wordpress.org', 'http', 'case-sensitive', true ),
-			array( 'http://wordpress.org', 'http', 'ascii-case-insensitive', true ),
-			array( 'http://wordpress.org', 'HTTP', 'case-sensitive', false ),
-			array( 'http://wordpress.org', 'HTTP', 'ascii-case-insensitive', true ),
-			array( 'http://wordpress.org', 'Http', 'case-sensitive', false ),
-			array( 'http://wordpress.org', 'Http', 'ascii-case-insensitive', true ),
-			array( 'http://wordpress.org', 'https', 'case-sensitive', false ),
-			array( 'http://wordpress.org', 'https', 'ascii-case-insensitive', false ),
+			array( 'http://finpress.org', 'http', 'case-sensitive', true ),
+			array( 'http://finpress.org', 'http', 'ascii-case-insensitive', true ),
+			array( 'http://finpress.org', 'HTTP', 'case-sensitive', false ),
+			array( 'http://finpress.org', 'HTTP', 'ascii-case-insensitive', true ),
+			array( 'http://finpress.org', 'Http', 'case-sensitive', false ),
+			array( 'http://finpress.org', 'Http', 'ascii-case-insensitive', true ),
+			array( 'http://finpress.org', 'https', 'case-sensitive', false ),
+			array( 'http://finpress.org', 'https', 'ascii-case-insensitive', false ),
 		);
 	}
 }

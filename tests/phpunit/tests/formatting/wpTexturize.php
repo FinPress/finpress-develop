@@ -204,7 +204,7 @@ class Tests_Formatting_wpTexturize extends WP_UnitTestCase {
 	 * @ticket 22823
 	 */
 	public function test_apostrophes_before_primes() {
-		$this->assertSame( 'WordPress 3.5&#8217;s release date', wptexturize( "WordPress 3.5's release date" ) );
+		$this->assertSame( 'FinPress 3.5&#8217;s release date', wptexturize( "FinPress 3.5's release date" ) );
 	}
 
 	/**

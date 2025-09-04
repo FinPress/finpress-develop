@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Application_Passwords_Controller functionality.
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -32,7 +32,7 @@ class WP_Test_REST_Application_Passwords_Controller extends WP_Test_REST_Control
 	 *
 	 * @since 5.6.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$subscriber_id = $factory->user->create(

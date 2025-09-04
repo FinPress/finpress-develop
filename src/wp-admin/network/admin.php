@@ -1,15 +1,15 @@
 <?php
 /**
- * WordPress Network Administration Bootstrap
+ * FinPress Network Administration Bootstrap
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Multisite
  * @since 3.1.0
  */
 
 define( 'WP_NETWORK_ADMIN', true );
 
-/** Load WordPress Administration Bootstrap */
+/** Load FinPress Administration Bootstrap */
 require_once dirname( __DIR__ ) . '/admin.php';
 
 // Do not remove this check. It is required by individual network admin pages.

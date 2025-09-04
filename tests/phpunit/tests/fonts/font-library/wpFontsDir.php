@@ -2,7 +2,7 @@
 /**
  * Test wp_get_font_dir().
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Font Library
  *
  * @group fonts

@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Themes_Panel class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 4.9.0
  */

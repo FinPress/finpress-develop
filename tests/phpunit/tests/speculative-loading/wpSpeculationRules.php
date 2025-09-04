@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_Speculation_Rules class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Speculative Loading
  */
 
@@ -206,7 +206,7 @@ class Tests_Speculative_Loading_wpSpeculationRules extends WP_UnitTestCase {
 				),
 				true,
 			),
-			// 'immediate' is a valid eagerness, but for safety WordPress does not allow it for document-level rules.
+			// 'immediate' is a valid eagerness, but for safety FinPress does not allow it for document-level rules.
 			'immediate-eagerness-document' => array(
 				'prefetch',
 				'test-rule-1',

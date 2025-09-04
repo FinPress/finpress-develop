@@ -1,17 +1,17 @@
 <?php
 /**
- * WordPress Version
+ * FinPress Version
  *
- * Contains version information for the current WordPress release.
+ * Contains version information for the current FinPress release.
  *
- * @package WordPress
+ * @package FinPress
  * @since 1.2.0
  */
 
 /**
- * The WordPress version string.
+ * The FinPress version string.
  *
- * Holds the current version number for WordPress core. Used to bust caches
+ * Holds the current version number for FinPress core. Used to bust caches
  * and to enable development mode for scripts when running from the /src directory.
  *
  * @global string $wp_version
@@ -19,7 +19,7 @@
 $wp_version = '6.9-alpha-60093-src';
 
 /**
- * Holds the WordPress DB revision, increments when changes are made to the WordPress DB schema.
+ * Holds the FinPress DB revision, increments when changes are made to the FinPress DB schema.
  *
  * @global int $wp_db_version
  */

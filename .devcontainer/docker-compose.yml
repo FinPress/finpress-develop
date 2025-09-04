@@ -2,15 +2,15 @@ version: '3.1'
 
 services:
   app:
-    image: wordpress
+    image: finpress
     restart: always
     ports:
       - 8080:80
     environment:
-      WORDPRESS_DB_HOST: db
-      WORDPRESS_DB_USER: exampleuser
-      WORDPRESS_DB_PASSWORD: examplepass
-      WORDPRESS_DB_NAME: exampledb
+      finpress_DB_HOST: db
+      finpress_DB_USER: exampleuser
+      finpress_DB_PASSWORD: examplepass
+      finpress_DB_NAME: exampledb
     volumes:
       - ..:/workspace:cached
 

@@ -2,7 +2,7 @@
 /**
  * Unit tests covering PHPMailer translations.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage PHPMailer
  * @since 6.8.0
  */

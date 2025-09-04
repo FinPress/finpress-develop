@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Section classes
+ * FinPress Customize Section classes
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 3.4.0
  */

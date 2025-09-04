@@ -22,28 +22,28 @@ class Tests_Multisite_wpMsThemesListTable extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$site_ids = array(
-			'wordpress.org/'          => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'          => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
-			'wordpress.org/foo/'      => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/foo/'      => array(
+				'domain' => 'finpress.org',
 				'path'   => '/foo/',
 			),
-			'wordpress.org/foo/bar/'  => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/foo/bar/'  => array(
+				'domain' => 'finpress.org',
 				'path'   => '/foo/bar/',
 			),
-			'wordpress.org/afoo/'     => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/afoo/'     => array(
+				'domain' => 'finpress.org',
 				'path'   => '/afoo/',
 			),
-			'make.wordpress.org/'     => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/'     => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/',
 			),
-			'make.wordpress.org/foo/' => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/foo/' => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/foo/',
 			),
 			'www.w.org/'              => array(

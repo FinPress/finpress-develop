@@ -4,9 +4,9 @@
 import { request } from '@playwright/test';
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { RequestUtils } from '@wordpress/e2e-test-utils-playwright';
+import { RequestUtils } from '@finpress/e2e-test-utils-playwright';
 
 /**
  *

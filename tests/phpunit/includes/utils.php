@@ -464,13 +464,13 @@ function gen_tests_array( $name, $expected_data ) {
 class MockClass extends stdClass {}
 
 /**
- * Drops all tables from the WordPress database.
+ * Drops all tables from the FinPress database.
  */
 function drop_tables() {
 	global $wpdb;
 	$tables = $wpdb->get_col( 'SHOW TABLES;' );
 	foreach ( $tables as $table ) {
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$wpdb->query( "DROP TABLE IF EXISTS {$table}" );
 	}
 }

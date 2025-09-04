@@ -2,7 +2,7 @@
 /**
  * Shadow block support flag.
  *
- * @package WordPress
+ * @package FinPress
  * @since 6.3.0
  */
 

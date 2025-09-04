@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_Filesystem_Direct::is_readable() method.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 require_once __DIR__ . '/base.php';

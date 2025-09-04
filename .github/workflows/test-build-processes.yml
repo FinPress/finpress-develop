@@ -47,13 +47,13 @@ concurrency:
 permissions: {}
 
 jobs:
-  # Tests the WordPress Core build process.
+  # Tests the FinPress Core build process.
   test-core-build-process:
     name: Core running from ${{ matrix.directory }}
     uses: ./.github/workflows/reusable-test-core-build-process.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -71,7 +71,7 @@ jobs:
       save-build: ${{ matrix.save-build && matrix.save-build || false }}
       prepare-playground: ${{ matrix.prepare-playground && matrix.prepare-playground || false }}
 
-  # Tests the WordPress Core build process on additional operating systems.
+  # Tests the FinPress Core build process on additional operating systems.
   #
   # This is separate from the job above in order to use stricter conditions when determining when to test additional
   # operating systems. This avoids unintentionally consuming excessive minutes. Windows-based jobs consume minutes at a
@@ -86,7 +86,7 @@ jobs:
     uses: ./.github/workflows/reusable-test-core-build-process.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     strategy:
       fail-fast: false
       matrix:
@@ -96,13 +96,13 @@ jobs:
       os: ${{ matrix.os }}
       directory: ${{ matrix.directory }}
 
-  # Tests the Gutenberg plugin build process within a wordpress-develop checkout.
+  # Tests the Gutenberg plugin build process within a finpress-develop checkout.
   test-gutenberg-build-process:
     name: Gutenberg running from ${{ matrix.directory }}
     uses: ./.github/workflows/reusable-test-gutenberg-build-process.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     strategy:
       fail-fast: false
       matrix:
@@ -127,7 +127,7 @@ jobs:
     uses: ./.github/workflows/reusable-test-gutenberg-build-process.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     strategy:
       fail-fast: false
       matrix:
@@ -144,7 +144,7 @@ jobs:
       actions: read
       contents: read
     needs: [ test-core-build-process, test-core-build-process-additional-os, test-gutenberg-build-process, test-gutenberg-build-process-additional-os ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -161,7 +161,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

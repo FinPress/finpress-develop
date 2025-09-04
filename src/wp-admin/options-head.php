@@ -1,10 +1,10 @@
 <?php
 /**
- * WordPress Options Header.
+ * FinPress Options Header.
  *
  * Displays updated message, if updated variable is part of the URL query.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 

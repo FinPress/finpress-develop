@@ -1,6 +1,6 @@
 # html5lib-tests
 
-This directory contains a third-party test suite used for testing the WordPress HTML API.
+This directory contains a third-party test suite used for testing the FinPress HTML API.
 
 `html5lib-tests` can be found on GitHub at [html5lib/html5lib-tests](https://github.com/html5lib/html5lib-tests).
 

@@ -10,7 +10,7 @@ class Tests_POMO_PO extends WP_UnitTestCase {
 	 *
 	 * @var string
 	 */
-	const MAIL_TEXT = 'Your new WordPress blog has been successfully set up at:
+	const MAIL_TEXT = 'Your new FinPress blog has been successfully set up at:
 
 %1$s
 
@@ -21,8 +21,8 @@ Password: %3$s
 
 We hope you enjoy your new blog. Thanks!
 
---The WordPress Team
-http://wordpress.org/
+--The FinPress Team
+http://finpress.org/
 ';
 
 	/**
@@ -31,7 +31,7 @@ http://wordpress.org/
 	 * @var string
 	 */
 	const PO_MAIL = '""
-"Your new WordPress blog has been successfully set up at:\n"
+"Your new FinPress blog has been successfully set up at:\n"
 "\n"
 "%1$s\n"
 "\n"
@@ -42,8 +42,8 @@ http://wordpress.org/
 "\n"
 "We hope you enjoy your new blog. Thanks!\n"
 "\n"
-"--The WordPress Team\n"
-"http://wordpress.org/\n"';
+"--The FinPress Team\n"
+"http://finpress.org/\n"';
 
 	public static function set_up_before_class() {
 		parent::set_up_before_class();
@@ -72,7 +72,7 @@ http://wordpress.org/
 		$this->assertSame( '"\\\\a\\\\n\\n"', $po->poify( "\a\\n\n" ) );
 		// Backslash.
 		$this->assertSame( '"ba\\\\ba"', $po->poify( 'ba\\ba' ) );
-		// Random wordpress.pot string.
+		// Random finpress.pot string.
 		$src = 'Categories can be selectively converted to tags using the <a href="%s">category to tag converter</a>.';
 		$this->assertSame( '"Categories can be selectively converted to tags using the <a href=\\"%s\\">category to tag converter</a>."', $po->poify( $src ) );
 
@@ -232,21 +232,21 @@ msgstr[2] "бабаяга"',
 
 	public function test_export_headers() {
 		$po = new PO();
-		$po->set_header( 'Project-Id-Version', 'WordPress 2.6-bleeding' );
+		$po->set_header( 'Project-Id-Version', 'FinPress 2.6-bleeding' );
 		$po->set_header( 'POT-Creation-Date', '2008-04-08 18:00+0000' );
-		$this->assertSame( "msgid \"\"\nmsgstr \"\"\n\"Project-Id-Version: WordPress 2.6-bleeding\\n\"\n\"POT-Creation-Date: 2008-04-08 18:00+0000\\n\"", $po->export_headers() );
+		$this->assertSame( "msgid \"\"\nmsgstr \"\"\n\"Project-Id-Version: FinPress 2.6-bleeding\\n\"\n\"POT-Creation-Date: 2008-04-08 18:00+0000\\n\"", $po->export_headers() );
 	}
 
 	public function test_export() {
 		$po     = new PO();
 		$entry  = new Translation_Entry( array( 'singular' => 'baba' ) );
 		$entry2 = new Translation_Entry( array( 'singular' => 'dyado' ) );
-		$po->set_header( 'Project-Id-Version', 'WordPress 2.6-bleeding' );
+		$po->set_header( 'Project-Id-Version', 'FinPress 2.6-bleeding' );
 		$po->set_header( 'POT-Creation-Date', '2008-04-08 18:00+0000' );
 		$po->add_entry( $entry );
 		$po->add_entry( $entry2 );
 		$this->assertSame( "msgid \"baba\"\nmsgstr \"\"\n\nmsgid \"dyado\"\nmsgstr \"\"", $po->export( false ) );
-		$this->assertSame( "msgid \"\"\nmsgstr \"\"\n\"Project-Id-Version: WordPress 2.6-bleeding\\n\"\n\"POT-Creation-Date: 2008-04-08 18:00+0000\\n\"\n\nmsgid \"baba\"\nmsgstr \"\"\n\nmsgid \"dyado\"\nmsgstr \"\"", $po->export() );
+		$this->assertSame( "msgid \"\"\nmsgstr \"\"\n\"Project-Id-Version: FinPress 2.6-bleeding\\n\"\n\"POT-Creation-Date: 2008-04-08 18:00+0000\\n\"\n\nmsgid \"baba\"\nmsgstr \"\"\n\nmsgid \"dyado\"\nmsgstr \"\"", $po->export() );
 	}
 
 
@@ -254,7 +254,7 @@ msgstr[2] "бабаяга"',
 		$po     = new PO();
 		$entry  = new Translation_Entry( array( 'singular' => 'baba' ) );
 		$entry2 = new Translation_Entry( array( 'singular' => 'dyado' ) );
-		$po->set_header( 'Project-Id-Version', 'WordPress 2.6-bleeding' );
+		$po->set_header( 'Project-Id-Version', 'FinPress 2.6-bleeding' );
 		$po->set_header( 'POT-Creation-Date', '2008-04-08 18:00+0000' );
 		$po->add_entry( $entry );
 		$po->add_entry( $entry2 );
@@ -275,7 +275,7 @@ msgstr[2] "бабаяга"',
 
 		$this->assertSame(
 			array(
-				'Project-Id-Version' => 'WordPress 2.6-bleeding',
+				'Project-Id-Version' => 'FinPress 2.6-bleeding',
 				'Plural-Forms'       => 'nplurals=2; plural=n != 1;',
 			),
 			$po->headers
@@ -296,7 +296,7 @@ msgstr[2] "бабаяга"',
 
 		$multiple_line_entry = new Translation_Entry(
 			array(
-				'singular'     => 'The first thing you need to do is tell Blogger to let WordPress access your account. You will be sent back here after providing authorization.',
+				'singular'     => 'The first thing you need to do is tell Blogger to let FinPress access your account. You will be sent back here after providing authorization.',
 				'translations' => array( "baba\ndyadogugu" ),
 			)
 		);

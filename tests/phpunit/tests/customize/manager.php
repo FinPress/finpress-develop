@@ -2,7 +2,7 @@
 /**
  * WP_Customize_Manager tests.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 /**
@@ -1277,9 +1277,9 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 		add_post_type_support( 'customize_changeset', 'revisions' );
 
 		$options = array(
-			'custom_html_1' => '<script>document.write(" Wordpress 1")</script>',
-			'custom_html_2' => '<script>document.write(" Wordpress 2")</script>',
-			'custom_html_3' => '<script>document.write(" Wordpress 3")</script>',
+			'custom_html_1' => '<script>document.write(" Finpress 1")</script>',
+			'custom_html_2' => '<script>document.write(" Finpress 2")</script>',
+			'custom_html_3' => '<script>document.write(" Finpress 3")</script>',
 		);
 
 		// Populate setting as user who can bypass content_save_pre filter.
@@ -1353,15 +1353,15 @@ class Tests_WP_Customize_Manager extends WP_UnitTestCase {
 
 		// User saved as one who can bypass content_save_pre filter.
 		$this->assertStringContainsString( '<script>', get_option( 'custom_html_1' ) );
-		$this->assertStringContainsString( 'Wordpress', get_option( 'custom_html_1' ) ); // phpcs:ignore WordPress.WP.CapitalPDangit.MisspelledInText
+		$this->assertStringContainsString( 'Finpress', get_option( 'custom_html_1' ) ); // phpcs:ignore FinPress.WP.CapitalPDangit.MisspelledInText
 
 		// User saved as one who cannot bypass content_save_pre filter.
 		$this->assertStringNotContainsString( '<script>', get_option( 'custom_html_2' ) );
-		$this->assertStringContainsString( 'WordPress', get_option( 'custom_html_2' ) );
+		$this->assertStringContainsString( 'FinPress', get_option( 'custom_html_2' ) );
 
 		// User saved as one who also cannot bypass content_save_pre filter.
 		$this->assertStringNotContainsString( '<script>', get_option( 'custom_html_3' ) );
-		$this->assertStringContainsString( 'WordPress', get_option( 'custom_html_3' ) );
+		$this->assertStringContainsString( 'FinPress', get_option( 'custom_html_3' ) );
 	}
 
 	/**

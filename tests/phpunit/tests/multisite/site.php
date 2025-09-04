@@ -30,8 +30,8 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$network_ids = array(
-			'make.wordpress.org/' => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/' => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/',
 			),
 		);
@@ -42,15 +42,15 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		unset( $id );
 
 		self::$site_ids = array(
-			'make.wordpress.org/'     => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/'     => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
-			'make.wordpress.org/foo/' => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/foo/' => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
 		);
 
@@ -64,7 +64,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 			array(
 				'domain'     => 'uninitialized.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			)
 		);
 		add_action( 'wp_initialize_site', 'wp_initialize_site', 10, 2 );
@@ -167,7 +167,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		foreach ( $wpdb->tables( 'blog', false ) as $table ) {
 			$suppress = $wpdb->suppress_errors();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$table_fields = $wpdb->get_results( "DESCRIBE $prefix$table;" );
 
 			$wpdb->suppress_errors( $suppress );
@@ -176,7 +176,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 			$this->assertNotEmpty( $table_fields );
 
 			// And the table should not be empty, unless commentmeta, termmeta, or links.
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$result = $wpdb->get_results( "SELECT * FROM $prefix$table LIMIT 1" );
 
 			if ( 'commentmeta' === $table || 'termmeta' === $table || 'links' === $table ) {
@@ -250,7 +250,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		foreach ( $wpdb->tables( 'blog', false ) as $table ) {
 			$suppress = $wpdb->suppress_errors();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$table_fields = $wpdb->get_results( "DESCRIBE $prefix$table;" );
 
 			$wpdb->suppress_errors( $suppress );
@@ -291,7 +291,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		foreach ( $wpdb->tables( 'blog', false ) as $table ) {
 			$suppress = $wpdb->suppress_errors();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$table_fields = $wpdb->get_results( "DESCRIBE $prefix$table;" );
 
 			$wpdb->suppress_errors( $suppress );
@@ -332,7 +332,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		foreach ( $wpdb->tables( 'blog', false ) as $table ) {
 			$suppress = $wpdb->suppress_errors();
 
-			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 			$table_fields = $wpdb->get_results( "DESCRIBE $prefix$table;" );
 
 			$wpdb->suppress_errors( $suppress );
@@ -825,16 +825,16 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 40503
 	 */
 	public function test_different_network_language() {
-		$network = get_network( self::$network_ids['make.wordpress.org/'] );
+		$network = get_network( self::$network_ids['make.finpress.org/'] );
 
 		add_filter( 'sanitize_option_WPLANG', array( $this, 'filter_allow_unavailable_languages' ), 10, 3 );
 
-		update_network_option( self::$network_ids['make.wordpress.org/'], 'WPLANG', 'wibble' );
+		update_network_option( self::$network_ids['make.finpress.org/'], 'WPLANG', 'wibble' );
 		$blog_id = wpmu_create_blog( $network->domain, '/de-de/', 'New Blog', get_current_user_id(), array(), $network->id );
 
 		remove_filter( 'sanitize_option_WPLANG', array( $this, 'filter_allow_unavailable_languages' ), 10 );
 
-		$this->assertSame( get_network_option( self::$network_ids['make.wordpress.org/'], 'WPLANG' ), get_blog_option( $blog_id, 'WPLANG' ) );
+		$this->assertSame( get_network_option( self::$network_ids['make.finpress.org/'], 'WPLANG' ), get_blog_option( $blog_id, 'WPLANG' ) );
 	}
 
 	/**
@@ -853,14 +853,14 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 29684
 	 */
 	public function test_is_main_site_different_network() {
-		$this->assertTrue( is_main_site( self::$site_ids['make.wordpress.org/'], self::$network_ids['make.wordpress.org/'] ) );
+		$this->assertTrue( is_main_site( self::$site_ids['make.finpress.org/'], self::$network_ids['make.finpress.org/'] ) );
 	}
 
 	/**
 	 * @ticket 29684
 	 */
 	public function test_is_main_site_different_network_random_site() {
-		$this->assertFalse( is_main_site( self::$site_ids['make.wordpress.org/foo/'], self::$network_ids['make.wordpress.org/'] ) );
+		$this->assertFalse( is_main_site( self::$site_ids['make.finpress.org/foo/'], self::$network_ids['make.finpress.org/'] ) );
 	}
 
 	/**
@@ -868,7 +868,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_clean_blog_cache( $key, $group ) {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		$replacements = array(
 			'%blog_id%'         => $site->blog_id,
@@ -894,7 +894,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_clean_blog_cache_with_id( $key, $group ) {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		$replacements = array(
 			'%blog_id%'         => $site->blog_id,
@@ -919,7 +919,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 40201
 	 */
 	public function test_clean_blog_cache_resets_last_changed() {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		wp_cache_delete( 'last_changed', 'sites' );
 
@@ -931,7 +931,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 40201
 	 */
 	public function test_clean_blog_cache_fires_action() {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		$old_count = did_action( 'clean_site_cache' );
 
@@ -943,7 +943,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 40201
 	 */
 	public function test_clean_blog_cache_bails_on_suspend_cache_invalidation() {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		$old_count = did_action( 'clean_site_cache' );
 
@@ -990,7 +990,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @dataProvider data_get_site_caches
 	 */
 	public function test_refresh_blog_details( $key, $group ) {
-		$site = get_site( self::$site_ids['make.wordpress.org/'] );
+		$site = get_site( self::$site_ids['make.finpress.org/'] );
 
 		$replacements = array(
 			'%blog_id%'         => $site->blog_id,
@@ -1339,7 +1339,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 */
 	public function test_wp_delete_site_validate_site_deletion_action() {
 		add_action( 'wp_validate_site_deletion', array( $this, 'action_wp_validate_site_deletion_prevent_deletion' ) );
-		$result = wp_delete_site( self::$site_ids['make.wordpress.org/'] );
+		$result = wp_delete_site( self::$site_ids['make.finpress.org/'] );
 		$this->assertWPError( $result );
 		$this->assertSame( 'action_does_not_like_deletion', $result->get_error_code() );
 	}
@@ -1618,8 +1618,8 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 	 * @ticket 40364
 	 */
 	public function test_wp_update_site_cleans_old_cache_on_domain_change() {
-		$old_domain = 'old.wordpress.org';
-		$new_domain = 'new.wordpress.org';
+		$old_domain = 'old.finpress.org';
+		$new_domain = 'new.finpress.org';
 
 		$site = self::factory()->blog->create_and_get(
 			array(
@@ -1678,7 +1678,7 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 
 		$site = self::factory()->blog->create_and_get(
 			array(
-				'domain' => 'test.wordpress.org',
+				'domain' => 'test.finpress.org',
 				'path'   => $old_path,
 			)
 		);
@@ -1686,18 +1686,18 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 		// Populate the caches.
 		get_blog_details(
 			array(
-				'domain' => 'test.wordpress.org',
+				'domain' => 'test.finpress.org',
 				'path'   => $old_path,
 			)
 		);
-		get_blog_id_from_url( 'test.wordpress.org', $old_path );
+		get_blog_id_from_url( 'test.finpress.org', $old_path );
 		get_blog_details(
 			array(
-				'domain' => 'test.wordpress.org',
+				'domain' => 'test.finpress.org',
 				'path'   => $new_path,
 			)
 		);
-		get_blog_id_from_url( 'test.wordpress.org', $new_path );
+		get_blog_id_from_url( 'test.finpress.org', $new_path );
 
 		wp_update_site(
 			$site->id,
@@ -1706,17 +1706,17 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 			)
 		);
 
-		$domain_path_key_old = md5( 'test.wordpress.org' . $old_path );
-		$domain_path_key_new = md5( 'test.wordpress.org' . $new_path );
+		$domain_path_key_old = md5( 'test.finpress.org' . $old_path );
+		$domain_path_key_new = md5( 'test.finpress.org' . $new_path );
 
 		// Ensure all respective cache values are empty.
 		$result = array(
 			wp_cache_get( $domain_path_key_old, 'blog-lookup' ),
 			wp_cache_get( $domain_path_key_old, 'blog-id-cache' ),
-			wp_cache_get( 'current_blog_test.wordpress.org' . $old_path, 'site-options' ),
+			wp_cache_get( 'current_blog_test.finpress.org' . $old_path, 'site-options' ),
 			wp_cache_get( $domain_path_key_new, 'blog-lookup' ),
 			wp_cache_get( $domain_path_key_new, 'blog-id-cache' ),
-			wp_cache_get( 'current_blog_test.wordpress.org' . $new_path, 'site-options' ),
+			wp_cache_get( 'current_blog_test.finpress.org' . $new_path, 'site-options' ),
 		);
 
 		$this->assertEmpty( array_filter( $result ) );
@@ -2260,8 +2260,8 @@ class Tests_Multisite_Site extends WP_UnitTestCase {
 			'default values' => array(
 				array(),
 				array(
-					'public' => 0, // `public` is one of the default metas in `wpmu_create_blog()' function prior to WordPress 5.1.0.
-					'WPLANG' => 'en_US', // WPLANG is another default meta in `wpmu_create_blog()` function prior to WordPress 5.1.0.
+					'public' => 0, // `public` is one of the default metas in `wpmu_create_blog()' function prior to FinPress 5.1.0.
+					'WPLANG' => 'en_US', // WPLANG is another default meta in `wpmu_create_blog()` function prior to FinPress 5.1.0.
 				),
 			),
 			'public site'    => array(

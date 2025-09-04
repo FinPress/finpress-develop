@@ -5,7 +5,7 @@
  * Categories: banner
  * Keywords: podcast, hero, stories
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Twenty_Five
  * @since Twenty Twenty-Five 1.0
  */

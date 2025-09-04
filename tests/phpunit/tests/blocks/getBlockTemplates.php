@@ -206,7 +206,7 @@ class Tests_Blocks_GetBlockTemplates extends WP_UnitTestCase {
 	 * Data provider.
 	 *
 	 * The `custom-hero-template` is intentionally omitted from the theme.json's `customTemplates`.
-	 * See: https://core.trac.wordpress.org/ticket/61110.
+	 * See: https://core.trac.finpress.org/ticket/61110.
 	 *
 	 * @return array
 	 */
@@ -264,7 +264,7 @@ class Tests_Blocks_GetBlockTemplates extends WP_UnitTestCase {
 	 *
 	 * Make sure that plugin-registered templates with default post type slugs (ie: `single` or `page`)
 	 * don't leak into `get_block_templates()`.
-	 * See: https://core.trac.wordpress.org/ticket/62319.
+	 * See: https://core.trac.finpress.org/ticket/62319.
 	 *
 	 * @return array
 	 */

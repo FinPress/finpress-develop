@@ -5,7 +5,7 @@
  * Categories: banner
  * Description: A hero with a full width image, heading, short paragraph and button.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Twenty_Five
  * @since Twenty Twenty-Five 1.0
  */

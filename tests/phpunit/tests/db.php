@@ -359,7 +359,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 		$id = 0;
 		// This, obviously, is an incorrect prepare.
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$prepared = $wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = $id", $id );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0", $prepared );
 	}
@@ -377,11 +377,11 @@ class Tests_DB extends WP_UnitTestCase {
 	public function test_prepare_sprintf_invalid_args() {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", 1, array( 'admin' ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1 ), 'admin' );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
 	}
@@ -399,11 +399,11 @@ class Tests_DB extends WP_UnitTestCase {
 	public function test_prepare_vsprintf_invalid_args() {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( 1, array( 'admin' ) ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 1 AND user_login = ''", $prepared );
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 		$prepared = @$wpdb->prepare( "SELECT * FROM $wpdb->users WHERE id = %d AND user_login = %s", array( array( 1 ), 'admin' ) );
 		$this->assertSame( "SELECT * FROM $wpdb->users WHERE id = 0 AND user_login = 'admin'", $prepared );
 	}
@@ -416,7 +416,7 @@ class Tests_DB extends WP_UnitTestCase {
 	public function test_prepare_incorrect_arg_count( $query, $args, $expected ) {
 		global $wpdb;
 
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged,WordPress.DB.PreparedSQL
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged,FinPress.DB.PreparedSQL
 		$prepared = @$wpdb->prepare( $query, ...$args );
 		$this->assertSame( $expected, $prepared );
 	}
@@ -587,7 +587,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$wpdb->last_result = $last_result;
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.NotPrepared
 		$result = $wpdb->get_col( $query, $column );
 
 		if ( $query ) {
@@ -1195,13 +1195,13 @@ class Tests_DB extends WP_UnitTestCase {
 	private function get_db_error_value_too_long( $errored_fields ) {
 		if ( str_contains( $errored_fields, ', ' ) ) {
 			return sprintf(
-				'WordPress database error: Processing the values for the following fields failed: %s. ' .
+				'FinPress database error: Processing the values for the following fields failed: %s. ' .
 				'The supplied values may be too long or contain invalid data.',
 				$errored_fields
 			);
 		}
 		return sprintf(
-			'WordPress database error: Processing the value for the following field failed: %s. ' .
+			'FinPress database error: Processing the value for the following field failed: %s. ' .
 			'The supplied value may be too long or contains invalid data.',
 			$errored_fields
 		);
@@ -1260,7 +1260,7 @@ class Tests_DB extends WP_UnitTestCase {
 		);
 
 		$this->assertSame(
-			'WordPress database error: Could not perform query because it contains invalid data.',
+			'FinPress database error: Could not perform query because it contains invalid data.',
 			$wpdb->last_error
 		);
 	}
@@ -1498,7 +1498,7 @@ class Tests_DB extends WP_UnitTestCase {
 			$values = array( $values );
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL
+		// phpcs:ignore FinPress.DB.PreparedSQL
 		$sql = $wpdb->prepare( $sql, ...$values );
 		$this->assertSame( $expected, $sql, 'The expected SQL does not match' );
 
@@ -1521,7 +1521,7 @@ class Tests_DB extends WP_UnitTestCase {
 			$values = array( $values );
 		}
 
-		// phpcs:ignore WordPress.DB.PreparedSQL
+		// phpcs:ignore FinPress.DB.PreparedSQL
 		$sql = $wpdb->prepare( $sql, $values );
 		$this->assertSame( $expected, $sql, 'The expected SQL does not match' );
 
@@ -1990,7 +1990,7 @@ class Tests_DB extends WP_UnitTestCase {
 		$property->setAccessible( true );
 		$property->setValue( $wpdb, $allow );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.NotPrepared
 		$actual = $wpdb->prepare( $sql, $values );
 
 		// Reset.
@@ -2104,7 +2104,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$sql = str_replace( '{ESCAPE}', $escape, $sql );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.NotPrepared
 		$actual = $wpdb->prepare( $sql, $values );
 
 		$this->assertSame( $expected, $actual );
@@ -2148,7 +2148,7 @@ class Tests_DB extends WP_UnitTestCase {
 
 		$part = $wpdb->prepare( ' AND meta_value = %s', ' %s ' );
 		$this->assertStringNotContainsString( '%s', $part );
-		// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
+		// phpcs:ignore FinPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber
 		$query = $wpdb->prepare( 'SELECT * FROM {$wpdb->postmeta} WHERE meta_key = %s $part', array( 'foo', 'bar' ) );
 		$this->assertNull( $query );
 	}
@@ -2157,7 +2157,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+			// phpcs:ignore FinPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			1.1,
 			2.2
@@ -2172,7 +2172,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$actual = $wpdb->prepare(
-			// phpcs:ignore WordPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
+			// phpcs:ignore FinPress.DB.PreparedSQLPlaceholders.UnquotedComplexPlaceholder
 			'WHERE second=%2$f AND first=%1$f',
 			array( 1.1, 2.2 )
 		);
@@ -2190,7 +2190,7 @@ class Tests_DB extends WP_UnitTestCase {
 		$wpdb->query( "CREATE TABLE {$wpdb->prefix}test_placeholder( a VARCHAR(100) );" );
 		$sql = $wpdb->prepare( "INSERT INTO {$wpdb->prefix}test_placeholder VALUES(%s)", $value );
 
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.NotPrepared
 		$wpdb->query( $sql );
 
 		$actual = $wpdb->get_var( "SELECT a FROM {$wpdb->prefix}test_placeholder" );
@@ -2205,7 +2205,7 @@ class Tests_DB extends WP_UnitTestCase {
 		global $wpdb;
 
 		$sql = $wpdb->prepare( ' %s %1$c ', 'foo' );
-		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$sql = $wpdb->prepare( " $sql %s ", 'foo' );
 
 		$this->assertSame( "  'foo' {$wpdb->placeholder_escape()}1\$c  'foo' ", $sql );

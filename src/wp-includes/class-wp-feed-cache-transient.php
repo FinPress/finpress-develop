@@ -2,7 +2,7 @@
 /**
  * Feed API: WP_Feed_Cache_Transient class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Feed
  * @since 4.7.0
  */

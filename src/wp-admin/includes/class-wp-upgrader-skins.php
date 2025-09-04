@@ -1,8 +1,8 @@
 <?php
 /**
- * The User Interface "Skins" for the WordPress File Upgrader
+ * The User Interface "Skins" for the FinPress File Upgrader
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Upgrader
  * @since 2.8.0
  * @deprecated 4.7.0

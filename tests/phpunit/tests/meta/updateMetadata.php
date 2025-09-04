@@ -35,7 +35,7 @@ class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 	 *
 	 * @covers ::clean_user_cache
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb FinPress database abstraction object.
 	 */
 	public function test_clear_user_metadata_caches() {
 		global $wpdb;
@@ -47,7 +47,7 @@ class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 		$found = get_metadata( 'user', $user_id, 'key', true );
 		$this->assertSame( 'value1', $found );
 
-		// Simulate updating the DB from outside of WordPress.
+		// Simulate updating the DB from outside of FinPress.
 		$wpdb->update(
 			$wpdb->usermeta,
 			array(
@@ -74,7 +74,7 @@ class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 	 *
 	 * @covers ::clean_user_cache
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb FinPress database abstraction object.
 	 */
 	public function test_clear_post_metadata_caches() {
 		global $wpdb;
@@ -86,7 +86,7 @@ class Tests_Meta_UpdateMetadata extends WP_UnitTestCase {
 		$found = get_metadata( 'post', $post_id, 'key', true );
 		$this->assertSame( 'value1', $found );
 
-		// Simulate updating the DB from outside of WordPress.
+		// Simulate updating the DB from outside of FinPress.
 		$wpdb->update(
 			$wpdb->postmeta,
 			array(

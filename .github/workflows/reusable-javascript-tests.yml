@@ -24,7 +24,7 @@ jobs:
   # - Sets up Node.js.
   # - Logs debug information about the GitHub Action runner.
   # - Installs npm dependencies.
-  # - Run the WordPress QUnit tests.
+  # - Run the FinPress QUnit tests.
   # - Ensures version-controlled files are not modified or deleted.
   test-js:
     name: Run QUnit tests

@@ -1,4 +1,4 @@
-# Visual Regression Tests in WordPress Core
+# Visual Regression Tests in FinPress Core
 
 These tests make use of Playwright, with a setup very similar to that of the e2e tests.
 

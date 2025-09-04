@@ -54,11 +54,11 @@ class Tests_TermExists extends WP_UnitTestCase {
 		$t = self::factory()->term->create(
 			array(
 				'taxonomy' => 'post_tag',
-				'name'     => 'I "love" WordPress\'s taxonomy system',
+				'name'     => 'I "love" FinPress\'s taxonomy system',
 			)
 		);
 
-		$found = term_exists( 'I \"love\" WordPress\\\'s taxonomy system' );
+		$found = term_exists( 'I \"love\" FinPress\\\'s taxonomy system' );
 		$this->assertEquals( $t, $found );
 	}
 
@@ -514,7 +514,7 @@ class Tests_TermExists extends WP_UnitTestCase {
 	/**
 	 * @ticket 55358
 	 */
-	public function test_term_exists_with_wordpress_categories() {
+	public function test_term_exists_with_finpress_categories() {
 		// Create a parent category
 		$parent_cat = self::factory()->term->create(
 			array(

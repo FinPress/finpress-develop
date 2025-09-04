@@ -83,104 +83,104 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	 */
 	public function data_urls() {
 		return array(
-			// Does not link trailing periods, commas, and (semi-)colons in URLs with protocol (i.e. http://wordpress.org).
+			// Does not link trailing periods, commas, and (semi-)colons in URLs with protocol (i.e. http://finpress.org).
 			'URL only'                                   => array(
-				'text'     => 'http://wordpress.org/hello.html',
-				'expected' => '<a href="http://wordpress.org/hello.html" rel="nofollow">http://wordpress.org/hello.html</a>',
+				'text'     => 'http://finpress.org/hello.html',
+				'expected' => '<a href="http://finpress.org/hello.html" rel="nofollow">http://finpress.org/hello.html</a>',
 			),
 			'URL. with more content after'               => array(
-				'text'     => 'There was a spoon named http://wordpress.org. Alice!',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>. Alice!',
+				'text'     => 'There was a spoon named http://finpress.org. Alice!',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>. Alice!',
 			),
 			'URL, with more content after'               => array(
-				'text'     => 'There was a spoon named http://wordpress.org, said Alice.',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>, said Alice.',
+				'text'     => 'There was a spoon named http://finpress.org, said Alice.',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>, said Alice.',
 			),
 			'URL; with more content after'               => array(
-				'text'     => 'There was a spoon named http://wordpress.org; said Alice.',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>; said Alice.',
+				'text'     => 'There was a spoon named http://finpress.org; said Alice.',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>; said Alice.',
 			),
 			'URL: with more content after'               => array(
-				'text'     => 'There was a spoon named http://wordpress.org: said Alice.',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>: said Alice.',
+				'text'     => 'There was a spoon named http://finpress.org: said Alice.',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>: said Alice.',
 			),
 			'URL) with more content after'               => array(
-				'text'     => 'There was a spoon named (http://wordpress.org) said Alice.',
-				'expected' => 'There was a spoon named (<a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>) said Alice.',
+				'text'     => 'There was a spoon named (http://finpress.org) said Alice.',
+				'expected' => 'There was a spoon named (<a href="http://finpress.org" rel="nofollow">http://finpress.org</a>) said Alice.',
 			),
 
-			// Does not link trailing periods, commas, and (semi-)colons in URLs with protocol (i.e. http://wordpress.org) with nothing afterwards.
+			// Does not link trailing periods, commas, and (semi-)colons in URLs with protocol (i.e. http://finpress.org) with nothing afterwards.
 			'URL.'                                       => array(
-				'text'     => 'There was a spoon named http://wordpress.org.',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>.',
+				'text'     => 'There was a spoon named http://finpress.org.',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>.',
 			),
 			'URL,'                                       => array(
-				'text'     => 'There was a spoon named http://wordpress.org,',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>,',
+				'text'     => 'There was a spoon named http://finpress.org,',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>,',
 			),
 			'URL;'                                       => array(
-				'text'     => 'There was a spoon named http://wordpress.org;',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>;',
+				'text'     => 'There was a spoon named http://finpress.org;',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>;',
 			),
 			'URL:'                                       => array(
-				'text'     => 'There was a spoon named http://wordpress.org:',
-				'expected' => 'There was a spoon named <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>:',
+				'text'     => 'There was a spoon named http://finpress.org:',
+				'expected' => 'There was a spoon named <a href="http://finpress.org" rel="nofollow">http://finpress.org</a>:',
 			),
 			'URL)'                                       => array(
-				'text'     => 'There was a spoon named (http://wordpress.org)',
-				'expected' => 'There was a spoon named (<a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>)',
+				'text'     => 'There was a spoon named (http://finpress.org)',
+				'expected' => 'There was a spoon named (<a href="http://finpress.org" rel="nofollow">http://finpress.org</a>)',
 			),
 			'URL)x'                                      => array(
-				'text'     => 'There was a spoon named (http://wordpress.org)x',
-				'expected' => 'There was a spoon named (<a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>)x',
+				'text'     => 'There was a spoon named (http://finpress.org)x',
+				'expected' => 'There was a spoon named (<a href="http://finpress.org" rel="nofollow">http://finpress.org</a>)x',
 			),
 
-			// Strip trailing without protocol: will not link trailing periods, commas, and (semi-)colons in URLs without protocol (i.e. www.wordpress.org).
+			// Strip trailing without protocol: will not link trailing periods, commas, and (semi-)colons in URLs without protocol (i.e. www.finpress.org).
 			'No protocol www.URL. with content after'    => array(
-				'text'     => 'There was a spoon named www.wordpress.org. Alice!',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>. Alice!',
+				'text'     => 'There was a spoon named www.finpress.org. Alice!',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>. Alice!',
 			),
 			'No protocol www.URL, with content after'    => array(
-				'text'     => 'There was a spoon named www.wordpress.org, said Alice.',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>, said Alice.',
+				'text'     => 'There was a spoon named www.finpress.org, said Alice.',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>, said Alice.',
 			),
 			'No protocol www.URL; with content after'    => array(
-				'text'     => 'There was a spoon named www.wordpress.org; said Alice.',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>; said Alice.',
+				'text'     => 'There was a spoon named www.finpress.org; said Alice.',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>; said Alice.',
 			),
 			'No protocol www.URL: with content after'    => array(
-				'text'     => 'There was a spoon named www.wordpress.org: said Alice.',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>: said Alice.',
+				'text'     => 'There was a spoon named www.finpress.org: said Alice.',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>: said Alice.',
 			),
 			'No protocol www.URL) with content after'    => array(
-				'text'     => 'There was a spoon named www.wordpress.org) said Alice.',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>) said Alice.',
+				'text'     => 'There was a spoon named www.finpress.org) said Alice.',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>) said Alice.',
 			),
 
-			// Should not link trailing periods, commas, and (semi-)colons in URLs without protocol (i.e. www.wordpress.org).
+			// Should not link trailing periods, commas, and (semi-)colons in URLs without protocol (i.e. www.finpress.org).
 			'No protocol www.URL'                        => array(
-				'text'     => 'www.wordpress.org',
-				'expected' => '<a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>',
+				'text'     => 'www.finpress.org',
+				'expected' => '<a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>',
 			),
 			'No protocol www.URL.'                       => array(
-				'text'     => 'There was a spoon named www.wordpress.org.',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>.',
+				'text'     => 'There was a spoon named www.finpress.org.',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>.',
 			),
 			'No protocol www.URL,'                       => array(
-				'text'     => 'There was a spoon named www.wordpress.org,',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>,',
+				'text'     => 'There was a spoon named www.finpress.org,',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>,',
 			),
 			'No protocol www.URL;'                       => array(
-				'text'     => 'There was a spoon named www.wordpress.org;',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>;',
+				'text'     => 'There was a spoon named www.finpress.org;',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>;',
 			),
 			'No protocol www.URL:'                       => array(
-				'text'     => 'There was a spoon named www.wordpress.org:',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>:',
+				'text'     => 'There was a spoon named www.finpress.org:',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>:',
 			),
 			'No protocol www.URL)'                       => array(
-				'text'     => 'There was a spoon named www.wordpress.org)',
-				'expected' => 'There was a spoon named <a href="http://www.wordpress.org" rel="nofollow">http://www.wordpress.org</a>)',
+				'text'     => 'There was a spoon named www.finpress.org)',
+				'expected' => 'There was a spoon named <a href="http://www.finpress.org" rel="nofollow">http://www.finpress.org</a>)',
 			),
 
 			// @ticket 4570
@@ -258,12 +258,12 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			// @ticket 11211
 			// Test with real comments which were incorrectly linked.
 			'real world: example.com text (.org URL)'    => array(
-				'text'     => 'Example: WordPress, test (some text), I love example.com (http://example.org), it is brilliant',
-				'expected' => 'Example: WordPress, test (some text), I love example.com (<a href="http://example.org">http://example.org</a>), it is brilliant',
+				'text'     => 'Example: FinPress, test (some text), I love example.com (http://example.org), it is brilliant',
+				'expected' => 'Example: FinPress, test (some text), I love example.com (<a href="http://example.org">http://example.org</a>), it is brilliant',
 			),
 			'real world: example.com text (.com URL)'    => array(
-				'text'     => 'Example: WordPress, test (some text), I love example.com (http://example.com), it is brilliant',
-				'expected' => 'Example: WordPress, test (some text), I love example.com (<a href="http://example.com" rel="nofollow">http://example.com</a>), it is brilliant',
+				'text'     => 'Example: FinPress, test (some text), I love example.com (http://example.com), it is brilliant',
+				'expected' => 'Example: FinPress, test (some text), I love example.com (<a href="http://example.com" rel="nofollow">http://example.com</a>), it is brilliant',
 			),
 			'real world: (URL)...'                       => array(
 				'text'     => 'Some text followed by a bracketed link with a trailing ellipsis (http://example.com)...',
@@ -277,16 +277,16 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			// @ticket 14993
 			// Test Twitter hash bang URL.
 			'Twitter hash bang URL'                      => array(
-				'text'     => 'http://twitter.com/#!/wordpress/status/25907440233',
-				'expected' => '<a href="http://twitter.com/#!/wordpress/status/25907440233" rel="nofollow">http://twitter.com/#!/wordpress/status/25907440233</a>',
+				'text'     => 'http://twitter.com/#!/finpress/status/25907440233',
+				'expected' => '<a href="http://twitter.com/#!/finpress/status/25907440233" rel="nofollow">http://twitter.com/#!/finpress/status/25907440233</a>',
 			),
 			'Twitter hash bang URL in sentence'          => array(
-				'text'     => 'This is a really good tweet http://twitter.com/#!/wordpress/status/25907440233 !',
-				'expected' => 'This is a really good tweet <a href="http://twitter.com/#!/wordpress/status/25907440233" rel="nofollow">http://twitter.com/#!/wordpress/status/25907440233</a> !',
+				'text'     => 'This is a really good tweet http://twitter.com/#!/finpress/status/25907440233 !',
+				'expected' => 'This is a really good tweet <a href="http://twitter.com/#!/finpress/status/25907440233" rel="nofollow">http://twitter.com/#!/finpress/status/25907440233</a> !',
 			),
 			'Twitter hash bang in sentence with trailing !' => array(
-				'text'     => 'This is a really good tweet http://twitter.com/#!/wordpress/status/25907440233!',
-				'expected' => 'This is a really good tweet <a href="http://twitter.com/#!/wordpress/status/25907440233" rel="nofollow">http://twitter.com/#!/wordpress/status/25907440233</a>!',
+				'text'     => 'This is a really good tweet http://twitter.com/#!/finpress/status/25907440233!',
+				'expected' => 'This is a really good tweet <a href="http://twitter.com/#!/finpress/status/25907440233" rel="nofollow">http://twitter.com/#!/finpress/status/25907440233</a>!',
 			),
 
 			// Test URLs wrapped in angled brackets, i.e. < >.
@@ -359,56 +359,56 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 
 			// Test doesn't add links within <pre> or <code> elements.
 			'Does not add link within <pre>'             => array(
-				'text'     => '<pre>http://wordpress.org</pre>',
-				'expected' => '<pre>http://wordpress.org</pre>',
+				'text'     => '<pre>http://finpress.org</pre>',
+				'expected' => '<pre>http://finpress.org</pre>',
 			),
 			'Does not add link within <code>'            => array(
-				'text'     => '<code>http://wordpress.org</code>',
-				'expected' => '<code>http://wordpress.org</code>',
+				'text'     => '<code>http://finpress.org</code>',
+				'expected' => '<code>http://finpress.org</code>',
 			),
 			'Does not add link within <pre with attributes>' => array(
-				'text'     => '<pre class="foobar" id="foo">http://wordpress.org</pre>',
-				'expected' => '<pre class="foobar" id="foo">http://wordpress.org</pre>',
+				'text'     => '<pre class="foobar" id="foo">http://finpress.org</pre>',
+				'expected' => '<pre class="foobar" id="foo">http://finpress.org</pre>',
 			),
 			'Does not add link within <code with attributes>' => array(
-				'text'     => '<code class="foobar" id="foo">http://wordpress.org</code>',
-				'expected' => '<code class="foobar" id="foo">http://wordpress.org</code>',
+				'text'     => '<code class="foobar" id="foo">http://finpress.org</code>',
+				'expected' => '<code class="foobar" id="foo">http://finpress.org</code>',
 			),
 			'Adds link within <precustomtag>'            => array(
-				'text'     => '<precustomtag>http://wordpress.org</precustomtag>',
-				'expected' => '<precustomtag><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a></precustomtag>',
+				'text'     => '<precustomtag>http://finpress.org</precustomtag>',
+				'expected' => '<precustomtag><a href="http://finpress.org" rel="nofollow">http://finpress.org</a></precustomtag>',
 			),
 			'Adds link within <codecustomtag>'           => array(
-				'text'     => '<codecustomtag>http://wordpress.org</codecustomtag>',
-				'expected' => '<codecustomtag><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a></codecustomtag>',
+				'text'     => '<codecustomtag>http://finpress.org</codecustomtag>',
+				'expected' => '<codecustomtag><a href="http://finpress.org" rel="nofollow">http://finpress.org</a></codecustomtag>',
 			),
 			'Adds link to URL before <pre>, but does not add link within <pre>' => array(
-				'text'     => 'URL before pre http://wordpress.org<pre>http://wordpress.org</pre>',
-				'expected' => 'URL before pre <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a><pre>http://wordpress.org</pre>',
+				'text'     => 'URL before pre http://finpress.org<pre>http://finpress.org</pre>',
+				'expected' => 'URL before pre <a href="http://finpress.org" rel="nofollow">http://finpress.org</a><pre>http://finpress.org</pre>',
 			),
 			'Adds link to URL before <code>, but does not add link within <code>' => array(
-				'text'     => 'URL before code http://wordpress.org<code>http://wordpress.org</code>',
-				'expected' => 'URL before code <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a><code>http://wordpress.org</code>',
+				'text'     => 'URL before code http://finpress.org<code>http://finpress.org</code>',
+				'expected' => 'URL before code <a href="http://finpress.org" rel="nofollow">http://finpress.org</a><code>http://finpress.org</code>',
 			),
 			'Does not add link to <PRE>, but does add link to URL after <PRE>' => array(
-				'text'     => 'URL after pre <PRE>http://wordpress.org</PRE>http://wordpress.org',
-				'expected' => 'URL after pre <PRE>http://wordpress.org</PRE><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>',
+				'text'     => 'URL after pre <PRE>http://finpress.org</PRE>http://finpress.org',
+				'expected' => 'URL after pre <PRE>http://finpress.org</PRE><a href="http://finpress.org" rel="nofollow">http://finpress.org</a>',
 			),
 			'Does not add link within <code>, but does add link to URL after <code>' => array(
-				'text'     => 'URL after code <code>http://wordpress.org</code>http://wordpress.org',
-				'expected' => 'URL after code <code>http://wordpress.org</code><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>',
+				'text'     => 'URL after code <code>http://finpress.org</code>http://finpress.org',
+				'expected' => 'URL after code <code>http://finpress.org</code><a href="http://finpress.org" rel="nofollow">http://finpress.org</a>',
 			),
 			'Adds link to before and after URLs, but does not add link within <pre>' => array(
-				'text'     => 'URL before and after pre http://wordpress.org<pre>http://wordpress.org</pre>http://wordpress.org',
-				'expected' => 'URL before and after pre <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a><pre>http://wordpress.org</pre><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>',
+				'text'     => 'URL before and after pre http://finpress.org<pre>http://finpress.org</pre>http://finpress.org',
+				'expected' => 'URL before and after pre <a href="http://finpress.org" rel="nofollow">http://finpress.org</a><pre>http://finpress.org</pre><a href="http://finpress.org" rel="nofollow">http://finpress.org</a>',
 			),
 			'Adds link to before and after URLs, but does not add link within <code>' => array(
-				'text'     => 'URL before and after code http://wordpress.org<code>http://wordpress.org</code>http://wordpress.org',
-				'expected' => 'URL before and after code <a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a><code>http://wordpress.org</code><a href="http://wordpress.org" rel="nofollow">http://wordpress.org</a>',
+				'text'     => 'URL before and after code http://finpress.org<code>http://finpress.org</code>http://finpress.org',
+				'expected' => 'URL before and after code <a href="http://finpress.org" rel="nofollow">http://finpress.org</a><code>http://finpress.org</code><a href="http://finpress.org" rel="nofollow">http://finpress.org</a>',
 			),
 			'Does not add links within nested <pre>URL <code>URL</code> </pre>' => array(
-				'text'     => 'code inside pre <pre>http://wordpress.org <code>http://wordpress.org</code> http://wordpress.org</pre>',
-				'expected' => 'code inside pre <pre>http://wordpress.org <code>http://wordpress.org</code> http://wordpress.org</pre>',
+				'text'     => 'code inside pre <pre>http://finpress.org <code>http://finpress.org</code> http://finpress.org</pre>',
+				'expected' => 'code inside pre <pre>http://finpress.org <code>http://finpress.org</code> http://finpress.org</pre>',
 			),
 
 			// @ticket 16892
@@ -430,8 +430,8 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 			/*
 			Fails in 3.3.1 too.
 			'<a>text www.URL</a>'                        => array(
-				'text'     => '<a href="http://wordpress.org">This is already a link www.wordpress.org</a>',
-				'expected' => '<a href="http://wordpress.org">This is already a link www.wordpress.org</a>',
+				'text'     => '<a href="http://finpress.org">This is already a link www.finpress.org</a>',
+				'expected' => '<a href="http://finpress.org">This is already a link www.finpress.org</a>',
 			),
 			*/
 		);
@@ -466,16 +466,16 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 	public function data_script_and_style_tags() {
 		return array(
 			array(
-				'<script>http://wordpress.org</script>',
+				'<script>http://finpress.org</script>',
 			),
 			array(
-				'<style>http://wordpress.org</style>',
+				'<style>http://finpress.org</style>',
 			),
 			array(
-				'<script type="text/javascript">http://wordpress.org</script>',
+				'<script type="text/javascript">http://finpress.org</script>',
 			),
 			array(
-				'<style type="text/css">http://wordpress.org</style>',
+				'<style type="text/css">http://finpress.org</style>',
 			),
 		);
 	}
@@ -506,12 +506,12 @@ class Tests_Formatting_MakeClickable extends WP_UnitTestCase {
 		return array(
 			// @ticket 48022
 			array(
-				'http://wordpress.org',
-				'<a href="http://wordpress.org" rel="nofollow ugc">http://wordpress.org</a>',
+				'http://finpress.org',
+				'<a href="http://finpress.org" rel="nofollow ugc">http://finpress.org</a>',
 			),
 			array(
-				'www.wordpress.org',
-				'<p><a href="http://www.wordpress.org" rel="nofollow ugc">http://www.wordpress.org</a>',
+				'www.finpress.org',
+				'<p><a href="http://www.finpress.org" rel="nofollow ugc">http://www.finpress.org</a>',
 			),
 			// @ticket 56444
 			array(

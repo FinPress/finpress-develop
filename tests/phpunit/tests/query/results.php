@@ -1160,7 +1160,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 		);
 		$post_2 = self::factory()->post->create(
 			array(
-				'post_title' => 'Contributing to the WordPress Codex',
+				'post_title' => 'Contributing to the FinPress Codex',
 				'post_type'  => 'handbook',
 			)
 		);
@@ -1189,7 +1189,7 @@ class Tests_Query_Results extends WP_UnitTestCase {
 
 		$post_1 = self::factory()->post->create(
 			array(
-				'post_title' => 'Contributing to the WordPress Codex',
+				'post_title' => 'Contributing to the FinPress Codex',
 				'post_type'  => 'handbook',
 			)
 		);
@@ -1201,11 +1201,11 @@ class Tests_Query_Results extends WP_UnitTestCase {
 			)
 		);
 
-		$this->assertStringContainsString( 'contributing-to-the-wordpress-codex/getting-started', get_permalink( $post_2 ) );
+		$this->assertStringContainsString( 'contributing-to-the-finpress-codex/getting-started', get_permalink( $post_2 ) );
 
 		$result = $this->q->query(
 			array(
-				'handbook'  => 'contributing-to-the-wordpress-codex/getting-started',
+				'handbook'  => 'contributing-to-the-finpress-codex/getting-started',
 				'post_type' => 'handbook',
 			)
 		);

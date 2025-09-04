@@ -2,7 +2,7 @@
 /**
  * Tests the `WP_SimplePie_File` class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 5.6.1
  *
@@ -31,7 +31,7 @@ class Tests_Feed_wpSimplePieFile extends WP_UnitTestCase {
 	public function test_header_parsing( $callback, $header_field, $expected ) {
 		add_filter( 'pre_http_request', array( $this, $callback ) );
 
-		$file = new WP_SimplePie_File( 'https://wordpress.org/news/feed/' );
+		$file = new WP_SimplePie_File( 'https://finpress.org/news/feed/' );
 
 		$this->assertSame( $expected, $file->headers[ $header_field ] );
 	}
@@ -52,7 +52,7 @@ class Tests_Feed_wpSimplePieFile extends WP_UnitTestCase {
 			'single generic header works'      => array(
 				'mocked_response_single_header_values',
 				'link',
-				'<https://wordpress.org/news/wp-json/>; rel="https://api.w.org/"',
+				'<https://finpress.org/news/wp-json/>; rel="https://api.w.org/"',
 			),
 
 			'only the final content-type header should be used' => array(
@@ -64,7 +64,7 @@ class Tests_Feed_wpSimplePieFile extends WP_UnitTestCase {
 			'multiple generic header values should be merged into a comma separated string' => array(
 				'mocked_response_multiple_header_values',
 				'link',
-				'<https://wordpress.org/news/wp-json/>; rel="https://api.w.org/", <https://wordpress.org/news/wp/v2/categories/3>; rel="alternate"; type="application/json"',
+				'<https://finpress.org/news/wp-json/>; rel="https://api.w.org/", <https://finpress.org/news/wp/v2/categories/3>; rel="alternate"; type="application/json"',
 			),
 		);
 	}
@@ -75,12 +75,12 @@ class Tests_Feed_wpSimplePieFile extends WP_UnitTestCase {
 	public function mocked_response_single_header_values() {
 		$single_value_headers = array(
 			'content-type' => 'application/rss+xml; charset=UTF-8',
-			'link'         => '<https://wordpress.org/news/wp-json/>; rel="https://api.w.org/"',
+			'link'         => '<https://finpress.org/news/wp-json/>; rel="https://api.w.org/"',
 		);
 
 		return array(
 			'headers'  => new WpOrg\Requests\Utility\CaseInsensitiveDictionary( $single_value_headers ),
-			'body'     => file_get_contents( DIR_TESTDATA . '/feed/wordpress-org-news.xml' ),
+			'body'     => file_get_contents( DIR_TESTDATA . '/feed/finpress-org-news.xml' ),
 			'response' => array(
 				'code'    => 200,
 				'message' => 'OK',
@@ -103,8 +103,8 @@ class Tests_Feed_wpSimplePieFile extends WP_UnitTestCase {
 			),
 
 			'link'         => array(
-				'<https://wordpress.org/news/wp-json/>; rel="https://api.w.org/"',
-				'<https://wordpress.org/news/wp/v2/categories/3>; rel="alternate"; type="application/json"',
+				'<https://finpress.org/news/wp-json/>; rel="https://api.w.org/"',
+				'<https://finpress.org/news/wp/v2/categories/3>; rel="alternate"; type="application/json"',
 			),
 		);
 

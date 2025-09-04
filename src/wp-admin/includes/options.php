@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Options Administration API.
+ * FinPress Options Administration API.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  * @since 4.4.0
  */
@@ -134,5 +134,5 @@ function options_reading_add_js() {
  */
 function options_reading_blog_charset() {
 	echo '<input name="blog_charset" type="text" id="blog_charset" value="' . esc_attr( get_option( 'blog_charset' ) ) . '" class="regular-text" />';
-	echo '<p class="description">' . __( 'The <a href="https://wordpress.org/documentation/article/wordpress-glossary/#character-set">character encoding</a> of your site (UTF-8 is recommended)' ) . '</p>';
+	echo '<p class="description">' . __( 'The <a href="https://finpress.org/documentation/article/finpress-glossary/#character-set">character encoding</a> of your site (UTF-8 is recommended)' ) . '</p>';
 }

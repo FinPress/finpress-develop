@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Setting classes
+ * FinPress Customize Setting classes
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 3.4.0
  */
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 3.4.0
  *
  * @see WP_Customize_Manager
- * @link https://developer.wordpress.org/themes/customize-api
+ * @link https://developer.finpress.org/themes/customize-api
  */
 #[AllowDynamicProperties]
 class WP_Customize_Setting {

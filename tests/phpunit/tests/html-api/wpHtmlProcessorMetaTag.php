@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_HTML_Processor META tag handling.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage HTML-API
  *
  * @since 6.9

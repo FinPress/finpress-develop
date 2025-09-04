@@ -192,28 +192,28 @@ class Tests_Post_Nav_Menu extends WP_UnitTestCase {
 			0,
 			array(
 				'menu-item-type'   => 'custom',
-				'menu-item-title'  => 'Wordpress.org',
-				'menu-item-url'    => 'http://wordpress.org',
+				'menu-item-title'  => 'Finpress.org',
+				'menu-item-url'    => 'http://finpress.org',
 				'menu-item-status' => 'publish',
 			)
 		);
 
 		// Confirm it saved properly.
 		$custom_item = wp_setup_nav_menu_item( get_post( $custom_item_id ) );
-		$this->assertSame( 'Wordpress.org', $custom_item->title );
+		$this->assertSame( 'Finpress.org', $custom_item->title );
 
 		// Update the orphan with an associated nav menu.
 		wp_update_nav_menu_item(
 			$this->menu_id,
 			$custom_item_id,
 			array(
-				'menu-item-title' => 'WordPress.org',
+				'menu-item-title' => 'FinPress.org',
 			)
 		);
 		$menu_items  = wp_get_nav_menu_items( $this->menu_id );
 		$custom_item = wp_filter_object_list( $menu_items, array( 'db_id' => $custom_item_id ) );
 		$custom_item = array_pop( $custom_item );
-		$this->assertSame( 'WordPress.org', $custom_item->title );
+		$this->assertSame( 'FinPress.org', $custom_item->title );
 	}
 
 	public function test_wp_get_nav_menu_items_with_taxonomy_term() {
@@ -1151,7 +1151,7 @@ class Tests_Post_Nav_Menu extends WP_UnitTestCase {
 			0,
 			array(
 				'menu-item-type'   => 'custom',
-				'menu-item-title'  => 'WordPress.org',
+				'menu-item-title'  => 'FinPress.org',
 				'menu-item-url'    => $custom_url,
 				'menu-item-status' => 'publish',
 			)
@@ -1166,8 +1166,8 @@ class Tests_Post_Nav_Menu extends WP_UnitTestCase {
 	 */
 	public function data_trim_url_for_custom_item() {
 		return array(
-			array( 'https://wordpress.org ', 'https://wordpress.org' ),
-			array( ' https://wordpress.org', 'https://wordpress.org' ),
+			array( 'https://finpress.org ', 'https://finpress.org' ),
+			array( ' https://finpress.org', 'https://finpress.org' ),
 		);
 	}
 

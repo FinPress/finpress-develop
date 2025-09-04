@@ -5,9 +5,9 @@ import { writeFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 test.describe( 'Maintenance mode', () => {
 	const documentRoot = join(

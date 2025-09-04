@@ -23,24 +23,24 @@ class Tests_Multisite_Network extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$different_network_id = $factory->network->create(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			)
 		);
 
 		$sites = array(
 			array(
-				'domain'     => 'wordpress.org',
+				'domain'     => 'finpress.org',
 				'path'       => '/',
 				'network_id' => self::$different_network_id,
 			),
 			array(
-				'domain'     => 'wordpress.org',
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/',
 				'network_id' => self::$different_network_id,
 			),
 			array(
-				'domain'     => 'wordpress.org',
+				'domain'     => 'finpress.org',
 				'path'       => '/bar/',
 				'network_id' => self::$different_network_id,
 			),

@@ -2,7 +2,7 @@
 /**
  * Tests for the Block Templates abstraction layer.
  *
- * @package WordPress
+ * @package FinPress
  *
  * @group block-templates
  */

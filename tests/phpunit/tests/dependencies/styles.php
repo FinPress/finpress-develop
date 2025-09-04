@@ -101,7 +101,7 @@ class Tests_Dependencies_Styles extends WP_UnitTestCase {
 		// Init.
 		global $wp_styles;
 		$base_url_backup     = $wp_styles->base_url;
-		$wp_styles->base_url = 'http://example.com/wordpress';
+		$wp_styles->base_url = 'http://example.com/finpress';
 		$expected            = '';
 		$ver                 = get_bloginfo( 'version' );
 

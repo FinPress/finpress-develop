@@ -59,13 +59,13 @@ class Tests_Admin_IncludesUser extends WP_UnitTestCase {
 			);
 
 			$datasets[ $environment_type . ' and an app scheme "success_url"' ] = array(
-				'request'             => array( 'success_url' => 'wordpress://example' ),
+				'request'             => array( 'success_url' => 'finpress://example' ),
 				'expected_error_code' => '',
 				'env'                 => $environment_type,
 			);
 
 			$datasets[ $environment_type . ' and an app scheme "reject_url"' ] = array(
-				'request'             => array( 'reject_url' => 'wordpress://example' ),
+				'request'             => array( 'reject_url' => 'finpress://example' ),
 				'expected_error_code' => '',
 				'env'                 => $environment_type,
 			);

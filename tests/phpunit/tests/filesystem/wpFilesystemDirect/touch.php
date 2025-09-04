@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_Filesystem_Direct::touch() method.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 require_once __DIR__ . '/base.php';

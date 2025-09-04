@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_Plugin_Dependencies::initialize() method.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 require_once __DIR__ . '/base.php';
@@ -259,7 +259,7 @@ class Tests_Admin_WPPluginDependencies_Initialize extends WP_PluginDependencies_
 				'requires_plugins' => 'لينوكس-ويكى',
 			),
 			'chinese dependencies'                   => array(
-				'requires_plugins' => '唐诗宋词chinese-poem,社交登录,腾讯微博一键登录,豆瓣秀-for-wordpress',
+				'requires_plugins' => '唐诗宋词chinese-poem,社交登录,腾讯微博一键登录,豆瓣秀-for-finpress',
 			),
 			'symbol dependencies'                    => array(
 				'requires_plugins' => '★-wpsymbols-★',

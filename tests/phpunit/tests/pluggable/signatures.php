@@ -137,7 +137,6 @@ class Tests_Pluggable_Signatures extends WP_UnitTestCase {
 				'message',
 				'headers'     => '',
 				'attachments' => array(),
-				'embeds'      => array(),
 			),
 			'wp_authenticate'                 => array( 'username', 'password' ),
 			'wp_logout'                       => array(),
@@ -176,14 +175,14 @@ class Tests_Pluggable_Signatures extends WP_UnitTestCase {
 			'wp_redirect'                     => array(
 				'location',
 				'status'        => 302,
-				'x_redirect_by' => 'WordPress',
+				'x_redirect_by' => 'FinPress',
 			),
 			'wp_sanitize_redirect'            => array( 'location' ),
 			'_wp_sanitize_utf8_in_redirect'   => array( 'matches' ),
 			'wp_safe_redirect'                => array(
 				'location',
 				'status'        => 302,
-				'x_redirect_by' => 'WordPress',
+				'x_redirect_by' => 'FinPress',
 			),
 			'wp_validate_redirect'            => array(
 				'location',

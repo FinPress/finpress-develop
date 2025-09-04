@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_URL_Details_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST_API
  * @since 5.9.0
  *
@@ -61,7 +61,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 	 *
 	 * @since 5.9.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$admin_id      = $factory->user->create(
@@ -225,7 +225,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 		return array(
 			'empty string'   => array( '' ),
 			'numeric'        => array( 1234456 ),
-			'invalid scheme' => array( 'invalid.proto://wordpress.org' ),
+			'invalid scheme' => array( 'invalid.proto://finpress.org' ),
 		);
 	}
 
@@ -528,7 +528,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 			'with other elements'            => array(
 				'<meta name="viewport" content="width=device-width">
 				<title>Testing &lt;title&gt;</title>
-				<link rel="shortcut icon" href="https://wordpress.org/favicon.ico" />',
+				<link rel="shortcut icon" href="https://finpress.org/favicon.ico" />',
 				'Testing',
 			),
 			'multiline'                      => array(
@@ -555,9 +555,9 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 	 *
 	 * @param string $html       Given HTML string.
 	 * @param string $expected   Expected found icon.
-	 * @param string $target_url Optional. Target URL. Default 'https://wordpress.org'.
+	 * @param string $target_url Optional. Target URL. Default 'https://finpress.org'.
 	 */
-	public function test_get_icon( $html, $expected, $target_url = 'https://wordpress.org' ) {
+	public function test_get_icon( $html, $expected, $target_url = 'https://finpress.org' ) {
 		$controller = new WP_REST_URL_Details_Controller();
 		$method     = $this->get_reflective_method( 'get_icon' );
 
@@ -579,103 +579,103 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 
 			// Happy path for default.
 			'default'                               => array(
-				'<link rel="shortcut icon" href="https://wordpress.org/favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="shortcut icon" href="https://finpress.org/favicon.ico" />',
+				'https://finpress.org/favicon.ico',
 			),
 			'default with no closing whitespace'    => array(
-				'<link rel="shortcut icon" href="https://wordpress.org/favicon.ico"/>',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="shortcut icon" href="https://finpress.org/favicon.ico"/>',
+				'https://finpress.org/favicon.ico',
 			),
 			'default without self-closing'          => array(
-				'<link rel="shortcut icon" href="https://wordpress.org/favicon.ico">',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="shortcut icon" href="https://finpress.org/favicon.ico">',
+				'https://finpress.org/favicon.ico',
 			),
 			'default with href first'               => array(
-				'<link href="https://wordpress.org/favicon.ico" rel="shortcut icon" />',
-				'https://wordpress.org/favicon.ico',
+				'<link href="https://finpress.org/favicon.ico" rel="shortcut icon" />',
+				'https://finpress.org/favicon.ico',
 			),
 			'default with type last'                => array(
-				'<link href="https://wordpress.org/favicon.png" rel="icon" type="image/png" />',
-				'https://wordpress.org/favicon.png',
+				'<link href="https://finpress.org/favicon.png" rel="icon" type="image/png" />',
+				'https://finpress.org/favicon.png',
 			),
 			'default with type first'               => array(
-				'<link type="image/png" href="https://wordpress.org/favicon.png" rel="icon" />',
-				'https://wordpress.org/favicon.png',
+				'<link type="image/png" href="https://finpress.org/favicon.png" rel="icon" />',
+				'https://finpress.org/favicon.png',
 			),
 			'default with single quotes'            => array(
-				'<link type="image/png" href=\'https://wordpress.org/favicon.png\' rel=\'icon\' />',
-				'https://wordpress.org/favicon.png',
+				'<link type="image/png" href=\'https://finpress.org/favicon.png\' rel=\'icon\' />',
+				'https://finpress.org/favicon.png',
 			),
 
 			// Happy paths.
 			'with query string'                     => array(
-				'<link rel="shortcut icon" href="https://wordpress.org/favicon.ico?somequerystring=foo&another=bar" />',
-				'https://wordpress.org/favicon.ico?somequerystring=foo&another=bar',
+				'<link rel="shortcut icon" href="https://finpress.org/favicon.ico?somequerystring=foo&another=bar" />',
+				'https://finpress.org/favicon.ico?somequerystring=foo&another=bar',
 			),
 			'with another link'                     => array(
-				'<link rel="shortcut icon" href="https://wordpress.org/favicon.ico" /><link rel="canonical" href="https://example.com">',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="shortcut icon" href="https://finpress.org/favicon.ico" /><link rel="canonical" href="https://example.com">',
+				'https://finpress.org/favicon.ico',
 			),
 			'with multiple links'                   => array(
 				'<link rel="manifest" href="/manifest.56b1cedc.json">
-				<link rel="shortcut icon" href="https://wordpress.org/favicon.ico" />
+				<link rel="shortcut icon" href="https://finpress.org/favicon.ico" />
 				<link rel="canonical" href="https://example.com">',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'relative url'                          => array(
 				'<link rel="shortcut icon" href="/favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'relative url no slash'                 => array(
 				'<link rel="shortcut icon" href="favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'relative url with path'                => array(
 				'<link rel="shortcut icon" href="favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
-				'https://wordpress.org/my/path/here/',
+				'https://finpress.org/favicon.ico',
+				'https://finpress.org/my/path/here/',
 			),
 			'rel reverse order'                     => array(
-				'<link rel="icon shortcut" href="https://wordpress.org/favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="icon shortcut" href="https://finpress.org/favicon.ico" />',
+				'https://finpress.org/favicon.ico',
 			),
 			'rel icon only'                         => array(
-				'<link rel="icon" href="https://wordpress.org/favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'<link rel="icon" href="https://finpress.org/favicon.ico" />',
+				'https://finpress.org/favicon.ico',
 			),
 			'rel icon only with whitespace'         => array(
-				'<link rel=" icon " href="https://wordpress.org/favicon.ico" />',
-				'https://wordpress.org/favicon.ico',
+				'<link rel=" icon " href="https://finpress.org/favicon.ico" />',
+				'https://finpress.org/favicon.ico',
 			),
 			'multiline attributes'                  => array(
 				'<link
 					rel="icon"
-					href="https://wordpress.org/favicon.ico"
+					href="https://finpress.org/favicon.ico"
 				/>',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'multiline attributes in reverse order' => array(
 				'<link
 					rel="icon"
-					href="https://wordpress.org/favicon.ico"
+					href="https://finpress.org/favicon.ico"
 				/>',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'multiline attributes with type'        => array(
 				'<link
 					rel="icon"
-					href="https://wordpress.org/favicon.ico"
+					href="https://finpress.org/favicon.ico"
 					type="image/x-icon"
 				/>',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'multiline with type first'             => array(
 				'<link
 					type="image/x-icon"
 					rel="icon"
-					href="https://wordpress.org/favicon.ico"
+					href="https://finpress.org/favicon.ico"
 				/>',
-				'https://wordpress.org/favicon.ico',
+				'https://finpress.org/favicon.ico',
 			),
 			'with data URL x-icon type'             => array(
 				'<link rel="icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQEAYAAABPYyMiAAAABmJLR0T///////8JWPfcAAAACXBIWXMAAABIAAAASABGyWs+AAAAF0lEQVRIx2NgGAWjYBSMglEwCkbBSAcACBAAAeaR9cIAAAAASUVORK5CYII=" type="image/x-icon" />',
@@ -688,7 +688,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 
 			// Unhappy paths.
 			'empty rel'                             => array(
-				'<link rel="" href="https://wordpress.org/favicon.ico" />',
+				'<link rel="" href="https://finpress.org/favicon.ico" />',
 				'',
 			),
 			'empty href'                            => array(
@@ -696,7 +696,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 				'',
 			),
 			'no rel'                                => array(
-				'<link href="https://wordpress.org/favicon.ico" />',
+				'<link href="https://finpress.org/favicon.ico" />',
 				'',
 			),
 			'link to external stylesheet'           => array(
@@ -714,7 +714,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 			'multiline with no rel'                 => array(
 				'<link
 					rel=""
-					href="https://wordpress.org/favicon.ico"
+					href="https://finpress.org/favicon.ico"
 				/>',
 				'',
 			),
@@ -784,7 +784,7 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 				'This is a description.',
 			),
 			'with multiple elements'                     => array(
-				'<meta property="og:image" content="https://wordpress.org/images/myimage.jpg" />
+				'<meta property="og:image" content="https://finpress.org/images/myimage.jpg" />
 				<link rel="stylesheet" href="https://example.com/assets/style.css" />
 				<meta name="description" content="This is a description.">
 				<meta name="viewport" content="width=device-width, initial-scale=1">',
@@ -881,9 +881,9 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 	 *
 	 * @param string $html       Given HTML string.
 	 * @param string $expected   Expected found image.
-	 * @param string $target_url Optional. Target URL. Default 'https://wordpress.org'.
+	 * @param string $target_url Optional. Target URL. Default 'https://finpress.org'.
 	 */
-	public function test_get_image( $html, $expected, $target_url = 'https://wordpress.org' ) {
+	public function test_get_image( $html, $expected, $target_url = 'https://finpress.org' ) {
 		$controller = new WP_REST_URL_Details_Controller();
 
 		// Parse the meta elements from the given HTML.
@@ -908,85 +908,85 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 
 			// Happy paths.
 			'default'                                      => array(
-				'<meta property="og:image" content="https://wordpress.org/images/myimage.jpg">',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta property="og:image" content="https://finpress.org/images/myimage.jpg">',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with whitespace'                              => array(
-				'<meta  property=" og:image "   content="  https://wordpress.org/images/myimage.jpg "  >',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta  property=" og:image "   content="  https://finpress.org/images/myimage.jpg "  >',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with self-closing'                            => array(
-				'<meta property="og:image" content="https://wordpress.org/images/myimage.jpg"/>',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta property="og:image" content="https://finpress.org/images/myimage.jpg"/>',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with self-closing and whitespace'             => array(
-				'<meta  property=" og:image "   content="  https://wordpress.org/images/myimage.jpg "  />',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta  property=" og:image "   content="  https://finpress.org/images/myimage.jpg "  />',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with single quotes'                           => array(
-				"<meta property='og:image' content='https://wordpress.org/images/myimage.jpg'>",
-				'https://wordpress.org/images/myimage.jpg',
+				"<meta property='og:image' content='https://finpress.org/images/myimage.jpg'>",
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'without quotes'                               => array(
-				'<meta property=og:image content="https://wordpress.org/images/myimage.jpg">',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta property=og:image content="https://finpress.org/images/myimage.jpg">',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with url modifier'                            => array(
-				'<meta property="og:image:url" content="https://wordpress.org/images/url-modifier.jpg" />
-				<meta property="og:image" content="https://wordpress.org/images/myimage.jpg">',
-				'https://wordpress.org/images/url-modifier.jpg',
+				'<meta property="og:image:url" content="https://finpress.org/images/url-modifier.jpg" />
+				<meta property="og:image" content="https://finpress.org/images/myimage.jpg">',
+				'https://finpress.org/images/url-modifier.jpg',
 			),
 			'with query string'                            => array(
-				'<meta property="og:image" content="https://wordpress.org/images/withquerystring.jpg?foo=bar&bar=foo" />',
-				'https://wordpress.org/images/withquerystring.jpg?foo=bar&bar=foo',
+				'<meta property="og:image" content="https://finpress.org/images/withquerystring.jpg?foo=bar&bar=foo" />',
+				'https://finpress.org/images/withquerystring.jpg?foo=bar&bar=foo',
 			),
 
 			// Happy paths with changing attributes order or adding attributes.
 			'with content first'                           => array(
-				'<meta content="https://wordpress.org/images/myimage.jpg" property="og:image">',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta content="https://finpress.org/images/myimage.jpg" property="og:image">',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with other attributes'                        => array(
-				'<meta first="first" property="og:image" third="third" content="https://wordpress.org/images/myimage.jpg" fifth="fifth">',
-				'https://wordpress.org/images/myimage.jpg',
+				'<meta first="first" property="og:image" third="third" content="https://finpress.org/images/myimage.jpg" fifth="fifth">',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with other og meta'                           => array(
 				'<meta property="og:image:height" content="720" />
 				<meta property="og:image:alt" content="Ignore this please" />
-				<meta property="og:image" content="https://wordpress.org/images/myimage.jpg" />
+				<meta property="og:image" content="https://finpress.org/images/myimage.jpg" />
 				<link rel="stylesheet" href="https://example.com/assets/style.css" />',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 
 			// Happy paths with relative url.
 			'with relative url'                            => array(
 				'<meta property="og:image" content="/images/myimage.jpg" />',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with relative url without starting slash'     => array(
 				'<meta property="og:image" content="images/myimage.jpg" />',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with relative url and path'                   => array(
 				'<meta property="og:image" content="images/myimage.jpg" />',
-				'https://wordpress.org/images/myimage.jpg',
-				'https://wordpress.org/my/path/here/',
+				'https://finpress.org/images/myimage.jpg',
+				'https://finpress.org/my/path/here/',
 			),
 
 			// Happy paths with multiline attributes.
 			'with multiline attributes'                    => array(
 				'<meta
 					property="og:image"
-					content="https://wordpress.org/images/myimage.jpg"
+					content="https://finpress.org/images/myimage.jpg"
 				>',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with multiline attributes in reverse order'   => array(
 				'<meta
-					content="https://wordpress.org/images/myimage.jpg"
+					content="https://finpress.org/images/myimage.jpg"
 					property="og:image"
 				>',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with multiline attributes and other elements' => array(
 				'<meta
@@ -999,29 +999,29 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 				/>
 				<meta
 					property="og:image"
-					content="https://wordpress.org/images/myimage.jpg"
+					content="https://finpress.org/images/myimage.jpg"
 				>
 				<link rel="stylesheet" href="https://example.com/assets/style.css" />',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 			'with multiline and other attributes'          => array(
 				'<meta
 					first="first"
 					property="og:image:url"
 					third="third"
-					content="https://wordpress.org/images/myimage.jpg"
+					content="https://finpress.org/images/myimage.jpg"
 					fifth="fifth"
 				>',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 
 			// Happy paths with HTML tags in the content.
 			'with other og meta'                           => array(
 				'<meta property="og:image:height" content="720" />
 				<meta property="og:image:alt" content="<em>ignore this please</em>" />
-				<meta property="og:image" content="https://wordpress.org/images/myimage.jpg" />
+				<meta property="og:image" content="https://finpress.org/images/myimage.jpg" />
 				<link rel="stylesheet" href="https://example.com/assets/style.css" />',
-				'https://wordpress.org/images/myimage.jpg',
+				'https://finpress.org/images/myimage.jpg',
 			),
 
 			// Unhappy paths.
@@ -1030,11 +1030,11 @@ class Tests_REST_WpRestUrlDetailsController extends WP_Test_REST_Controller_Test
 				'',
 			),
 			'without a property attribute'                 => array(
-				'<meta content="https://wordpress.org/images/myimage.jpg">',
+				'<meta content="https://finpress.org/images/myimage.jpg">',
 				'',
 			),
 			'without a content attribute empty property'   => array(
-				'<meta property="og:image" href="https://wordpress.org/images/myimage.jpg">',
+				'<meta property="og:image" href="https://finpress.org/images/myimage.jpg">',
 				'',
 			),
 		);

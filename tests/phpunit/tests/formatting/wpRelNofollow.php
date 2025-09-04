@@ -44,28 +44,28 @@ class Tests_Formatting_wpRelNofollow extends WP_UnitTestCase {
 				true,
 			),
 			array(
-				'<a href="https://wordpress.org">Double Quotes</a>',
-				'<a href="https://wordpress.org" rel="nofollow">Double Quotes</a>',
+				'<a href="https://finpress.org">Double Quotes</a>',
+				'<a href="https://finpress.org" rel="nofollow">Double Quotes</a>',
 			),
 			array(
-				"<a href='https://wordpress.org'>Single Quotes</a>",
-				"<a href='https://wordpress.org' rel=\"nofollow\">Single Quotes</a>",
+				"<a href='https://finpress.org'>Single Quotes</a>",
+				"<a href='https://finpress.org' rel=\"nofollow\">Single Quotes</a>",
 			),
 			array(
-				'<a href="https://wordpress.org" title="Title">Multiple attributes</a>',
-				'<a href="https://wordpress.org" title="Title" rel="nofollow">Multiple attributes</a>',
+				'<a href="https://finpress.org" title="Title">Multiple attributes</a>',
+				'<a href="https://finpress.org" title="Title" rel="nofollow">Multiple attributes</a>',
 			),
 			array(
-				'<a title="Title" href="https://wordpress.org">Multiple attributes</a>',
-				'<a title="Title" href="https://wordpress.org" rel="nofollow">Multiple attributes</a>',
+				'<a title="Title" href="https://finpress.org">Multiple attributes</a>',
+				'<a title="Title" href="https://finpress.org" rel="nofollow">Multiple attributes</a>',
 			),
 			array(
-				'<a data-someflag href="https://wordpress.org">Multiple attributes</a>',
-				'<a data-someflag href="https://wordpress.org" rel="nofollow">Multiple attributes</a>',
+				'<a data-someflag href="https://finpress.org">Multiple attributes</a>',
+				'<a data-someflag href="https://finpress.org" rel="nofollow">Multiple attributes</a>',
 			),
 			array(
-				'<a  data-someflag  title="Title"  href="https://wordpress.org" onclick=""  >Everything at once</a>',
-				'<a  data-someflag  title="Title"  href="https://wordpress.org" onclick=""   rel="nofollow">Everything at once</a>',
+				'<a  data-someflag  title="Title"  href="https://finpress.org" onclick=""  >Everything at once</a>',
+				'<a  data-someflag  title="Title"  href="https://finpress.org" onclick=""   rel="nofollow">Everything at once</a>',
 			),
 			array(
 				'<a href="' . $home_url_http . '/some-url">Home URL (http)</a>',

@@ -2,7 +2,7 @@
 /**
  * Tests for synced pattern rendering.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 5.0.0
  *

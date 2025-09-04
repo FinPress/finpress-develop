@@ -45,8 +45,8 @@ class Tests_Kses extends WP_UnitTestCase {
 
 		foreach ( $attributes as $name => $values ) {
 			foreach ( (array) $values as $value ) {
-				$content  = "<address $name='$value'>1 WordPress Avenue, The Internet.</address>";
-				$expected = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 WordPress Avenue, The Internet.</address>";
+				$content  = "<address $name='$value'>1 FinPress Avenue, The Internet.</address>";
+				$expected = "<address $name='" . str_replace( '; ', ';', trim( $value, ';' ) ) . "'>1 FinPress Avenue, The Internet.</address>";
 
 				$data[] = array( $content, $expected );
 			}
@@ -154,9 +154,9 @@ class Tests_Kses extends WP_UnitTestCase {
 			),
 			// Set 3: Disallowed attributes in post context.
 			array(
-				'<video onload="alert(1);" src="https://videos.files.wordpress.com/DZEMDKxc/video-0f9c363010.mp4" />',
+				'<video onload="alert(1);" src="https://videos.files.finpress.com/DZEMDKxc/video-0f9c363010.mp4" />',
 				'post',
-				'<video src="https://videos.files.wordpress.com/DZEMDKxc/video-0f9c363010.mp4" />',
+				'<video src="https://videos.files.finpress.com/DZEMDKxc/video-0f9c363010.mp4" />',
 			),
 		);
 	}
@@ -643,7 +643,7 @@ EOF;
 			),
 			array(
 				"\x00h\x01e\x02l\x03l\x04o\x05 \x06w\x07o\x08r\x0Bl\x0Cd\x0E.\x0F \x10W\x11O\x12R\x13D\x14P\x15R\x16E\x17S\x18S\x19 \x1AK\x1BS\X1CE\x1DS\x1E.\x1F/",
-				'hello world. WORDPRESS KSES./',
+				'hello world. finpress KSES./',
 			),
 			array(
 				"\x1F\x1E\x1D\x1C\x1B\x1A\x19\x18\x17\x16\x15\x14\x13\x12\x11\x10\x0F\x0E\x0C\x0B\x08\x07\x06\x05\x04\X03\x02\x01\x00",
@@ -651,7 +651,7 @@ EOF;
 			),
 			array(
 				"\x1Fh\x1Ee\x1Dl\x1Cl\x1Bo\x1A \x19w\x18o\x17r\x16l\x15d\x14.\x13 \x12W\x11O\x10R\x0FD\x0EP\x0CR\x0BE\x08S\x07S\x06 \x05K\x04S\X03E\x02S\x01.\x00/",
-				'hello world. WORDPRESS KSES./',
+				'hello world. finpress KSES./',
 			),
 			array(
 				"\t\r\n word \n\r\t",
@@ -1393,7 +1393,7 @@ EOF;
 				'expected' => 'aspect-ratio: calc( 16 / 9 )',
 			),
 			array(
-				'css'      => 'aspect-ratio: url( https://wordpress.org/wp-content/uploads/aspect-ratio.jpg );',
+				'css'      => 'aspect-ratio: url( https://finpress.org/wp-content/uploads/aspect-ratio.jpg );',
 				'expected' => '',
 			),
 			// URL support for `filter` introduced in 6.3.
@@ -1982,8 +1982,8 @@ EOF;
 	 */
 	public function test_wp_kses_object_added_in_html_filter() {
 		$html = <<<HTML
-<object type="application/pdf" data="https://wordpress.org/foo.pdf" />
-<object type="application/x-shockwave-flash" data="https://wordpress.org/foo.swf">
+<object type="application/pdf" data="https://finpress.org/foo.pdf" />
+<object type="application/x-shockwave-flash" data="https://finpress.org/foo.swf">
 	<param name="foo" value="bar" />
 </object>
 HTML;

@@ -2,7 +2,7 @@
 /**
  * Customize API: WP_Customize_Image_Control class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 4.4.0
  */

@@ -68,7 +68,7 @@ permissions: {}
 
 jobs:
   #
-  # Determines the appropriate supported values for PHP and database versions based on the WordPress
+  # Determines the appropriate supported values for PHP and database versions based on the FinPress
   # version being tested.
   #
   build-test-matrix:
@@ -77,7 +77,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     with:
       wp-version: ${{ github.event_name == 'pull_request' && github.base_ref || github.ref_name }}
 
@@ -104,7 +104,7 @@ jobs:
           - db-version: '9.1'
           - db-version: '9.2'
           - db-version: '9.3'
-          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.wordpress.org/ticket/61218.
+          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '9.4'
           - php: '7.3'
@@ -124,7 +124,7 @@ jobs:
       actions: read
       contents: read
     needs: [ build-test-matrix, environment-tests-mysql ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -141,7 +141,7 @@ jobs:
     needs: [ build-test-matrix, environment-tests-mysql, slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

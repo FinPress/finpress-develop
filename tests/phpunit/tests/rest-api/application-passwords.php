@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_Application_Passwords functionality.
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage REST API
  *
  * @group  restapi

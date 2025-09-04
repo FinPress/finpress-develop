@@ -298,24 +298,24 @@ class Tests_URL extends WP_UnitTestCase {
 	 */
 	public function test_set_url_scheme() {
 		$links = array(
-			'http://wordpress.org/',
-			'https://wordpress.org/',
-			'http://wordpress.org/news/',
-			'http://wordpress.org',
+			'http://finpress.org/',
+			'https://finpress.org/',
+			'http://finpress.org/news/',
+			'http://finpress.org',
 		);
 
 		$https_links = array(
-			'https://wordpress.org/',
-			'https://wordpress.org/',
-			'https://wordpress.org/news/',
-			'https://wordpress.org',
+			'https://finpress.org/',
+			'https://finpress.org/',
+			'https://finpress.org/news/',
+			'https://finpress.org',
 		);
 
 		$http_links = array(
-			'http://wordpress.org/',
-			'http://wordpress.org/',
-			'http://wordpress.org/news/',
-			'http://wordpress.org',
+			'http://finpress.org/',
+			'http://finpress.org/',
+			'http://finpress.org/news/',
+			'http://finpress.org',
 		);
 
 		$relative_links = array(

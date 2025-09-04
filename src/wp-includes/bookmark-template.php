@@ -2,7 +2,7 @@
 /**
  * Bookmark Template Functions for usage in Themes.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Template
  */
 

@@ -2,7 +2,7 @@
 /**
  * Tests for WP_Block::get_block_bindings_processor.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 6.9.0
  *

@@ -2,7 +2,7 @@
 /**
  * Feed API
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Feed
  * @deprecated 4.7.0
  */

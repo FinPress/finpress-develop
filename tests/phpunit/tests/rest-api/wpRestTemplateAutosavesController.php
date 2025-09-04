@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Template_Autosaves_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi

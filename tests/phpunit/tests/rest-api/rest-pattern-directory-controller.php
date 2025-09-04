@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Pattern_Directory_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -42,7 +42,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 	 *
 	 * @since 5.8.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$contributor_id = $factory->user->create(
@@ -273,7 +273,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 	 */
 	public function test_get_items_wdotorg_unavailable( $method ) {
 		wp_set_current_user( self::$contributor_id );
-		self::prevent_requests_to_host( 'api.wordpress.org' );
+		self::prevent_requests_to_host( 'api.finpress.org' );
 
 		$request  = new WP_REST_Request( $method, '/wp/v2/pattern-directory/patterns' );
 		$response = rest_do_request( $request );
@@ -641,7 +641,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 	}
 
 	/**
-	 * Get a mocked raw response from api.wordpress.org.
+	 * Get a mocked raw response from api.finpress.org.
 	 *
 	 * @return string
 	 */
@@ -651,22 +651,22 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 		switch ( $action ) {
 			default:
 			case 'browse-all':
-				// Response from https://api.wordpress.org/patterns/1.0/.
+				// Response from https://api.finpress.org/patterns/1.0/.
 				$response = file_get_contents( $fixtures_dir . '/browse-all.json' );
 				break;
 
 			case 'browse-category':
-				// Response from https://api.wordpress.org/patterns/1.0/?pattern-categories=2.
+				// Response from https://api.finpress.org/patterns/1.0/?pattern-categories=2.
 				$response = file_get_contents( $fixtures_dir . '/browse-category-2.json' );
 				break;
 
 			case 'browse-keyword':
-				// Response from https://api.wordpress.org/patterns/1.0/?pattern-keywords=11.
+				// Response from https://api.finpress.org/patterns/1.0/?pattern-keywords=11.
 				$response = file_get_contents( $fixtures_dir . '/browse-keyword-11.json' );
 				break;
 
 			case 'search':
-				// Response from https://api.wordpress.org/patterns/1.0/?search=button.
+				// Response from https://api.finpress.org/patterns/1.0/?search=button.
 				$response = file_get_contents( $fixtures_dir . '/search-button.json' );
 				break;
 
@@ -791,7 +791,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 			'pre_http_request',
 			static function ( $response, $parsed_args, $url ) use ( $action, $expects_results ) {
 
-				if ( 'api.wordpress.org' !== wp_parse_url( $url, PHP_URL_HOST ) ) {
+				if ( 'api.finpress.org' !== wp_parse_url( $url, PHP_URL_HOST ) ) {
 					return $response;
 				}
 
@@ -820,7 +820,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 	 *
 	 * @param string $blocked_host The host to block connections to.
 	 */
-	private static function prevent_requests_to_host( $blocked_host = 'api.wordpress.org' ) {
+	private static function prevent_requests_to_host( $blocked_host = 'api.finpress.org' ) {
 		add_filter(
 			'pre_http_request',
 			static function ( $response, $parsed_args, $url ) use ( $blocked_host ) {
@@ -849,7 +849,7 @@ class WP_REST_Pattern_Directory_Controller_Test extends WP_Test_REST_Controller_
 	 * @return array faux/mocked response.
 	 */
 	public function mock_request_to_apiwporg_url( $response, $args, $url ) {
-		if ( 'api.wordpress.org' !== wp_parse_url( $url, PHP_URL_HOST ) ) {
+		if ( 'api.finpress.org' !== wp_parse_url( $url, PHP_URL_HOST ) ) {
 			return $response;
 		}
 

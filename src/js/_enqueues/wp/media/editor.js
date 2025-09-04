@@ -4,7 +4,7 @@
 
 /* global getUserSetting, tinymce, QTags */
 
-// WordPress, TinyMCE, and Media
+// FinPress, TinyMCE, and Media
 // -----------------------------
 (function($, _){
 	/**

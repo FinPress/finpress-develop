@@ -1,7 +1,7 @@
 name: JavaScript Tests
 
 on:
-  # JavaScript testing was introduced in WordPress 3.8.
+  # JavaScript testing was introduced in FinPress 3.8.
   push:
     branches:
       - trunk
@@ -49,13 +49,13 @@ concurrency:
 permissions: {}
 
 jobs:
-  # Runs the WordPress Core JavaScript tests.
+  # Runs the FinPress Core JavaScript tests.
   test-js:
     name: QUnit Tests
     uses: ./.github/workflows/reusable-javascript-tests.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
 
   slack-notifications:
     name: Slack Notifications
@@ -64,7 +64,7 @@ jobs:
       actions: read
       contents: read
     needs: [ test-js ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -81,7 +81,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

@@ -2,7 +2,7 @@
 /**
  * Test cases for the `wp_privacy_generate_personal_data_export_file()` function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 5.2.0
  *
@@ -229,12 +229,12 @@ class Tests_Privacy_wpPrivacyGeneratePersonalDataExportFile extends WP_UnitTestC
 	public function data_export_data_grouped_invalid_type() {
 		return array(
 			array( 10 ),
-			array( 'WordPress' ),
+			array( 'FinPress' ),
 			array( null ),
 			array( true ),
 			array( false ),
 			array( new stdClass() ),
-			array( serialize( array( 10, 'WordPress', null, true, false ) ) ),
+			array( serialize( array( 10, 'FinPress', null, true, false ) ) ),
 			array(
 				json_encode(
 					array(

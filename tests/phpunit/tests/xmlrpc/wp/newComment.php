@@ -200,8 +200,8 @@ class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
 			'',
 			self::$posts['publish']->ID,
 			array(
-				'author'       => 'WordPress',
-				'author_email' => 'noreply@wordpress.org',
+				'author'       => 'FinPress',
+				'author_email' => 'noreply@finpress.org',
 				'content'      => 'Test Anon Comments',
 			),
 		);
@@ -225,8 +225,8 @@ class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
 			'',
 			self::$posts['publish']->ID,
 			array(
-				'author'       => 'WordPress',
-				'author_email' => 'noreply at wordpress.org',
+				'author'       => 'FinPress',
+				'author_email' => 'noreply at finpress.org',
 				'content'      => 'Test Anon Comments',
 			),
 		);
@@ -250,8 +250,8 @@ class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
 			'administrator',
 			self::$posts['publish']->ID,
 			array(
-				'author'       => 'WordPress',
-				'author_email' => 'noreply at wordpress.org',
+				'author'       => 'FinPress',
+				'author_email' => 'noreply at finpress.org',
 				'content'      => 'Test Anon Comments',
 			),
 		);
@@ -282,8 +282,8 @@ class Tests_XMLRPC_wp_newComment extends WP_XMLRPC_UnitTestCase {
 			$username,
 			self::$posts[ $post_key ]->ID,
 			array(
-				'author'       => 'WordPress',
-				'author_email' => 'noreply@wordpress.org',
+				'author'       => 'FinPress',
+				'author_email' => 'noreply@finpress.org',
 				'content'      => 'Test Comment',
 			),
 		);

@@ -2,7 +2,7 @@
 /**
  * Multisite Administration hooks
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  * @since 4.3.0
  */

@@ -239,7 +239,7 @@ window._wpCustomizeSettings.settings['nav_menu_item[2000]'] = {
 		'title': 'Sample Page',
 		'type': 'post_type',
 		'type_label': 'Page',
-		'url': 'http://src.wordpress-develop.dev/sample-page/',
+		'url': 'http://src.finpress-develop.dev/sample-page/',
 		'xfn': ''
 	}
 };
@@ -266,7 +266,7 @@ window._wpCustomizeSettings.controls['nav_menu_item[2000]'] = {
 	'target': '',
 	'title': 'Sample Page',
 	'type': 'nav_menu_item',
-	'url': 'http://src.wordpress-develop.dev/sample-page/',
+	'url': 'http://src.finpress-develop.dev/sample-page/',
 	'xfn': ''
 };
 

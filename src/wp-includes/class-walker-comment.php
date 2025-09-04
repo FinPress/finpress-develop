@@ -2,7 +2,7 @@
 /**
  * Comment API: Walker_Comment class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Comments
  * @since 4.4.0
  */

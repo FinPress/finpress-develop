@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Posts meta functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -1467,7 +1467,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			array(
 				'meta' => array(
 					'object' => array(
-						'project' => 'WordPress',
+						'project' => 'FinPress',
 					),
 				),
 			)
@@ -1478,11 +1478,11 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 
 		$this->assertArrayHasKey( 'object', $data['meta'] );
 		$this->assertArrayHasKey( 'project', $data['meta']['object'] );
-		$this->assertSame( 'WordPress', $data['meta']['object']['project'] );
+		$this->assertSame( 'FinPress', $data['meta']['object']['project'] );
 
 		$meta = get_post_meta( self::$post_id, 'object', true );
 		$this->assertArrayHasKey( 'project', $meta );
-		$this->assertSame( 'WordPress', $meta['project'] );
+		$this->assertSame( 'FinPress', $meta['project'] );
 	}
 
 	/**
@@ -1516,7 +1516,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 				'meta' => array(
 					'object' => array(
 						array(
-							'project' => 'WordPress',
+							'project' => 'FinPress',
 						),
 						array(
 							'project' => 'bbPress',
@@ -1533,7 +1533,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$this->assertCount( 2, $data['meta']['object'] );
 
 		$this->assertArrayHasKey( 'project', $data['meta']['object'][0] );
-		$this->assertSame( 'WordPress', $data['meta']['object'][0]['project'] );
+		$this->assertSame( 'FinPress', $data['meta']['object'][0]['project'] );
 
 		$this->assertArrayHasKey( 'project', $data['meta']['object'][1] );
 		$this->assertSame( 'bbPress', $data['meta']['object'][1]['project'] );
@@ -1543,7 +1543,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$this->assertCount( 2, $meta );
 
 		$this->assertArrayHasKey( 'project', $meta[0] );
-		$this->assertSame( 'WordPress', $meta[0]['project'] );
+		$this->assertSame( 'FinPress', $meta[0]['project'] );
 
 		$this->assertArrayHasKey( 'project', $meta[1] );
 		$this->assertSame( 'bbPress', $meta[1]['project'] );
@@ -1576,7 +1576,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$request->set_body_params(
 			array(
 				'meta' => array(
-					'list' => array( 'WordPress', 'bbPress' ),
+					'list' => array( 'FinPress', 'bbPress' ),
 				),
 			)
 		);
@@ -1585,10 +1585,10 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$data     = $response->get_data();
 
 		$this->assertArrayHasKey( 'list', $data['meta'] );
-		$this->assertSame( array( 'WordPress', 'bbPress' ), $data['meta']['list'] );
+		$this->assertSame( array( 'FinPress', 'bbPress' ), $data['meta']['list'] );
 
 		$meta = get_post_meta( self::$post_id, 'list', true );
-		$this->assertSame( array( 'WordPress', 'bbPress' ), $meta );
+		$this->assertSame( array( 'FinPress', 'bbPress' ), $meta );
 	}
 
 	/**
@@ -1733,7 +1733,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		);
 
 		$basic          = new Basic_Object();
-		$basic->project = 'WordPress';
+		$basic->project = 'FinPress';
 		update_post_meta( self::$post_id, 'object', $basic );
 
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
@@ -1768,7 +1768,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		);
 
 		$basic          = new Basic_Object();
-		$basic->project = 'WordPress';
+		$basic->project = 'FinPress';
 		add_post_meta( self::$post_id, 'object', array( 'project' => 'bbPress' ) );
 		add_post_meta( self::$post_id, 'object', $basic );
 
@@ -1807,14 +1807,14 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			)
 		);
 
-		update_post_meta( self::$post_id, 'object', new JsonSerializable_Object( array( 'project' => 'WordPress' ) ) );
+		update_post_meta( self::$post_id, 'object', new JsonSerializable_Object( array( 'project' => 'FinPress' ) ) );
 
 		$request  = new WP_REST_Request( 'GET', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
 		$response = rest_get_server()->dispatch( $request );
 		$data     = $response->get_data();
 
 		$this->assertArrayHasKey( 'object', $data['meta'] );
-		$this->assertSame( array( 'project' => 'WordPress' ), $data['meta']['object'] );
+		$this->assertSame( array( 'project' => 'FinPress' ), $data['meta']['object'] );
 	}
 
 	/**
@@ -1843,7 +1843,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		);
 
 		$basic          = new Basic_Object();
-		$basic->project = 'WordPress';
+		$basic->project = 'FinPress';
 		update_post_meta( self::$post_id, 'object', $basic );
 
 		$request = new WP_REST_Request( 'PUT', sprintf( '/wp/v2/posts/%d', self::$post_id ) );
@@ -1885,7 +1885,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		);
 
 		$basic          = new Basic_Object();
-		$basic->project = 'WordPress';
+		$basic->project = 'FinPress';
 		add_post_meta( self::$post_id, 'object', array( 'project' => 'bbPress' ) );
 		add_post_meta( self::$post_id, 'object', $basic );
 
@@ -2137,7 +2137,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			self::$post_id,
 			'object',
 			array(
-				'project' => 'WordPress',
+				'project' => 'FinPress',
 			)
 		);
 		add_post_meta(
@@ -2155,7 +2155,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			array(
 				'meta' => array(
 					'object' => array(
-						array( 'project' => 'WordPress' ),
+						array( 'project' => 'FinPress' ),
 						array( 'project' => 'BuddyPress' ),
 					),
 				),
@@ -2169,12 +2169,12 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$this->assertArrayHasKey( 'object', $data['meta'] );
 
 		$this->assertCount( 2, $data['meta']['object'] );
-		$this->assertSame( array( 'project' => 'WordPress' ), $data['meta']['object'][0] );
+		$this->assertSame( array( 'project' => 'FinPress' ), $data['meta']['object'][0] );
 		$this->assertSame( array( 'project' => 'BuddyPress' ), $data['meta']['object'][1] );
 
 		$meta = get_post_meta( self::$post_id, 'object' );
 		$this->assertCount( 2, $meta );
-		$this->assertSame( array( 'project' => 'WordPress' ), $meta[0] );
+		$this->assertSame( array( 'project' => 'FinPress' ), $meta[0] );
 		$this->assertSame( array( 'project' => 'BuddyPress' ), $meta[1] );
 	}
 
@@ -2198,7 +2198,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			)
 		);
 
-		add_post_meta( self::$post_id, 'list', array( 'WordPress', 'bbPress' ) );
+		add_post_meta( self::$post_id, 'list', array( 'FinPress', 'bbPress' ) );
 		add_post_meta( self::$post_id, 'list', array( 'WordCamp' ) );
 
 		$this->grant_write_permission();
@@ -2208,7 +2208,7 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 			array(
 				'meta' => array(
 					'list' => array(
-						array( 'WordPress', 'bbPress' ),
+						array( 'FinPress', 'bbPress' ),
 						array( 'BuddyPress' ),
 					),
 				),
@@ -2222,12 +2222,12 @@ class WP_Test_REST_Post_Meta_Fields extends WP_Test_REST_TestCase {
 		$this->assertArrayHasKey( 'list', $data['meta'] );
 
 		$this->assertCount( 2, $data['meta']['list'] );
-		$this->assertSame( array( 'WordPress', 'bbPress' ), $data['meta']['list'][0] );
+		$this->assertSame( array( 'FinPress', 'bbPress' ), $data['meta']['list'][0] );
 		$this->assertSame( array( 'BuddyPress' ), $data['meta']['list'][1] );
 
 		$meta = get_post_meta( self::$post_id, 'list' );
 		$this->assertCount( 2, $meta );
-		$this->assertSame( array( 'WordPress', 'bbPress' ), $meta[0] );
+		$this->assertSame( array( 'FinPress', 'bbPress' ), $meta[0] );
 		$this->assertSame( array( 'BuddyPress' ), $meta[1] );
 	}
 

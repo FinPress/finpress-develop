@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_Interactivity_API functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Interactivity API
  *
  * @since 6.5.0
@@ -232,9 +232,9 @@ class Tests_Interactivity_API_WpInteractivityAPI extends WP_UnitTestCase {
 	 */
 	private function get_script_data_filter_result( ?Closure $callback = null ): MockAction {
 		$this->interactivity->add_hooks();
-		wp_enqueue_script_module( '@wordpress/interactivity' );
+		wp_enqueue_script_module( '@finpress/interactivity' );
 		$filter = new MockAction();
-		add_filter( 'script_module_data_@wordpress/interactivity', array( $filter, 'filter' ) );
+		add_filter( 'script_module_data_@finpress/interactivity', array( $filter, 'filter' ) );
 
 		if ( $callback ) {
 			$callback();

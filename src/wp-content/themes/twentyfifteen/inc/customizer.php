@@ -2,7 +2,7 @@
 /**
  * Twenty Fifteen Customizer functionality
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Fifteen
  * @since Twenty Fifteen 1.0
  */

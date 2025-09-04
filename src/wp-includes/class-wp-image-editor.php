@@ -1,8 +1,8 @@
 <?php
 /**
- * Base WordPress Image Editor
+ * Base FinPress Image Editor
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Image_Editor
  */
 

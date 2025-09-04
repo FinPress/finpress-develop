@@ -2,7 +2,7 @@
 /**
  * WP_Theme_JSON_Schema class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Theme
  * @since 5.9.0
  */

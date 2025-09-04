@@ -63,10 +63,10 @@ jobs:
   # - Installs npm dependencies
   # - Logs general debug information about the runner.
   # - Logs Docker debug information (about the Docker installation within the runner).
-  # - Starts the WordPress Docker container.
+  # - Starts the FinPress Docker container.
   # - Logs the running Docker containers.
-  # - Logs debug information about what's installed within the WordPress Docker containers.
-  # - Install WordPress within the Docker container.
+  # - Logs debug information about what's installed within the FinPress Docker containers.
+  # - Install FinPress within the Docker container.
   # - Restarts the Docker environment.
   # - Runs a WP CLI command.
   # - Tests the logs command.
@@ -146,7 +146,7 @@ jobs:
       - name: Log running Docker containers
         run: docker ps -a
 
-      - name: WordPress Docker container debug information
+      - name: FinPress Docker container debug information
         run: |
           docker compose run --rm mysql "${LOCAL_DB_TYPE}" --version
           docker compose run --rm php php --version
@@ -154,7 +154,7 @@ jobs:
           docker compose run --rm php php -i
           docker compose run --rm php locale -a
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: npm run env:install
 
       - name: Restart Docker environment

@@ -1,13 +1,13 @@
 <?php
 
-/* Path to the WordPress codebase you'd like to test. Add a forward slash in the end. */
+/* Path to the FinPress codebase you'd like to test. Add a forward slash in the end. */
 define( 'ABSPATH', dirname( __FILE__ ) . '/src/' );
 
 /*
  * Path to the theme to test with.
  *
  * The 'default' theme is symlinked from test/phpunit/data/themedir1/default into
- * the themes directory of the WordPress installation defined above.
+ * the themes directory of the FinPress installation defined above.
  */
 define( 'WP_DEFAULT_THEME', 'default' );
 
@@ -23,14 +23,14 @@ define( 'WP_DEFAULT_THEME', 'default' );
  */
 // define( 'WP_TESTS_FORCE_KNOWN_BUGS', true );
 
-// Test with WordPress debug mode (default).
+// Test with FinPress debug mode (default).
 define( 'WP_DEBUG', true );
 
 // ** Database settings ** //
 
 /*
- * This configuration file will be used by the copy of WordPress being tested.
- * wordpress/wp-config.php will be ignored.
+ * This configuration file will be used by the copy of FinPress being tested.
+ * finpress/wp-config.php will be ignored.
  *
  * WARNING WARNING WARNING!
  * These tests will DROP ALL TABLES in the database with the prefix named below.
@@ -48,7 +48,7 @@ define( 'DB_COLLATE', '' );
  * Authentication Unique Keys and Salts.
  *
  * Change these to different unique phrases!
- * You can generate these using the {@link https://api.wordpress.org/secret-key/1.1/salt/ WordPress.org secret-key service}
+ * You can generate these using the {@link https://api.finpress.org/secret-key/1.1/salt/ FinPress.org secret-key service}
  */
 define( 'AUTH_KEY',         'put your unique phrase here' );
 define( 'SECURE_AUTH_KEY',  'put your unique phrase here' );

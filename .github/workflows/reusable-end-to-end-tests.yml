@@ -2,7 +2,7 @@
 # A reusable workflow that runs end-to-end tests.
 #
 # Branches 6.3 and earlier used Puppeteer instead of Playwright.
-# Use https://github.com/WordPress/wordpress-develop/tree/6.3/.github/workflows/reusable-end-to-end-tests.yml instead.
+# Use https://github.com/FinPress/finpress-develop/tree/6.3/.github/workflows/reusable-end-to-end-tests.yml instead.
 ##
 name: End-to-end Tests
 
@@ -52,11 +52,11 @@ jobs:
   # - Logs debug information about the GitHub Action runner.
   # - Installs npm dependencies.
   # - Install Playwright browsers.
-  # - Builds WordPress to run from the `build` directory.
-  # - Starts the WordPress Docker container.
+  # - Builds FinPress to run from the `build` directory.
+  # - Starts the FinPress Docker container.
   # - Logs the running Docker containers.
-  # - Logs Docker debug information (about both the Docker installation within the runner and the WordPress container).
-  # - Install WordPress within the Docker container.
+  # - Logs Docker debug information (about both the Docker installation within the runner and the FinPress container).
+  # - Install FinPress within the Docker container.
   # - Install Gutenberg.
   # - Install additional languages.
   # - Run the E2E tests.
@@ -108,7 +108,7 @@ jobs:
         if: ${{ inputs.install-playwright }}
         run: npx playwright install --with-deps
 
-      - name: Build WordPress
+      - name: Build FinPress
         run: npm run build
 
       - name: Start Docker environment
@@ -127,7 +127,7 @@ jobs:
           docker compose run --rm php php -i
           docker compose run --rm php locale -a
 
-      - name: Install WordPress
+      - name: Install FinPress
         env:
           LOCAL_SCRIPT_DEBUG: ${{ inputs.LOCAL_SCRIPT_DEBUG }}
         run: npm run env:install

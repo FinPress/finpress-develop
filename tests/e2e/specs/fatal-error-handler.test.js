@@ -5,9 +5,9 @@ import { existsSync, mkdirSync, writeFileSync, unlinkSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 test.describe( 'Fatal error handler', () => {
 	const muPlugins = join(
@@ -40,7 +40,7 @@ test.describe( 'Fatal error handler', () => {
 
 		await expect(
 			page.getByText( /There has been a critical error on this website/ ),
-			'should display WordPress fatal error handler message'
+			'should display FinPress fatal error handler message'
 		).toBeVisible();
 	} );
 } );

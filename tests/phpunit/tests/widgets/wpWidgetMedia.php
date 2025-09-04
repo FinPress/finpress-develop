@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_Widget_Media functionality.
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage widgets
  */
 

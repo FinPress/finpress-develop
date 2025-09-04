@@ -101,7 +101,7 @@ module.exports = function(grunt) {
 			'banner',
 			'file-append',
 			'jsdoc',
-			'patch-wordpress',
+			'patch-finpress',
 			'replace-lts',
 			'rtlcss',
 			'sass',
@@ -497,7 +497,7 @@ module.exports = function(grunt) {
 				options: {
 					processContent: function( src ) {
 						return src.replace( /uses: \.\/\.github\/workflows\/([^\.]+)\.yml/g, function( match, $1 ) {
-							return 'uses: WordPress/wordpress-develop/.github/workflows/' + $1 + '.yml@trunk';
+							return 'uses: FinPress/finpress-develop/.github/workflows/' + $1 + '.yml@trunk';
 						} );
 					}
 				},
@@ -507,7 +507,7 @@ module.exports = function(grunt) {
 			'workflow-references-remote-to-local': {
 				options: {
 					processContent: function( src ) {
-						return src.replace( /uses: WordPress\/wordpress-develop\/\.github\/workflows\/([^\.]+)\.yml@trunk/g, function( match, $1 ) {
+						return src.replace( /uses: FinPress\/finpress-develop\/\.github\/workflows\/([^\.]+)\.yml@trunk/g, function( match, $1 ) {
 							return 'uses: ./.github/workflows/' + $1 + '.yml';
 						} );
 					}
@@ -831,7 +831,7 @@ module.exports = function(grunt) {
 					'wp-includes/js/mediaelement/wp-mediaelement.js',
 					'wp-includes/js/mediaelement/wp-playlist.js',
 					'wp-includes/js/mediaelement/mediaelement-migrate.js',
-					'wp-includes/js/tinymce/plugins/wordpress/plugin.js',
+					'wp-includes/js/tinymce/plugins/finpress/plugin.js',
 					'wp-includes/js/tinymce/plugins/wp*/plugin.js',
 
 					// Exceptions.
@@ -1114,7 +1114,7 @@ module.exports = function(grunt) {
 				src: [
 					'wp-{admin,includes}/images/**/*.{png,jpg,gif,jpeg}',
 					'wp-content/themes/**/*.{png,jpg,gif,jpeg}',
-					'wp-includes/js/tinymce/skins/wordpress/images/*.{png,jpg,gif,jpeg}'
+					'wp-includes/js/tinymce/skins/finpress/images/*.{png,jpg,gif,jpeg}'
 				],
 				dest: SOURCE_DIR
 			}
@@ -1349,11 +1349,11 @@ module.exports = function(grunt) {
 			 *
 			 * It should not be updated:
 			 * - After the RC1
-			 * - When backporting fixes to older WordPress releases.
+			 * - When backporting fixes to older FinPress releases.
 			 *
 			 * For more context, see:
-			 * https://github.com/WordPress/wordpress-develop/pull/2621#discussion_r859840515
-			 * https://core.trac.wordpress.org/ticket/55559
+			 * https://github.com/FinPress/finpress-develop/pull/2621#discussion_r859840515
+			 * https://core.trac.finpress.org/ticket/55559
 			 */
 			grunt.task.run( 'browserslist:update' );
 		}
@@ -1362,8 +1362,8 @@ module.exports = function(grunt) {
 		grunt.task.run( 'wp-packages:update' );
 
 		/*
-		 * Install any new @wordpress packages that are now required.
-		 * Update any non-@wordpress deps to the same version as required in the @wordpress packages (e.g. react 16 -> 17).
+		 * Install any new @finpress packages that are now required.
+		 * Update any non-@finpress deps to the same version as required in the @finpress packages (e.g. react 16 -> 17).
 		 */
 		grunt.task.run( 'wp-packages:refresh-deps' );
 	} );
@@ -1821,9 +1821,9 @@ module.exports = function(grunt) {
 		} );
 	} );
 
-	grunt.registerTask( 'wp-packages:update', 'Update WordPress packages', function() {
+	grunt.registerTask( 'wp-packages:update', 'Update FinPress packages', function() {
 		const distTag = grunt.option('dist-tag') || 'latest';
-		grunt.log.writeln( `Updating WordPress packages (--dist-tag=${distTag})` );
+		grunt.log.writeln( `Updating FinPress packages (--dist-tag=${distTag})` );
 		spawn( 'npx', [ 'wp-scripts', 'packages-update', `--dist-tag=${distTag}` ], {
 			cwd: __dirname,
 			stdio: 'inherit',
@@ -1838,7 +1838,7 @@ module.exports = function(grunt) {
 		} );
 	} );
 
-	grunt.registerTask( 'wp-packages:refresh-deps', 'Update version of dependencies in package.json to match the ones listed in the latest WordPress packages', function() {
+	grunt.registerTask( 'wp-packages:refresh-deps', 'Update version of dependencies in package.json to match the ones listed in the latest FinPress packages', function() {
 		const distTag = grunt.option('dist-tag') || 'latest';
 		grunt.log.writeln( `Updating versions of dependencies listed in package.json (--dist-tag=${distTag})` );
 		spawn( 'node', [ 'tools/release/sync-gutenberg-packages.js', `--dist-tag=${distTag}` ], {
@@ -1847,14 +1847,14 @@ module.exports = function(grunt) {
 		} );
 	} );
 
-	grunt.registerTask( 'wp-packages:sync-stable-blocks', 'Refresh the PHP files referring to stable @wordpress/block-library blocks.', function() {
-		grunt.log.writeln( `Syncing stable blocks from @wordpress/block-library to src/` );
+	grunt.registerTask( 'wp-packages:sync-stable-blocks', 'Refresh the PHP files referring to stable @finpress/block-library blocks.', function() {
+		grunt.log.writeln( `Syncing stable blocks from @finpress/block-library to src/` );
 		const { main } = require( './tools/release/sync-stable-blocks' );
 		main();
 	} );
 
 	// Patch task.
-	grunt.renameTask('patch_wordpress', 'patch');
+	grunt.renameTask('patch_finpress', 'patch');
 
 	// Add an alias `apply` of the `patch` task name.
 	grunt.registerTask('apply', 'patch');

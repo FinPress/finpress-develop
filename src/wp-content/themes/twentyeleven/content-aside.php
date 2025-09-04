@@ -4,9 +4,9 @@
  *
  * Used on index and archive pages.
  *
- * @link https://developer.wordpress.org/advanced-administration/wordpress/post-formats/
+ * @link https://developer.finpress.org/advanced-administration/finpress/post-formats/
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Eleven
  * @since Twenty Eleven 1.0
  */

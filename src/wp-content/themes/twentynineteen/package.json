@@ -3,15 +3,15 @@
   "version": "3.1.0",
   "description": "Default WP Theme",
   "bugs": {
-    "url": "https://core.trac.wordpress.org/"
+    "url": "https://core.trac.finpress.org/"
   },
-  "homepage": "https://wordpress.org/themes/twentynineteen/",
+  "homepage": "https://finpress.org/themes/twentynineteen/",
   "engines": {
     "node": ">=20.10.0",
     "npm": ">=10.2.3"
   },
   "devDependencies": {
-    "@wordpress/browserslist-config": "^6.14.0",
+    "@finpress/browserslist-config": "^6.14.0",
     "autoprefixer": "^10.4.20",
     "chokidar-cli": "^3.0.0",
     "node-sass": "^9.0.0",
@@ -35,7 +35,7 @@
     "map": false
   },
   "browserslist": [
-    "extends @wordpress/browserslist-config"
+    "extends @finpress/browserslist-config"
   ],
   "scripts": {
     "build:style": "node-sass style.scss style.css --output-style expanded && postcss -r style.css",

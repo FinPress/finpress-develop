@@ -27,7 +27,7 @@ on:
         default: false
     secrets:
       CODEVITALS_PROJECT_TOKEN:
-        description: 'The authorization token for https://www.codevitals.run/project/wordpress.'
+        description: 'The authorization token for https://www.codevitals.run/project/finpress.'
         required: false
 
 env:

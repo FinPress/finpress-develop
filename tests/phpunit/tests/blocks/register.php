@@ -2,7 +2,7 @@
 /**
  * Tests for register_block_type(), unregister_block_type(), get_dynamic_block_names(), and register_block_style().
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 5.0.0
  *
@@ -815,11 +815,11 @@ class Tests_Blocks_Register extends WP_UnitTestCase {
 
 	/**
 	 * Tests that the function returns false when the `block.json` is not found
-	 * in the WordPress core.
+	 * in the FinPress core.
 	 *
 	 * @ticket 50263
 	 */
-	public function test_metadata_not_found_in_wordpress_core() {
+	public function test_metadata_not_found_in_finpress_core() {
 		$result = register_block_type_from_metadata( 'unknown' );
 
 		$this->assertFalse( $result );

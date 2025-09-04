@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Nav Menus classes
+ * FinPress Customize Nav Menus classes
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 4.3.0
  */

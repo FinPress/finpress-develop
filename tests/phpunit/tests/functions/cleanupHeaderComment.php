@@ -48,8 +48,8 @@ class Tests_Functions_CleanupHeaderComment extends WP_UnitTestCase {
 				'<?php
 /*
 Plugin Name: Health Check
-Plugin URI: https://wordpress.org/plugins/health-check/
-Description: Checks the health of your WordPress install
+Plugin URI: https://finpress.org/plugins/health-check/
+Description: Checks the health of your FinPress install
 Version: 0.1.0
 Author: The Health Check Team
 Author URI: http://health-check-team.example.com
@@ -60,8 +60,8 @@ Domain Path: /languages
 				'<?php
 /*
 Plugin Name: Health Check
-Plugin URI: https://wordpress.org/plugins/health-check/
-Description: Checks the health of your WordPress install
+Plugin URI: https://finpress.org/plugins/health-check/
+Description: Checks the health of your FinPress install
 Version: 0.1.0
 Author: The Health Check Team
 Author URI: http://health-check-team.example.com
@@ -73,8 +73,8 @@ Domain Path: /languages',
 				'<?php
 /*
 Plugin Name: Health Check
-Plugin URI: https://wordpress.org/plugins/health-check/
-Description: Checks the health of your WordPress install
+Plugin URI: https://finpress.org/plugins/health-check/
+Description: Checks the health of your FinPress install
 Version: 0.1.0
 Author: The Health Check Team
 Author URI: http://health-check-team.example.com
@@ -86,8 +86,8 @@ dddlddfs
 				'<?php
 /*
 Plugin Name: Health Check
-Plugin URI: https://wordpress.org/plugins/health-check/
-Description: Checks the health of your WordPress install
+Plugin URI: https://finpress.org/plugins/health-check/
+Description: Checks the health of your FinPress install
 Version: 0.1.0
 Author: The Health Check Team
 Author URI: http://health-check-team.example.com
@@ -100,8 +100,8 @@ dddlddfs',
 				'<?php
 /**
  * Plugin Name: Health Check
- * Plugin URI: https://wordpress.org/plugins/health-check/
- * Description: Checks the health of your WordPress install
+ * Plugin URI: https://finpress.org/plugins/health-check/
+ * Description: Checks the health of your FinPress install
  * Version: 0.1.0
  * Author: The Health Check Team
  * Author URI: http://health-check-team.example.com
@@ -111,8 +111,8 @@ dddlddfs',
 				'<?php
 /**
  * Plugin Name: Health Check
- * Plugin URI: https://wordpress.org/plugins/health-check/
- * Description: Checks the health of your WordPress install
+ * Plugin URI: https://finpress.org/plugins/health-check/
+ * Description: Checks the health of your FinPress install
  * Version: 0.1.0
  * Author: The Health Check Team
  * Author URI: http://health-check-team.example.com

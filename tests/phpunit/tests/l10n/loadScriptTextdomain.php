@@ -41,11 +41,11 @@ class Tests_L10n_LoadScriptTextdomain extends WP_UnitTestCase {
 			array(
 				'/languages/en_US-813e104eb47e13dd4cc5af844c618754.json',
 				'test-example-cdn',
-				'https://my-cdn.com/wordpress/wp-includes/js/script.js',
+				'https://my-cdn.com/finpress/wp-includes/js/script.js',
 				'default',
 				array( 'load_script_textdomain_relative_path', array( __CLASS__, 'relative_path_from_cdn' ), 2 ),
 			),
-			// Test for WordPress installs in a subdirectory.
+			// Test for FinPress installs in a subdirectory.
 			array(
 				'/languages/en_US-813e104eb47e13dd4cc5af844c618754.json',
 				'test-example-subdir',
@@ -147,8 +147,8 @@ class Tests_L10n_LoadScriptTextdomain extends WP_UnitTestCase {
 	}
 
 	public static function relative_path_from_cdn( $relative, $src ) {
-		if ( 0 === strpos( $src, 'https://my-cdn.com/wordpress/' ) ) {
-			return substr( $src, strlen( 'https://my-cdn.com/wordpress/' ) );
+		if ( 0 === strpos( $src, 'https://my-cdn.com/finpress/' ) ) {
+			return substr( $src, strlen( 'https://my-cdn.com/finpress/' ) );
 		}
 
 		return $relative;

@@ -2,7 +2,7 @@
 /**
  * Widget API: WP_Widget_Recent_Comments class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Widgets
  * @since 4.4.0
  */

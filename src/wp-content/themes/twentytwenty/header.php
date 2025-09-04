@@ -1,10 +1,10 @@
 <?php
 /**
- * Header file for the Twenty Twenty WordPress default theme.
+ * Header file for the Twenty Twenty FinPress default theme.
  *
- * @link https://developer.wordpress.org/themes/basics/template-files/#template-partials
+ * @link https://developer.finpress.org/themes/basics/template-files/#template-partials
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Twenty
  * @since Twenty Twenty 1.0
  */

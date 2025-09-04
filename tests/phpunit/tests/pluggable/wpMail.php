@@ -103,7 +103,7 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 
 		wp_mail( $to, $subject, $message, $headers );
 
-		// WordPress 3.2 and later correctly split the address into the two parts and send them separately to PHPMailer.
+		// FinPress 3.2 and later correctly split the address into the two parts and send them separately to PHPMailer.
 		// Earlier versions of PHPMailer were not touchy about the formatting of these arguments.
 
 		// Retrieve the mailer instance.
@@ -127,7 +127,7 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 
 		wp_mail( $to, $subject, $message );
 
-		// WordPress 3.2 and later correctly split the address into the two parts and send them separately to PHPMailer.
+		// FinPress 3.2 and later correctly split the address into the two parts and send them separately to PHPMailer.
 		// Earlier versions of PHPMailer were not touchy about the formatting of these arguments.
 		$mailer = tests_retrieve_phpmailer_instance();
 		$this->assertSame( 'address@tld.com', $mailer->get_recipient( 'to' )->address );
@@ -210,7 +210,7 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 		wp_mail( $to, $subject, $message, $headers );
 
 		$mailer = tests_retrieve_phpmailer_instance();
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		// phpcs:disable FinPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$this->assertSame( $from, $mailer->From );
 		$this->assertSame( $from_name, $mailer->FromName );
 		// phpcs:enable
@@ -228,7 +228,7 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 		$subject  = 'Testing';
 		$message  = 'Test Message';
 		$headers  = 'From: ';
-		$expected = 'From: WordPress <wordpress@' . $url_parts['host'] . '>';
+		$expected = 'From: FinPress <finpress@' . $url_parts['host'] . '>';
 
 		wp_mail( $to, $subject, $message, $headers );
 
@@ -243,8 +243,8 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 		$to       = 'address@tld.com';
 		$subject  = 'Testing';
 		$message  = 'Test Message';
-		$headers  = 'From: <wordpress@example.com>';
-		$expected = 'From: WordPress <wordpress@example.com>';
+		$headers  = 'From: <finpress@example.com>';
+		$expected = 'From: FinPress <finpress@example.com>';
 
 		wp_mail( $to, $subject, $message, $headers );
 
@@ -553,76 +553,5 @@ class Tests_Pluggable_wpMail extends WP_UnitTestCase {
 
 		$phpmailer = $GLOBALS['phpmailer'];
 		$this->assertNotSame( 'user1', $phpmailer->AltBody );
-	}
-
-	/**
-	 * Tests that wp_mail() can send embedded images.
-	 *
-	 * @ticket 28059
-	 */
-	public function test_wp_mail_can_send_embedded_images() {
-		$embeds = array(
-			'canola' => DIR_TESTDATA . '/images/canola.jpg',
-			DIR_TESTDATA . '/images/test-image-2.gif',
-			DIR_TESTDATA . '/images/avif-lossy.avif',
-		);
-
-		$message = '';
-		foreach ( $embeds as $key => $path ) {
-			$message .= '<p><img src="cid:' . $key . '" alt="" /></p>';
-		}
-
-		wp_mail(
-			'user@example.org',
-			'Embedded images test',
-			$message,
-			'Content-Type: text/html',
-			array(),
-			$embeds
-		);
-
-		$mailer      = tests_retrieve_phpmailer_instance();
-		$attachments = $mailer->getAttachments();
-
-		foreach ( $attachments as $attachment ) {
-			$inline_embed_exists = in_array( $attachment[0], $embeds, true ) && 'inline' === $attachment[6];
-			$this->assertTrue( $inline_embed_exists, 'The attachment ' . $attachment[2] . ' is not inline in the embeds array.' );
-		}
-		foreach ( $embeds as $key => $path ) {
-			$this->assertStringContainsString( 'cid:' . $key, $mailer->get_sent()->body, 'The cid ' . $key . ' is not referenced in the mail body.' );
-		}
-	}
-
-	/**
-	 * Tests that wp_mail() can send embedded images as a multiple line string.
-	 *
-	 * @ticket 28059
-	 */
-	public function test_wp_mail_string_embeds() {
-		$embeds  = DIR_TESTDATA . '/images/canola.jpg' . "\n";
-		$embeds .= DIR_TESTDATA . '/images/test-image-2.gif';
-
-		$message = '<p><img src="cid:0" alt="" /></p><p><img src="cid:1" alt="" /></p>';
-
-		wp_mail(
-			'user@example.org',
-			'Embedded images test',
-			$message,
-			'Content-Type: text/html',
-			array(),
-			$embeds
-		);
-
-		$embeds_array = explode( "\n", $embeds );
-		$mailer       = tests_retrieve_phpmailer_instance();
-		$attachments  = $mailer->getAttachments();
-
-		foreach ( $attachments as $attachment ) {
-			$inline_embed_exists = in_array( $attachment[0], $embeds_array, true ) && 'inline' === $attachment[6];
-			$this->assertTrue( $inline_embed_exists, 'The attachment ' . $attachment[2] . ' is not inline in the embeds array.' );
-		}
-		foreach ( $embeds_array as $key => $path ) {
-			$this->assertStringContainsString( 'cid:' . $key, $mailer->get_sent()->body, 'The cid ' . $key . ' is not referenced in the mail body.' );
-		}
 	}
 }

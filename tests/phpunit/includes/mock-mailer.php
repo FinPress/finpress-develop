@@ -2,7 +2,7 @@
 /**
  * Mock PHPMailer class for testing.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 4.5.0
  */

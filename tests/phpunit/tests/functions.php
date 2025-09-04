@@ -7,7 +7,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	public function test_wp_parse_args_object() {
 		$x        = new MockClass();
 		$x->_baba = 5;
-		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$x->yZ    = 'baba'; // phpcs:ignore FinPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$x->a     = array( 5, 111, 'x' );
 		$this->assertSame(
 			array(
@@ -43,7 +43,7 @@ class Tests_Functions extends WP_UnitTestCase {
 	public function test_wp_parse_args_defaults() {
 		$x        = new MockClass();
 		$x->_baba = 5;
-		$x->yZ    = 'baba'; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$x->yZ    = 'baba'; // phpcs:ignore FinPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$x->a     = array( 5, 111, 'x' );
 		$d        = array( 'pu' => 'bu' );
 		$this->assertSame(
@@ -795,10 +795,10 @@ class Tests_Functions extends WP_UnitTestCase {
 			'http://this.com',
 			'http://127.0.0.1',
 			'http://www111.urwyeoweytwutreyytqytwetowteuiiu.com/?346236346326&2134362574863.437',
-			'http://wordpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html',
-			'http://wordpress-core.com:8080/',
+			'http://finpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html',
+			'http://finpress-core.com:8080/',
 			'http://www.website.com:5000',
-			'http://wordpress-core/?346236346326&2134362574863.437',
+			'http://finpress-core/?346236346326&2134362574863.437',
 			'http://افغانستا.icom.museum',
 			'http://الجزائر.icom.museum',
 			'http://österreich.icom.museum',
@@ -862,13 +862,13 @@ class Tests_Functions extends WP_UnitTestCase {
 
 			http://www111.urwyeoweytwutreyytqytwetowteuiiu.com/?346236346326&amp;2134362574863.437
 
-			http://wordpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html
+			http://finpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html
 
-			http://wordpress-core.com:8080/
+			http://finpress-core.com:8080/
 
 			http://www.website.com:5000
 
-			http://wordpress-core/?346236346326&amp;2134362574863.437
+			http://finpress-core/?346236346326&amp;2134362574863.437
 
 			http://افغانستا.icom.museum
 			http://الجزائر.icom.museum
@@ -938,9 +938,9 @@ class Tests_Functions extends WP_UnitTestCase {
 			incididunt ut labore http://woo.com/1,2,3,4,5,6/-1-2-3-4-/woo.html et dolore magna aliqua.
 			Ut http://this.com enim ad minim veniam, quis nostrud exercitation 16.06. to 18.06.2014 ullamco http://127.0.0.1
 			laboris nisi ut aliquip ex http://www111.urwyeoweytwutreyytqytwetowteuiiu.com/?346236346326&amp;2134362574863.437 ea
-			commodo consequat. http://wordpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html Duis aute irure dolor in reprehenderit in voluptate
-			velit esse http://wordpress-core.com:8080/ cillum dolore eu fugiat nulla <A href="http://www.website.com:5000">http://www.website.com:5000</B> pariatur. Excepteur sint occaecat cupidatat non proident,
-			sunt in culpa qui officia deserunt mollit http://wordpress-core/?346236346326&amp;2134362574863.437 anim id est laborum.';
+			commodo consequat. http://finpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html Duis aute irure dolor in reprehenderit in voluptate
+			velit esse http://finpress-core.com:8080/ cillum dolore eu fugiat nulla <A href="http://www.website.com:5000">http://www.website.com:5000</B> pariatur. Excepteur sint occaecat cupidatat non proident,
+			sunt in culpa qui officia deserunt mollit http://finpress-core/?346236346326&amp;2134362574863.437 anim id est laborum.';
 
 		$urls = wp_extract_urls( $blob );
 		$this->assertNotEmpty( $urls );
@@ -952,9 +952,9 @@ class Tests_Functions extends WP_UnitTestCase {
 			incididunt ut labore <a href="http://woo.com/1,2,3,4,5,6/-1-2-3-4-/woo.html">343462^</a> et dolore magna aliqua.
 			Ut <a href="http://this.com">&amp;3640i6p1yi499</a> enim ad minim veniam, quis nostrud exercitation 16.06. to 18.06.2014 ullamco <a href="http://127.0.0.1">localhost</a>
 			laboris nisi ut aliquip ex <a href="http://www111.urwyeoweytwutreyytqytwetowteuiiu.com/?346236346326&amp;2134362574863.437">343462^</a> ea
-			commodo consequat. <a href="http://wordpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html">343462^</a> Duis aute irure dolor in reprehenderit in voluptate
-			velit esse <a href="http://wordpress-core.com:8080/">-3-4--321-64-4@#!$^$!@^@^</a> cillum dolore eu <A href="http://www.website.com:5000">http://www.website.com:5000</B> fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-			sunt in culpa qui officia deserunt mollit <a href="http://wordpress-core/?346236346326&amp;2134362574863.437">)(*&^%$</a> anim id est laborum.';
+			commodo consequat. <a href="http://finpress-core/1,2,3,4,5,6/-1-2-3-4-/woo.html">343462^</a> Duis aute irure dolor in reprehenderit in voluptate
+			velit esse <a href="http://finpress-core.com:8080/">-3-4--321-64-4@#!$^$!@^@^</a> cillum dolore eu <A href="http://www.website.com:5000">http://www.website.com:5000</B> fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident,
+			sunt in culpa qui officia deserunt mollit <a href="http://finpress-core/?346236346326&amp;2134362574863.437">)(*&^%$</a> anim id est laborum.';
 
 		$urls = wp_extract_urls( $blob );
 		$this->assertNotEmpty( $urls );
@@ -1952,8 +1952,8 @@ class Tests_Functions extends WP_UnitTestCase {
 
 			// Windows Path with allowed file
 			array(
-				'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css',
-				array( 'Apache24\htdocs\wordpress/wp-content/themes/twentyten/style.css' ),
+				'Apache24\htdocs\finpress/wp-content/themes/twentyten/style.css',
+				array( 'Apache24\htdocs\finpress/wp-content/themes/twentyten/style.css' ),
 				0,
 			),
 

@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_HTML_Processor bookmark functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage HTML-API
  */
 

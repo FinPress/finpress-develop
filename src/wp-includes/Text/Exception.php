@@ -4,7 +4,7 @@
  *
  * {@internal This is a WP native addition to the external Text_Diff package.}
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Text_Diff
  */
 

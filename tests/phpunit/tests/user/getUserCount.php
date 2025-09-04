@@ -13,7 +13,7 @@ class Tests_User_GetUserCount extends WP_UnitTestCase {
 	public function test_wp_update_network_counts_on_different_network() {
 		$different_network_id = self::factory()->network->create(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			)
 		);
@@ -35,7 +35,7 @@ class Tests_User_GetUserCount extends WP_UnitTestCase {
 	public function test_get_user_count_on_different_network() {
 		$different_network_id = self::factory()->network->create(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			)
 		);

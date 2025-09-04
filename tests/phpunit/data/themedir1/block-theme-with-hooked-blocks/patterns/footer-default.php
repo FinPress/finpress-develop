@@ -15,9 +15,9 @@
 		<p class="has-text-align-right">
 		<?php
 		printf(
-			/* Translators: WordPress link. */
+			/* Translators: FinPress link. */
 			esc_html__( 'Proudly powered by %s', 'block-theme-with-hooked-blocks' ),
-			'<a href="' . esc_url( __( 'https://wordpress.org', 'block-theme-with-hooked-blocks' ) ) . '" rel="nofollow">WordPress</a>'
+			'<a href="' . esc_url( __( 'https://finpress.org', 'block-theme-with-hooked-blocks' ) ) . '" rel="nofollow">FinPress</a>'
 		)
 		?>
 		</p>

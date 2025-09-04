@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Privacy Tools API.
+ * FinPress Administration Privacy Tools API.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 

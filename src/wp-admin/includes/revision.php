@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Revisions API
+ * FinPress Administration Revisions API
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  * @since 3.6.0
  */

@@ -13,16 +13,16 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$network_ids = array(
-			'wordpress.org/'      => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'      => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
-			'make.wordpress.org/' => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/' => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/',
 			),
-			'www.wordpress.net/'  => array(
-				'domain' => 'www.wordpress.net',
+			'www.finpress.net/'  => array(
+				'domain' => 'www.finpress.net',
 				'path'   => '/',
 			),
 		);
@@ -33,30 +33,30 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		unset( $id );
 
 		self::$site_ids = array(
-			'wordpress.org/'          => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/'          => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'wordpress.org/foo/'      => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/foo/'      => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'wordpress.org/foo/bar/'  => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/foo/bar/'  => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/bar/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'make.wordpress.org/'     => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/'     => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
-			'make.wordpress.org/foo/' => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/foo/' => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
 			'www.w.org/'              => array(
 				'domain' => 'www.w.org',
@@ -124,7 +124,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_site_query_by_site__in_with_single_id() {
-		$expected = array( self::$site_ids['wordpress.org/foo/'] );
+		$expected = array( self::$site_ids['finpress.org/foo/'] );
 
 		$q     = new WP_Site_Query();
 		$found = $q->query(
@@ -138,7 +138,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_site_query_by_site__in_with_multiple_ids() {
-		$expected = array( self::$site_ids['wordpress.org/'], self::$site_ids['wordpress.org/foo/'] );
+		$expected = array( self::$site_ids['finpress.org/'], self::$site_ids['finpress.org/foo/'] );
 
 		$q     = new WP_Site_Query();
 		$found = $q->query(
@@ -155,7 +155,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 	 * Test the `count` query var
 	 */
 	public function test_wp_site_query_by_site__in_and_count_with_multiple_ids() {
-		$expected = array( self::$site_ids['wordpress.org/'], self::$site_ids['wordpress.org/foo/'] );
+		$expected = array( self::$site_ids['finpress.org/'], self::$site_ids['finpress.org/foo/'] );
 
 		$q     = new WP_Site_Query();
 		$found = $q->query(
@@ -170,7 +170,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_site_query_by_site__not_in_with_single_id() {
-		$excluded = array( self::$site_ids['wordpress.org/foo/'] );
+		$excluded = array( self::$site_ids['finpress.org/foo/'] );
 		$expected = array_diff( self::$site_ids, $excluded );
 
 		// Exclude main site since we don't have control over it here.
@@ -188,7 +188,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_site_query_by_site__not_in_with_multiple_ids() {
-		$excluded = array( self::$site_ids['wordpress.org/'], self::$site_ids['wordpress.org/foo/'] );
+		$excluded = array( self::$site_ids['finpress.org/'], self::$site_ids['finpress.org/foo/'] );
 		$expected = array_diff( self::$site_ids, $excluded );
 
 		// Exclude main site since we don't have control over it here.
@@ -210,16 +210,16 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 			)
 		);
 
 		$expected = array(
-			self::$site_ids['wordpress.org/'],
-			self::$site_ids['wordpress.org/foo/'],
-			self::$site_ids['wordpress.org/foo/bar/'],
+			self::$site_ids['finpress.org/'],
+			self::$site_ids['finpress.org/foo/'],
+			self::$site_ids['finpress.org/foo/bar/'],
 		);
 
 		$this->assertSame( $expected, $found );
@@ -227,7 +227,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'DESC',
 			)
@@ -241,13 +241,13 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			)
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -258,7 +258,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['www.wordpress.net/'],
+				'network_id' => self::$network_ids['www.finpress.net/'],
 			)
 		);
 
@@ -327,13 +327,13 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'domain__in' => array( 'make.wordpress.org' ),
+				'domain__in' => array( 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -344,16 +344,16 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'domain__in' => array( 'wordpress.org', 'make.wordpress.org' ),
+				'domain__in' => array( 'finpress.org', 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$site_ids['wordpress.org/'],
-			self::$site_ids['wordpress.org/foo/'],
-			self::$site_ids['wordpress.org/foo/bar/'],
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['finpress.org/'],
+			self::$site_ids['finpress.org/foo/'],
+			self::$site_ids['finpress.org/foo/bar/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -370,11 +370,11 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 
 		$expected = array(
 			get_current_blog_id(), // Account for the initial site added by the test suite.
-			self::$site_ids['wordpress.org/'],
-			self::$site_ids['wordpress.org/foo/'],
-			self::$site_ids['wordpress.org/foo/bar/'],
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['finpress.org/'],
+			self::$site_ids['finpress.org/foo/'],
+			self::$site_ids['finpress.org/foo/bar/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -385,14 +385,14 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'         => 'ids',
-				'domain__not_in' => array( 'wordpress.org', 'www.w.org' ),
+				'domain__not_in' => array( 'finpress.org', 'www.w.org' ),
 			)
 		);
 
 		$expected = array(
 			get_current_blog_id(), // Account for the initial site added by the test suite.
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -408,7 +408,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['wordpress.org/foo/bar/'],
+			self::$site_ids['finpress.org/foo/bar/'],
 			self::$site_ids['www.w.org/foo/bar/'],
 		);
 
@@ -621,8 +621,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -638,9 +638,9 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['wordpress.org/foo/'],
-			self::$site_ids['wordpress.org/foo/bar/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['finpress.org/foo/'],
+			self::$site_ids['finpress.org/foo/bar/'],
+			self::$site_ids['make.finpress.org/foo/'],
 			self::$site_ids['www.w.org/foo/'],
 			self::$site_ids['www.w.org/foo/bar/'],
 		);
@@ -658,8 +658,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 			self::$site_ids['www.w.org/make/'],
 		);
 
@@ -679,8 +679,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 
 		$expected = array(
 			self::$site_ids['www.w.org/make/'],
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSame( $expected, $found );
@@ -714,8 +714,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSame( $expected, $found );
@@ -732,8 +732,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 
 		$expected = array(
 			self::$site_ids['www.w.org/make/'],
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -750,8 +750,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$site_ids['make.wordpress.org/'],
-			self::$site_ids['make.wordpress.org/foo/'],
+			self::$site_ids['make.finpress.org/'],
+			self::$site_ids['make.finpress.org/foo/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -782,7 +782,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_1           = $q->query(
 			array(
 				'fields'     => 'all',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 			)
@@ -792,7 +792,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_2 = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 			)
@@ -810,7 +810,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_1           = $q->query(
 			array(
 				'fields'     => 'all',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 				'count'      => true,
@@ -821,7 +821,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_2 = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 				'count'      => true,
@@ -839,7 +839,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_1 = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 			)
@@ -850,7 +850,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_2 = $q->query(
 			array(
 				'fields'     => 'ids',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 				'number'     => 3,
 				'order'      => 'ASC',
 				'count'      => true,
@@ -868,7 +868,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_1 = $q->query(
 			array(
 				'fields'                 => 'ids',
-				'network_id'             => self::$network_ids['wordpress.org/'],
+				'network_id'             => self::$network_ids['finpress.org/'],
 				'number'                 => 3,
 				'order'                  => 'ASC',
 				'update_site_cache'      => true,
@@ -881,7 +881,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_2 = $q->query(
 			array(
 				'fields'                 => 'ids',
-				'network_id'             => self::$network_ids['wordpress.org/'],
+				'network_id'             => self::$network_ids['finpress.org/'],
 				'number'                 => 3,
 				'order'                  => 'ASC',
 				'update_site_cache'      => true,
@@ -900,7 +900,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_1 = $q->query(
 			array(
 				'fields'                 => 'ids',
-				'network_id'             => self::$network_ids['wordpress.org/'],
+				'network_id'             => self::$network_ids['finpress.org/'],
 				'number'                 => 3,
 				'order'                  => 'ASC',
 				'update_site_cache'      => true,
@@ -913,7 +913,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$query_2 = $q->query(
 			array(
 				'fields'                 => 'ids',
-				'network_id'             => self::$network_ids['wordpress.org/'],
+				'network_id'             => self::$network_ids['finpress.org/'],
 				'number'                 => 3,
 				'order'                  => 'ASC',
 				'update_site_cache'      => false,
@@ -932,12 +932,12 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Test only runs with the blogmeta database table installed.' );
 		}
 
-		add_site_meta( self::$site_ids['wordpress.org/'], 'foo', 'foo' );
-		add_site_meta( self::$site_ids['wordpress.org/foo/'], 'foo', 'bar' );
-		add_site_meta( self::$site_ids['wordpress.org/foo/bar/'], 'foo', 'baz' );
-		add_site_meta( self::$site_ids['make.wordpress.org/'], 'bar', 'baz' );
-		add_site_meta( self::$site_ids['wordpress.org/'], 'numberfoo', 1 );
-		add_site_meta( self::$site_ids['wordpress.org/foo/'], 'numberfoo', 2 );
+		add_site_meta( self::$site_ids['finpress.org/'], 'foo', 'foo' );
+		add_site_meta( self::$site_ids['finpress.org/foo/'], 'foo', 'bar' );
+		add_site_meta( self::$site_ids['finpress.org/foo/bar/'], 'foo', 'baz' );
+		add_site_meta( self::$site_ids['make.finpress.org/'], 'bar', 'baz' );
+		add_site_meta( self::$site_ids['finpress.org/'], 'numberfoo', 1 );
+		add_site_meta( self::$site_ids['finpress.org/foo/'], 'numberfoo', 2 );
 
 		$query['fields'] = 'ids';
 
@@ -962,9 +962,9 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'meta_key' => 'foo',
 				),
 				array(
-					'wordpress.org/',
-					'wordpress.org/foo/',
-					'wordpress.org/foo/bar/',
+					'finpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/foo/bar/',
 				),
 				false,
 			),
@@ -974,7 +974,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'meta_value' => 'bar',
 				),
 				array(
-					'wordpress.org/foo/',
+					'finpress.org/foo/',
 				),
 				false,
 			),
@@ -985,8 +985,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'meta_compare' => 'IN',
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/foo/bar/',
+					'finpress.org/foo/',
+					'finpress.org/foo/bar/',
 				),
 				false,
 			),
@@ -1005,7 +1005,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					),
 				),
 				array(
-					'wordpress.org/foo/',
+					'finpress.org/foo/',
 				),
 				false,
 			),
@@ -1016,9 +1016,9 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'order'    => 'ASC',
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/foo/bar/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/foo/bar/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1029,9 +1029,9 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'order'    => 'ASC',
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/foo/bar/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/foo/bar/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1042,8 +1042,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'order'    => 'DESC',
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1062,8 +1062,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'orderby'    => array( 'meta_value' => 'ASC' ),
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1082,8 +1082,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'orderby'    => array( 'foo' => 'ASC' ),
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1102,8 +1102,8 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 					'orderby'    => array( 'my_subquery' => 'DESC' ),
 				),
 				array(
-					'wordpress.org/foo/',
-					'wordpress.org/',
+					'finpress.org/foo/',
+					'finpress.org/',
 				),
 				true,
 			),
@@ -1154,12 +1154,12 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		// Make sure the sites property is the same as the results.
 		$this->assertSame( $results, $q->sites );
 
-		// Make sure the site domain is `wordpress.org`.
-		$this->assertSame( 'wordpress.org', $q->sites[0]->domain );
+		// Make sure the site domain is `finpress.org`.
+		$this->assertSame( 'finpress.org', $q->sites[0]->domain );
 	}
 
 	public static function filter_sites_pre_query_and_set_sites( $sites, $query ) {
-		return array( get_site( self::$site_ids['wordpress.org/'] ) );
+		return array( get_site( self::$site_ids['finpress.org/'] ) );
 	}
 
 	/**
@@ -1171,7 +1171,7 @@ class Tests_Multisite_wpSiteQuery extends WP_UnitTestCase {
 		$q->query(
 			array(
 				'fields'                 => 'ids',
-				'network_id'             => self::$network_ids['wordpress.org/'],
+				'network_id'             => self::$network_ids['finpress.org/'],
 				'number'                 => 3,
 				'order'                  => 'ASC',
 				'update_site_cache'      => true,

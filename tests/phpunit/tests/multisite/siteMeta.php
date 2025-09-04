@@ -16,13 +16,13 @@ class Tests_Multisite_SiteMeta extends WP_UnitTestCase {
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$site_id  = $factory->blog->create(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			)
 		);
 		self::$site_id2 = $factory->blog->create(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/foo/',
 			)
 		);

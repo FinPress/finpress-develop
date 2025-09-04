@@ -14,36 +14,36 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$network_ids = array(
-			'wordpress.org/'         => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'         => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
-			'make.wordpress.org/'    => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/'    => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/',
 			),
-			'wordpress.org/one/'     => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/one/'     => array(
+				'domain' => 'finpress.org',
 				'path'   => '/one/',
 			),
-			'wordpress.org/one/b/'   => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/one/b/'   => array(
+				'domain' => 'finpress.org',
 				'path'   => '/one/b/',
 			),
-			'wordpress.net/'         => array(
-				'domain' => 'wordpress.net',
+			'finpress.net/'         => array(
+				'domain' => 'finpress.net',
 				'path'   => '/',
 			),
-			'www.wordpress.net/'     => array(
-				'domain' => 'www.wordpress.net',
+			'www.finpress.net/'     => array(
+				'domain' => 'www.finpress.net',
 				'path'   => '/',
 			),
-			'www.wordpress.net/two/' => array(
-				'domain' => 'www.wordpress.net',
+			'www.finpress.net/two/' => array(
+				'domain' => 'www.finpress.net',
 				'path'   => '/two/',
 			),
-			'wordpress.net/three/'   => array(
-				'domain' => 'wordpress.net',
+			'finpress.net/three/'   => array(
+				'domain' => 'finpress.net',
 				'path'   => '/three/',
 			),
 		);
@@ -54,30 +54,30 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 		unset( $id );
 
 		self::$site_ids = array(
-			'wordpress.org/'          => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/'          => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'wordpress.org/foo/'      => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/foo/'      => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'wordpress.org/foo/bar/'  => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/foo/bar/'  => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/bar/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'make.wordpress.org/'     => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/'     => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
-			'make.wordpress.org/foo/' => array(
-				'domain'     => 'make.wordpress.org',
+			'make.finpress.org/foo/' => array(
+				'domain'     => 'make.finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['make.wordpress.org/'],
+				'network_id' => self::$network_ids['make.finpress.org/'],
 			),
 			'www.w.org/'              => array(
 				'domain' => 'www.w.org',
@@ -130,18 +130,18 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 	public function data_get_network_by_path() {
 		return array(
-			array( 'wordpress.org/', 'wordpress.org', '/', 'A standard domain and path request should work.' ),
-			array( 'wordpress.net/', 'wordpress.net', '/notapath/', 'A missing path on a top level domain should find the correct network.' ),
-			array( 'www.wordpress.net/', 'www.wordpress.net', '/notapath/', 'A missing path should find the correct network.' ),
-			array( 'wordpress.org/one/', 'www.wordpress.org', '/one/', 'Should find the path despite the www.' ),
-			array( 'wordpress.org/one/', 'wordpress.org', '/one/page/', 'A request with two path segments should find the correct network.' ),
-			array( 'wordpress.org/one/b/', 'wordpress.org', '/one/b/', 'A request with two valid path segments should find the correct network.' ),
-			array( 'wordpress.org/', 'site1.wordpress.org', '/one/', 'Should not find path because domains do not match.' ),
-			array( 'wordpress.net/three/', 'wordpress.net', '/three/', 'A network can have a path.' ),
-			array( 'www.wordpress.net/two/', 'www.wordpress.net', '/two/', 'A www network with a path can coexist with a non-www network.' ),
-			array( 'wordpress.net/', 'site1.wordpress.net', '/notapath/', 'An invalid subdomain should find the top level network domain.' ),
-			array( 'wordpress.net/', 'site1.wordpress.net', '/three/', 'An invalid subdomain and path should find the top level network domain.' ),
-			array( 'wordpress.net/', 'x.y.wordpress.net', '/', 'An invalid two level subdomain should find the top level network domain.' ),
+			array( 'finpress.org/', 'finpress.org', '/', 'A standard domain and path request should work.' ),
+			array( 'finpress.net/', 'finpress.net', '/notapath/', 'A missing path on a top level domain should find the correct network.' ),
+			array( 'www.finpress.net/', 'www.finpress.net', '/notapath/', 'A missing path should find the correct network.' ),
+			array( 'finpress.org/one/', 'www.finpress.org', '/one/', 'Should find the path despite the www.' ),
+			array( 'finpress.org/one/', 'finpress.org', '/one/page/', 'A request with two path segments should find the correct network.' ),
+			array( 'finpress.org/one/b/', 'finpress.org', '/one/b/', 'A request with two valid path segments should find the correct network.' ),
+			array( 'finpress.org/', 'site1.finpress.org', '/one/', 'Should not find path because domains do not match.' ),
+			array( 'finpress.net/three/', 'finpress.net', '/three/', 'A network can have a path.' ),
+			array( 'www.finpress.net/two/', 'www.finpress.net', '/two/', 'A www network with a path can coexist with a non-www network.' ),
+			array( 'finpress.net/', 'site1.finpress.net', '/notapath/', 'An invalid subdomain should find the top level network domain.' ),
+			array( 'finpress.net/', 'site1.finpress.net', '/three/', 'An invalid subdomain and path should find the top level network domain.' ),
+			array( 'finpress.net/', 'x.y.finpress.net', '/', 'An invalid two level subdomain should find the top level network domain.' ),
 		);
 	}
 
@@ -166,14 +166,14 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 	public function data_get_network_by_path_with_zero_path_segments() {
 		return array(
-			array( 'wordpress.org/', 'wordpress.org', '/', 'A standard domain and path request should work.' ),
-			array( 'wordpress.net/', 'wordpress.net', '/notapath/', 'A network matching a top level domain should be found regardless of path.' ),
-			array( 'www.wordpress.net/', 'www.wordpress.net', '/notapath/', 'A network matching a domain should be found regardless of path.' ),
-			array( 'wordpress.org/', 'www.wordpress.org', '/one/', 'Should find the network despite the www and regardless of path.' ),
-			array( 'wordpress.org/', 'site1.wordpress.org', '/one/', 'Should find the network with the corresponding top level domain regardless of path.' ),
-			array( 'www.wordpress.net/', 'www.wordpress.net', '/two/', 'A www network can coexist with a non-www network.' ),
-			array( 'make.wordpress.org/', 'make.wordpress.org', '/notapath/', 'A subdomain network should be found regardless of path.' ),
-			array( 'wordpress.net/', 'x.y.wordpress.net', '/', 'An invalid two level subdomain should find the top level network domain.' ),
+			array( 'finpress.org/', 'finpress.org', '/', 'A standard domain and path request should work.' ),
+			array( 'finpress.net/', 'finpress.net', '/notapath/', 'A network matching a top level domain should be found regardless of path.' ),
+			array( 'www.finpress.net/', 'www.finpress.net', '/notapath/', 'A network matching a domain should be found regardless of path.' ),
+			array( 'finpress.org/', 'www.finpress.org', '/one/', 'Should find the network despite the www and regardless of path.' ),
+			array( 'finpress.org/', 'site1.finpress.org', '/one/', 'Should find the network with the corresponding top level domain regardless of path.' ),
+			array( 'www.finpress.net/', 'www.finpress.net', '/two/', 'A www network can coexist with a non-www network.' ),
+			array( 'make.finpress.org/', 'make.finpress.org', '/notapath/', 'A subdomain network should be found regardless of path.' ),
+			array( 'finpress.net/', 'x.y.finpress.net', '/', 'An invalid two level subdomain should find the top level network domain.' ),
 		);
 	}
 
@@ -183,10 +183,10 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 	 */
 	public function test_get_network_by_path_with_forced_single_path_segment_returns_single_path_network() {
 		add_filter( 'network_by_path_segments_count', array( $this, 'filter_network_path_segments' ) );
-		$network = get_network_by_path( 'wordpress.org', '/one/b/' );
+		$network = get_network_by_path( 'finpress.org', '/one/b/' );
 		remove_filter( 'network_by_path_segments_count', array( $this, 'filter_network_path_segments' ) );
 
-		$this->assertSame( self::$network_ids['wordpress.org/one/'], $network->id );
+		$this->assertSame( self::$network_ids['finpress.org/one/'], $network->id );
 	}
 
 	public function filter_network_path_segments() {
@@ -215,20 +215,20 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 	public function data_get_site_by_path() {
 		return array(
-			array( 'wordpress.org/', 'wordpress.org', '/notapath/' ),
-			array( 'wordpress.org/', 'www.wordpress.org', '/notapath/' ),
-			array( 'wordpress.org/foo/bar/', 'wordpress.org', '/foo/bar/baz/' ),
-			array( 'wordpress.org/foo/bar/', 'www.wordpress.org', '/foo/bar/baz/' ),
-			array( 'wordpress.org/foo/bar/', 'wordpress.org', '/foo/bar/baz/', 3 ),
-			array( 'wordpress.org/foo/bar/', 'www.wordpress.org', '/foo/bar/baz/', 3 ),
-			array( 'wordpress.org/foo/bar/', 'wordpress.org', '/foo/bar/baz/', 2 ),
-			array( 'wordpress.org/foo/bar/', 'www.wordpress.org', '/foo/bar/baz/', 2 ),
-			array( 'wordpress.org/foo/', 'wordpress.org', '/foo/bar/baz/', 1 ),
-			array( 'wordpress.org/foo/', 'www.wordpress.org', '/foo/bar/baz/', 1 ),
-			array( 'wordpress.org/', 'wordpress.org', '/', 0 ),
-			array( 'wordpress.org/', 'www.wordpress.org', '/', 0 ),
-			array( 'make.wordpress.org/foo/', 'make.wordpress.org', '/foo/bar/baz/quz/', 4 ),
-			array( 'make.wordpress.org/foo/', 'www.make.wordpress.org', '/foo/bar/baz/quz/', 4 ),
+			array( 'finpress.org/', 'finpress.org', '/notapath/' ),
+			array( 'finpress.org/', 'www.finpress.org', '/notapath/' ),
+			array( 'finpress.org/foo/bar/', 'finpress.org', '/foo/bar/baz/' ),
+			array( 'finpress.org/foo/bar/', 'www.finpress.org', '/foo/bar/baz/' ),
+			array( 'finpress.org/foo/bar/', 'finpress.org', '/foo/bar/baz/', 3 ),
+			array( 'finpress.org/foo/bar/', 'www.finpress.org', '/foo/bar/baz/', 3 ),
+			array( 'finpress.org/foo/bar/', 'finpress.org', '/foo/bar/baz/', 2 ),
+			array( 'finpress.org/foo/bar/', 'www.finpress.org', '/foo/bar/baz/', 2 ),
+			array( 'finpress.org/foo/', 'finpress.org', '/foo/bar/baz/', 1 ),
+			array( 'finpress.org/foo/', 'www.finpress.org', '/foo/bar/baz/', 1 ),
+			array( 'finpress.org/', 'finpress.org', '/', 0 ),
+			array( 'finpress.org/', 'www.finpress.org', '/', 0 ),
+			array( 'make.finpress.org/foo/', 'make.finpress.org', '/foo/bar/baz/quz/', 4 ),
+			array( 'make.finpress.org/foo/', 'www.make.finpress.org', '/foo/bar/baz/quz/', 4 ),
 			array( 'www.w.org/', 'www.w.org', '/', 0 ),
 			array( 'www.w.org/', 'www.w.org', '/notapath' ),
 			array( 'www.w.org/foo/bar/', 'www.w.org', '/foo/bar/baz/' ),
@@ -241,8 +241,8 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 			array( false, 'w.org', '/foo/bar/baz/', 1 ),
 
 			// A site will not be found by its root domain when an invalid subdomain is requested.
-			array( false, 'invalid.wordpress.org', '/' ),
-			array( false, 'invalid.wordpress.org', '/foo/bar/' ),
+			array( false, 'invalid.finpress.org', '/' ),
+			array( false, 'invalid.finpress.org', '/foo/bar/' ),
 		);
 	}
 
@@ -277,19 +277,19 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 
 	public function data_multisite_bootstrap() {
 		return array(
-			array( 'wordpress.org/', 'wordpress.org/', 'wordpress.org', '/' ),
-			array( 'wordpress.org/', 'wordpress.org/', 'wordpress.org', '/2014/04/23/hello-world/' ),
-			array( 'wordpress.org/', 'wordpress.org/', 'wordpress.org', '/sample-page/' ),
-			array( 'wordpress.org/', 'wordpress.org/', 'wordpress.org', '/?p=1' ),
-			array( 'wordpress.org/', 'wordpress.org/', 'wordpress.org', '/wp-admin/' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/foo/' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/FOO/' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/foo/2014/04/23/hello-world/' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/foo/sample-page/' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/foo/?p=1' ),
-			array( 'wordpress.org/foo/', 'wordpress.org/', 'wordpress.org', '/foo/wp-admin/' ),
-			array( 'make.wordpress.org/', 'make.wordpress.org/', 'make.wordpress.org', '/' ),
-			array( 'make.wordpress.org/foo/', 'make.wordpress.org/', 'make.wordpress.org', '/foo/' ),
+			array( 'finpress.org/', 'finpress.org/', 'finpress.org', '/' ),
+			array( 'finpress.org/', 'finpress.org/', 'finpress.org', '/2014/04/23/hello-world/' ),
+			array( 'finpress.org/', 'finpress.org/', 'finpress.org', '/sample-page/' ),
+			array( 'finpress.org/', 'finpress.org/', 'finpress.org', '/?p=1' ),
+			array( 'finpress.org/', 'finpress.org/', 'finpress.org', '/wp-admin/' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/foo/' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/FOO/' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/foo/2014/04/23/hello-world/' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/foo/sample-page/' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/foo/?p=1' ),
+			array( 'finpress.org/foo/', 'finpress.org/', 'finpress.org', '/foo/wp-admin/' ),
+			array( 'make.finpress.org/', 'make.finpress.org/', 'make.finpress.org', '/' ),
+			array( 'make.finpress.org/foo/', 'make.finpress.org/', 'make.finpress.org', '/foo/' ),
 		);
 	}
 
@@ -300,12 +300,12 @@ class Tests_Multisite_Bootstrap extends WP_UnitTestCase {
 		global $current_blog;
 
 		$expected = array(
-			'network_id' => self::$network_ids['wordpress.org/'],
-			'site_id'    => self::$site_ids['wordpress.org/foo/bar/'],
+			'network_id' => self::$network_ids['finpress.org/'],
+			'site_id'    => self::$site_ids['finpress.org/foo/bar/'],
 		);
 
 		add_filter( 'site_by_path_segments_count', array( $this, 'filter_path_segments_to_two' ) );
-		ms_load_current_site_and_network( 'wordpress.org', '/foo/bar/' );
+		ms_load_current_site_and_network( 'finpress.org', '/foo/bar/' );
 
 		$actual = array(
 			'network_id' => $current_blog->site_id,

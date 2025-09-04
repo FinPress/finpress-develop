@@ -55,7 +55,7 @@ class Tests_Feed_Atom extends WP_UnitTestCase {
 		}
 
 		// Assign a tagline option.
-		update_option( 'blogdescription', 'Just another WordPress site' );
+		update_option( 'blogdescription', 'Just another FinPress site' );
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Tests_Feed_Atom extends WP_UnitTestCase {
 		// Nasty hack! In the future it would better to leverage do_feed( 'atom' ).
 		global $post;
 		try {
-			// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+			// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 			@require ABSPATH . 'wp-includes/feed-atom.php';
 			$out = ob_get_clean();
 		} catch ( Exception $e ) {
@@ -224,45 +224,45 @@ class Tests_Feed_Atom extends WP_UnitTestCase {
 		$enclosures = array(
 			array(
 				// URL, length, type.
-				'actual'   => "https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4\n318465\nvideo/mp4",
+				'actual'   => "https://finpress.dev/wp-content/uploads/2017/09/movie.mp4\n318465\nvideo/mp4",
 				'expected' => array(
-					'href'   => 'https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4',
+					'href'   => 'https://finpress.dev/wp-content/uploads/2017/09/movie.mp4',
 					'length' => 318465,
 					'type'   => 'video/mp4',
 				),
 			),
 			array(
 				// URL, type, length.
-				'actual'   => "https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4\nvideo/mp4\n318465",
+				'actual'   => "https://finpress.dev/wp-content/uploads/2017/09/movie.mp4\nvideo/mp4\n318465",
 				'expected' => array(
-					'href'   => 'https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4',
+					'href'   => 'https://finpress.dev/wp-content/uploads/2017/09/movie.mp4',
 					'length' => 318465,
 					'type'   => 'video/mp4',
 				),
 			),
 			array(
 				// URL, length.
-				'actual'   => "https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4\n318465",
+				'actual'   => "https://finpress.dev/wp-content/uploads/2017/09/movie.mp4\n318465",
 				'expected' => array(
-					'href'   => 'https://wordpress.dev/wp-content/uploads/2017/09/movie.mp4',
+					'href'   => 'https://finpress.dev/wp-content/uploads/2017/09/movie.mp4',
 					'length' => 318465,
 					'type'   => '',
 				),
 			),
 			array(
 				// URL, type.
-				'actual'   => "https://wordpress.dev/wp-content/uploads/2017/01/audio.mp3\n\naudio/mpeg",
+				'actual'   => "https://finpress.dev/wp-content/uploads/2017/01/audio.mp3\n\naudio/mpeg",
 				'expected' => array(
-					'href'   => 'https://wordpress.dev/wp-content/uploads/2017/01/audio.mp3',
+					'href'   => 'https://finpress.dev/wp-content/uploads/2017/01/audio.mp3',
 					'length' => 0,
 					'type'   => 'audio/mpeg',
 				),
 			),
 			array(
 				// URL.
-				'actual'   => 'https://wordpress.dev/wp-content/uploads/2016/01/test.mp4',
+				'actual'   => 'https://finpress.dev/wp-content/uploads/2016/01/test.mp4',
 				'expected' => array(
-					'href'   => 'https://wordpress.dev/wp-content/uploads/2016/01/test.mp4',
+					'href'   => 'https://finpress.dev/wp-content/uploads/2016/01/test.mp4',
 					'length' => 0,
 					'type'   => '',
 				),

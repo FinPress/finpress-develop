@@ -4,7 +4,7 @@
  * Slug: twentytwentythree/footer-default
  * Categories: footer
  * Block Types: core/template-part/footer
- * Description: Footer with site title and powered by WordPress.
+ * Description: Footer with site title and powered by FinPress.
  */
 ?>
 <!-- wp:group {"layout":{"type":"constrained"}} -->
@@ -16,9 +16,9 @@
 		<p class="has-text-align-right">
 		<?php
 		printf(
-			/* Translators: WordPress link. */
+			/* Translators: FinPress link. */
 			esc_html__( 'Proudly powered by %s', 'twentytwentythree' ),
-			'<a href="' . esc_url( __( 'https://wordpress.org', 'twentytwentythree' ) ) . '" rel="nofollow">WordPress</a>'
+			'<a href="' . esc_url( __( 'https://finpress.org', 'twentytwentythree' ) ) . '" rel="nofollow">FinPress</a>'
 		)
 		?>
 		</p>

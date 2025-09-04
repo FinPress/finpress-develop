@@ -2,7 +2,7 @@
 /**
  * Tests for the wp_get_speculation_rules_configuration() function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Speculative Loading
  */
 
@@ -181,7 +181,7 @@ class Tests_Speculative_Loading_wpGetSpeculationRulesConfiguration extends WP_Un
 					'eagerness' => 'conservative',
 				),
 			),
-			// 'immediate' is a valid eagerness, but for safety WordPress does not allow it for document-level rules.
+			// 'immediate' is a valid eagerness, but for safety FinPress does not allow it for document-level rules.
 			'immediate eagerness'    => array(
 				array(
 					'mode'      => 'auto',

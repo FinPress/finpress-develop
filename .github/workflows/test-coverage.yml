@@ -52,7 +52,7 @@ jobs:
     uses: ./.github/workflows/reusable-phpunit-tests-v3.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     strategy:
       fail-fast: false
       matrix:
@@ -72,7 +72,7 @@ jobs:
       actions: read
       contents: read
     needs: [ test-coverage-report ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -89,7 +89,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

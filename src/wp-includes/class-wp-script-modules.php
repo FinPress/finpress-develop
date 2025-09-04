@@ -4,7 +4,7 @@
  *
  * Native support for ES Modules and Import Maps.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Script Modules
  */
 
@@ -31,7 +31,7 @@ class WP_Script_Modules {
 	private $enqueued_before_registered = array();
 
 	/**
-	 * Tracks whether the @wordpress/a11y script module is available.
+	 * Tracks whether the @finpress/a11y script module is available.
 	 *
 	 * Some additional HTML is required on the page for the module to work. Track
 	 * whether it's available to print at the appropriate time.
@@ -50,7 +50,7 @@ class WP_Script_Modules {
 	 * @param string            $id       The identifier of the script module. Should be unique. It will be used in the
 	 *                                    final import map.
 	 * @param string            $src      Optional. Full URL of the script module, or path of the script module relative
-	 *                                    to the WordPress root directory. If it is provided and the script module has
+	 *                                    to the FinPress root directory. If it is provided and the script module has
 	 *                                    not been registered yet, it will be registered.
 	 * @param array             $deps     {
 	 *                                        Optional. List of dependencies.
@@ -69,7 +69,7 @@ class WP_Script_Modules {
 	 *                                    }
 	 * @param string|false|null $version  Optional. String specifying the script module version number. Defaults to false.
 	 *                                    It is added to the URL as a query string for cache busting purposes. If $version
-	 *                                    is set to false, the version number is the currently installed WordPress version.
+	 *                                    is set to false, the version number is the currently installed FinPress version.
 	 *                                    If $version is set to null, no version is added.
 	 */
 	public function register( string $id, string $src, array $deps = array(), $version = false ) {
@@ -115,7 +115,7 @@ class WP_Script_Modules {
 	 * @param string            $id       The identifier of the script module. Should be unique. It will be used in the
 	 *                                    final import map.
 	 * @param string            $src      Optional. Full URL of the script module, or path of the script module relative
-	 *                                    to the WordPress root directory. If it is provided and the script module has
+	 *                                    to the FinPress root directory. If it is provided and the script module has
 	 *                                    not been registered yet, it will be registered.
 	 * @param array             $deps     {
 	 *                                        Optional. List of dependencies.
@@ -134,7 +134,7 @@ class WP_Script_Modules {
 	 *                                    }
 	 * @param string|false|null $version  Optional. String specifying the script module version number. Defaults to false.
 	 *                                    It is added to the URL as a query string for cache busting purposes. If $version
-	 *                                    is set to false, the version number is the currently installed WordPress version.
+	 *                                    is set to false, the version number is the currently installed FinPress version.
 	 *                                    If $version is set to null, no version is added.
 	 */
 	public function enqueue( string $id, string $src = '', array $deps = array(), $version = false ) {
@@ -329,7 +329,7 @@ class WP_Script_Modules {
 	 * Gets the versioned URL for a script module src.
 	 *
 	 * If $version is set to false, the version number is the currently installed
-	 * WordPress version. If $version is set to null, no version is added.
+	 * FinPress version. If $version is set to null, no version is added.
 	 * Otherwise, the string passed in $version is used.
 	 *
 	 * @since 6.5.0
@@ -380,13 +380,13 @@ class WP_Script_Modules {
 	public function print_script_module_data(): void {
 		$modules = array();
 		foreach ( array_keys( $this->get_marked_for_enqueue() ) as $id ) {
-			if ( '@wordpress/a11y' === $id ) {
+			if ( '@finpress/a11y' === $id ) {
 				$this->a11y_available = true;
 			}
 			$modules[ $id ] = true;
 		}
 		foreach ( array_keys( $this->get_import_map()['imports'] ) as $id ) {
-			if ( '@wordpress/a11y' === $id ) {
+			if ( '@finpress/a11y' === $id ) {
 				$this->a11y_available = true;
 			}
 			$modules[ $id ] = true;

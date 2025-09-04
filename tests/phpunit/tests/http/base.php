@@ -12,7 +12,7 @@
  */
 abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	// You can use your own version of data/WPHTTP-testcase-redirection-script.php here.
-	public $redirection_script = 'http://api.wordpress.org/core/tests/1.0/redirection.php';
+	public $redirection_script = 'http://api.finpress.org/core/tests/1.0/redirection.php';
 	public $file_stream_url    = 'http://s.w.org/screenshots/3.9/dashboard.png';
 
 	protected $http_request_args;
@@ -195,7 +195,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * @covers ::wp_remote_retrieve_body
 	 */
 	public function test_no_redirection_on_PUT() {
-		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?201-location=1';
+		$url = 'http://api.finpress.org/core/tests/1.0/redirection.php?201-location=1';
 
 		// Test 301 - POST to POST.
 		$res = $this->wp_remote_request(
@@ -335,7 +335,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * @covers ::wp_remote_retrieve_body
 	 */
 	public function test_post_redirect_to_method_300( $response_code, $method ) {
-		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?post-redirect-to-method=1';
+		$url = 'http://api.finpress.org/core/tests/1.0/redirection.php?post-redirect-to-method=1';
 
 		$res = $this->wp_remote_post( add_query_arg( 'response_code', $response_code, $url ), array( 'timeout' => 30 ) );
 
@@ -377,11 +377,11 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * @covers ::wp_remote_retrieve_body
 	 */
 	public function test_ip_url_with_host_header() {
-		$ip   = gethostbyname( 'api.wordpress.org' );
+		$ip   = gethostbyname( 'api.finpress.org' );
 		$url  = 'http://' . $ip . '/core/tests/1.0/redirection.php?print-pass=1';
 		$args = array(
 			'headers'     => array(
-				'Host' => 'api.wordpress.org',
+				'Host' => 'api.finpress.org',
 			),
 			'timeout'     => 30,
 			'redirection' => 0,
@@ -401,7 +401,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * @covers ::wp_remote_head
 	 */
 	public function test_https_url_without_ssl_verification() {
-		$url  = 'https://wordpress.org/';
+		$url  = 'https://finpress.org/';
 		$args = array(
 			'sslverify' => false,
 		);
@@ -425,7 +425,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 	 * @covers ::wp_remote_retrieve_body
 	 */
 	public function test_cookie_handling() {
-		$url = 'http://api.wordpress.org/core/tests/1.0/redirection.php?cookie-test=1';
+		$url = 'http://api.finpress.org/core/tests/1.0/redirection.php?cookie-test=1';
 
 		$res = $this->wp_remote_get( $url );
 
@@ -446,7 +446,7 @@ abstract class WP_HTTP_UnitTestCase extends WP_UnitTestCase {
 			$this->fail( 'This installation of PHP does not support SSL.' );
 		}
 
-		$res = $this->wp_remote_get( 'https://wordpress.org/' );
+		$res = $this->wp_remote_get( 'https://finpress.org/' );
 
 		$this->assertNotWPError( $res );
 	}

@@ -2,7 +2,7 @@
 /**
  * Error Protection API: WP_Recovery_Mode class
  *
- * @package WordPress
+ * @package FinPress
  * @since 5.2.0
  */
 

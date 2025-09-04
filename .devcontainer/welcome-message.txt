@@ -1,4 +1,4 @@
-👋 Welcome to "WordPress Core Development" in Codespaces!
+👋 Welcome to "FinPress Core Development" in Codespaces!
 
 🛠️  Your environment is fully setup with all the required software.
 

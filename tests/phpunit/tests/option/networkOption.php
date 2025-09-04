@@ -230,7 +230,7 @@ class Tests_Option_NetworkOption extends WP_UnitTestCase {
 	 */
 	public function test_update_network_option_array_with_object() {
 		$array_w_object = array(
-			'url'       => 'http://src.wordpress-develop.dev/wp-content/uploads/2016/10/cropped-Blurry-Lights.jpg',
+			'url'       => 'http://src.finpress-develop.dev/wp-content/uploads/2016/10/cropped-Blurry-Lights.jpg',
 			'meta_data' => (object) array(
 				'attachment_id' => 292,
 				'height'        => 708,
@@ -239,7 +239,7 @@ class Tests_Option_NetworkOption extends WP_UnitTestCase {
 		);
 
 		$array_w_object_2 = array(
-			'url'       => 'http://src.wordpress-develop.dev/wp-content/uploads/2016/10/cropped-Blurry-Lights.jpg',
+			'url'       => 'http://src.finpress-develop.dev/wp-content/uploads/2016/10/cropped-Blurry-Lights.jpg',
 			'meta_data' => (object) array(
 				'attachment_id' => 292,
 				'height'        => 708,

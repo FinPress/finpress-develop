@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_Plugin_Dependencies::has_dependencies() method.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 require_once __DIR__ . '/base.php';

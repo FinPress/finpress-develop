@@ -1,4 +1,4 @@
-# A reusable workflow that runs WordPress upgrade testing under the conditions provided.
+# A reusable workflow that runs FinPress upgrade testing under the conditions provided.
 name: Upgrade Tests
 
 on:
@@ -10,11 +10,11 @@ on:
         type: 'string'
         default: 'ubuntu-24.04'
       wp:
-        description: 'The version of WordPress to start with.'
+        description: 'The version of FinPress to start with.'
         required: true
         type: 'string'
       new-version:
-        description: 'The version of WordPress to update to. Use "latest" to update to the latest version, "develop" to update to the current branch, or provide a specific version number to update to.'
+        description: 'The version of FinPress to update to. Use "latest" to update to the latest version, "develop" to update to the current branch, or provide a specific version number to update to.'
         type: 'string'
         default: 'latest'
       php:
@@ -42,20 +42,20 @@ on:
 permissions: {}
 
 jobs:
-  # Runs upgrade tests on a build of WordPress.
+  # Runs upgrade tests on a build of FinPress.
   #
   # Performs the following steps:
   # - Sets up PHP.
-  # - Downloads the specified version of WordPress.
+  # - Downloads the specified version of FinPress.
   # - Creates a `wp-config.php` file.
-  # - Installs WordPress.
-  # - Checks the version of WordPress before the upgrade.
+  # - Installs FinPress.
+  # - Checks the version of FinPress before the upgrade.
   # - Updates to the latest minor version.
   # - Updates the database after the minor update.
-  # - Checks the version of WordPress after the minor update.
-  # - Updates to the version of WordPress being tested.
+  # - Checks the version of FinPress after the minor update.
+  # - Updates to the version of FinPress being tested.
   # - Updates the database.
-  # - Checks the version of WordPress after the upgrade.
+  # - Checks the version of FinPress after the upgrade.
   upgrade-tests:
     name: ${{ inputs.wp }} to ${{ inputs.new-version }} / PHP ${{ inputs.php }} with ${{ 'mariadb' == inputs.db-type && 'MariaDB' || 'MySQL' }} ${{ inputs.db-version }}${{ inputs.multisite && ' multisite' || '' }}
     permissions:
@@ -86,7 +86,7 @@ jobs:
           coverage: none
           tools: wp-cli
 
-      - name: Download WordPress ${{ inputs.wp }}
+      - name: Download FinPress ${{ inputs.wp }}
         run: wp core download --version="${WP_VERSION}"
         env:
           WP_VERSION: ${{ inputs.wp }}
@@ -96,7 +96,7 @@ jobs:
         env:
           DB_PORT: ${{ job.services.database.ports['3306'] }}
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: |
           wp core ${{ inputs.multisite && 'multisite-install' || 'install' }} \
           --url=http://localhost/ --title="Upgrade Test" --admin_user=admin \
@@ -118,14 +118,14 @@ jobs:
         if: ${{ inputs.new-version == 'develop' }}
         uses: actions/download-artifact@634f93cb2916e3fdff6788551b99b062d0335ce0 # v5.0.0
         with:
-          name: wordpress-develop
+          name: finpress-develop
 
-      - name: Upgrade to WordPress at current branch
+      - name: Upgrade to FinPress at current branch
         if: ${{ inputs.new-version == 'develop' }}
         run: |
           wp core update develop.zip
 
-      - name: Upgrade to WordPress ${{ inputs.new-version }}
+      - name: Upgrade to FinPress ${{ inputs.new-version }}
         if: ${{ inputs.new-version != 'develop' }}
         run: |
           wp core update ${{ 'latest' != inputs.new-version && '--version="${WP_VERSION}"' || '' }}

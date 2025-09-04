@@ -2,7 +2,7 @@
 /**
  * Test WP_Font_Library::get_font_collections().
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Font Library
  *
  * @group fonts
@@ -19,7 +19,7 @@ class Tests_Fonts_WpFontLibrary_GetFontCollections extends WP_Font_Library_UnitT
 	public function test_should_get_mock_font_collection() {
 		$my_font_collection_config = array(
 			'name'          => 'My Font Collection',
-			'description'   => 'Demo about how to a font collection to your WordPress Font Library.',
+			'description'   => 'Demo about how to a font collection to your FinPress Font Library.',
 			'font_families' => array( 'mock' ),
 		);
 

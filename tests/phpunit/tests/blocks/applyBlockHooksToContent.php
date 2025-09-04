@@ -2,7 +2,7 @@
 /**
  * Tests for the apply_block_hooks_to_content function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  *
  * @since 6.7.0

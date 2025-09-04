@@ -2,7 +2,7 @@
 /**
  * Templates registry functions.
  *
- * @package WordPress
+ * @package FinPress
  * @since 6.7.0
  */
 

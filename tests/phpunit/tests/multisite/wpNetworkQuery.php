@@ -13,16 +13,16 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$network_ids = array(
-			'wordpress.org/'      => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'      => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
-			'make.wordpress.org/' => array(
-				'domain' => 'make.wordpress.org',
+			'make.finpress.org/' => array(
+				'domain' => 'make.finpress.org',
 				'path'   => '/',
 			),
-			'www.wordpress.net/'  => array(
-				'domain' => 'www.wordpress.net',
+			'www.finpress.net/'  => array(
+				'domain' => 'www.finpress.net',
 				'path'   => '/',
 			),
 			'www.w.org/foo/'      => array(
@@ -59,7 +59,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__in_with_order() {
-		$expected = array( self::$network_ids['wordpress.org/'], self::$network_ids['make.wordpress.org/'] );
+		$expected = array( self::$network_ids['finpress.org/'], self::$network_ids['make.finpress.org/'] );
 
 		$q     = new WP_Network_Query();
 		$found = $q->query(
@@ -84,7 +84,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__in_with_single_id() {
-		$expected = array( self::$network_ids['wordpress.org/'] );
+		$expected = array( self::$network_ids['finpress.org/'] );
 
 		$q     = new WP_Network_Query();
 		$found = $q->query(
@@ -98,7 +98,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__in_with_multiple_ids() {
-		$expected = array( self::$network_ids['wordpress.org/'], self::$network_ids['www.wordpress.net/'] );
+		$expected = array( self::$network_ids['finpress.org/'], self::$network_ids['www.finpress.net/'] );
 
 		$q     = new WP_Network_Query();
 		$found = $q->query(
@@ -112,7 +112,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__in_and_count_with_multiple_ids() {
-		$expected = array( self::$network_ids['wordpress.org/'], self::$network_ids['make.wordpress.org/'] );
+		$expected = array( self::$network_ids['finpress.org/'], self::$network_ids['make.finpress.org/'] );
 
 		$q     = new WP_Network_Query();
 		$found = $q->query(
@@ -127,7 +127,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__not_in_with_single_id() {
-		$excluded = array( self::$network_ids['wordpress.org/'] );
+		$excluded = array( self::$network_ids['finpress.org/'] );
 		$expected = array_diff( self::$network_ids, $excluded );
 
 		// Exclude main network since we don't have control over it here.
@@ -145,7 +145,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 	}
 
 	public function test_wp_network_query_by_network__not_in_with_multiple_ids() {
-		$excluded = array( self::$network_ids['wordpress.org/'], self::$network_ids['www.w.org/foo/'] );
+		$excluded = array( self::$network_ids['finpress.org/'], self::$network_ids['www.w.org/foo/'] );
 		$expected = array_diff( self::$network_ids, $excluded );
 
 		// Exclude main network since we don't have control over it here.
@@ -183,12 +183,12 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'domain__in' => array( 'make.wordpress.org' ),
+				'domain__in' => array( 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$network_ids['make.wordpress.org/'],
+			self::$network_ids['make.finpress.org/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -199,13 +199,13 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'     => 'ids',
-				'domain__in' => array( 'wordpress.org', 'make.wordpress.org' ),
+				'domain__in' => array( 'finpress.org', 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$network_ids['wordpress.org/'],
-			self::$network_ids['make.wordpress.org/'],
+			self::$network_ids['finpress.org/'],
+			self::$network_ids['make.finpress.org/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -217,12 +217,12 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 			array(
 				'fields'     => 'ids',
 				'number'     => 1,
-				'domain__in' => array( 'wordpress.org', 'make.wordpress.org' ),
+				'domain__in' => array( 'finpress.org', 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$network_ids['wordpress.org/'],
+			self::$network_ids['finpress.org/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -235,12 +235,12 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 				'fields'     => 'ids',
 				'number'     => 1,
 				'offset'     => 1,
-				'domain__in' => array( 'wordpress.org', 'make.wordpress.org' ),
+				'domain__in' => array( 'finpress.org', 'make.finpress.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$network_ids['make.wordpress.org/'],
+			self::$network_ids['make.finpress.org/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -257,9 +257,9 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 
 		$expected = array(
 			get_current_site()->id, // Account for the initial network added by the test suite.
-			self::$network_ids['wordpress.org/'],
-			self::$network_ids['make.wordpress.org/'],
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['finpress.org/'],
+			self::$network_ids['make.finpress.org/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -270,14 +270,14 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		$found = $q->query(
 			array(
 				'fields'         => 'ids',
-				'domain__not_in' => array( 'wordpress.org', 'www.w.org' ),
+				'domain__not_in' => array( 'finpress.org', 'www.w.org' ),
 			)
 		);
 
 		$expected = array(
 			get_current_site()->id, // Account for the initial network added by the test suite.
-			self::$network_ids['make.wordpress.org/'],
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['make.finpress.org/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -289,13 +289,13 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 			array(
 				'fields'         => 'ids',
 				'number'         => 2,
-				'domain__not_in' => array( 'wordpress.org', 'www.w.org' ),
+				'domain__not_in' => array( 'finpress.org', 'www.w.org' ),
 			)
 		);
 
 		$expected = array(
 			get_current_site()->id, // Account for the initial network added by the test suite.
-			self::$network_ids['make.wordpress.org/'],
+			self::$network_ids['make.finpress.org/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -308,13 +308,13 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 				'fields'         => 'ids',
 				'number'         => 2,
 				'offset'         => 1,
-				'domain__not_in' => array( 'wordpress.org', 'www.w.org' ),
+				'domain__not_in' => array( 'finpress.org', 'www.w.org' ),
 			)
 		);
 
 		$expected = array(
-			self::$network_ids['make.wordpress.org/'],
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['make.finpress.org/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -331,9 +331,9 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$network_ids['wordpress.org/'],
-			self::$network_ids['make.wordpress.org/'],
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['finpress.org/'],
+			self::$network_ids['make.finpress.org/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -352,7 +352,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -380,7 +380,7 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$network_ids['www.wordpress.net/'],
+			self::$network_ids['www.finpress.net/'],
 		);
 
 		$this->assertSameSets( $expected, $found );
@@ -415,9 +415,9 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		);
 
 		$expected = array(
-			self::$network_ids['www.wordpress.net/'],
-			self::$network_ids['wordpress.org/'],
-			self::$network_ids['make.wordpress.org/'],
+			self::$network_ids['www.finpress.net/'],
+			self::$network_ids['finpress.org/'],
+			self::$network_ids['make.finpress.org/'],
 		);
 
 		$this->assertSame( $expected, $found );
@@ -600,12 +600,12 @@ class Tests_Multisite_wpNetworkQuery extends WP_UnitTestCase {
 		// Make sure the networks property is the same as the results.
 		$this->assertSame( $results, $q->networks );
 
-		// Make sure the network domain is `wordpress.org`.
-		$this->assertSame( 'wordpress.org', $q->networks[0]->domain );
+		// Make sure the network domain is `finpress.org`.
+		$this->assertSame( 'finpress.org', $q->networks[0]->domain );
 	}
 
 	public static function filter_networks_pre_query_and_set_networks( $networks, $query ) {
-		return array( get_network( self::$network_ids['wordpress.org/'] ) );
+		return array( get_network( self::$network_ids['finpress.org/'] ) );
 	}
 
 	/**

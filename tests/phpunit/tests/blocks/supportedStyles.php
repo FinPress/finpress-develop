@@ -2,7 +2,7 @@
 /**
  * Test block supported styles.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 5.6.0
  *

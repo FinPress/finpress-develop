@@ -24,7 +24,7 @@ jobs:
   # - Builds CSS file using SASS.
   # - Builds Emoji files.
   # - Builds bundled Root Certificate files.
-  # - Builds WordPress.
+  # - Builds FinPress.
   # - Checks for changes to versioned files.
   # - Displays the result of git diff for debugging purposes.
   # - Saves the diff to a patch file.
@@ -81,7 +81,7 @@ jobs:
       - name: Run certificate tasks
         run: npm run grunt copy:certificates
 
-      - name: Build WordPress
+      - name: Build FinPress
         run: npm run build:dev
 
       - name: Check for changes to versioned files

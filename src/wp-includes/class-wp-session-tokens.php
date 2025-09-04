@@ -2,7 +2,7 @@
 /**
  * Session API: WP_Session_Tokens class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Session
  * @since 4.7.0
  */

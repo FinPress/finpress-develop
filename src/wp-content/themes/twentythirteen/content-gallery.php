@@ -2,7 +2,7 @@
 /**
  * The template for displaying posts in the Gallery post format
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Thirteen
  * @since Twenty Thirteen 1.0
  */

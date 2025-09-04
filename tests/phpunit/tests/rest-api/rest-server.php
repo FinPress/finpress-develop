@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Server functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -1057,7 +1057,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		$response = new WP_REST_Response();
 		$response->add_link( 'author', rest_url( '404' ), array( 'embeddable' => true ) );
 		$response->add_link( 'https://api.w.org/term', rest_url( '404' ), array( 'embeddable' => true ) );
-		$response->add_link( 'https://wordpress.org', rest_url( '404' ), array( 'embeddable' => true ) );
+		$response->add_link( 'https://finpress.org', rest_url( '404' ), array( 'embeddable' => true ) );
 		$response->add_link( 'no-embed', rest_url( '404' ) );
 
 		$data = rest_get_server()->response_to_data( $response, $embed );
@@ -1072,12 +1072,12 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 	public function data_response_to_data_embedding() {
 		return array(
 			array(
-				array( 'author', 'wp:term', 'https://wordpress.org' ),
+				array( 'author', 'wp:term', 'https://finpress.org' ),
 				true,
 			),
 			array(
-				array( 'author', 'wp:term', 'https://wordpress.org' ),
-				array( 'author', 'wp:term', 'https://wordpress.org' ),
+				array( 'author', 'wp:term', 'https://finpress.org' ),
+				array( 'author', 'wp:term', 'https://finpress.org' ),
 			),
 			array(
 				array( 'author' ),
@@ -1088,8 +1088,8 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				array( 'wp:term' ),
 			),
 			array(
-				array( 'https://wordpress.org' ),
-				array( 'https://wordpress.org' ),
+				array( 'https://finpress.org' ),
+				array( 'https://finpress.org' ),
 			),
 			array(
 				array( 'author', 'wp:term' ),
@@ -1559,7 +1559,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			)
 		);
 
-		// WordPress internally will slash the superglobals on bootstrap.
+		// FinPress internally will slash the superglobals on bootstrap.
 		$_GET = wp_slash(
 			array(
 				'data' => 'data\\with\\slashes',
@@ -1587,7 +1587,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			)
 		);
 
-		// WordPress internally will slash the superglobals on bootstrap.
+		// FinPress internally will slash the superglobals on bootstrap.
 		$_POST = wp_slash(
 			array(
 				'data' => 'data\\with\\slashes',
@@ -1644,7 +1644,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			)
 		);
 
-		// WordPress internally will slash the superglobals on bootstrap.
+		// FinPress internally will slash the superglobals on bootstrap.
 		$_FILES = array(
 			'data' => array(
 				'name' => 'data\\with\\slashes',
@@ -1672,7 +1672,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 			)
 		);
 
-		// WordPress internally will slash the superglobals on bootstrap.
+		// FinPress internally will slash the superglobals on bootstrap.
 		$_SERVER['HTTP_X_MY_HEADER'] = wp_slash( 'data\\with\\slashes' );
 
 		$result = rest_get_server()->serve_request( '/test/data\\with\\slashes' );
@@ -2091,7 +2091,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'args'                => array(
 					'project' => array(
 						'type' => 'string',
-						'enum' => array( 'gutenberg', 'WordPress' ),
+						'enum' => array( 'gutenberg', 'FinPress' ),
 					),
 				),
 			)
@@ -2147,7 +2147,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'args'                => array(
 					'project' => array(
 						'type' => 'string',
-						'enum' => array( 'gutenberg', 'WordPress' ),
+						'enum' => array( 'gutenberg', 'FinPress' ),
 					),
 				),
 			)
@@ -2167,7 +2167,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 					array(
 						'path' => '/test-ns/v1/test',
 						'body' => array(
-							'project' => 'WordPress',
+							'project' => 'FinPress',
 						),
 					),
 				),
@@ -2181,7 +2181,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 		$this->assertArrayNotHasKey( 'failed', $data );
 		$this->assertCount( 2, $data['responses'] );
 		$this->assertSame( 'gutenberg', $data['responses'][0]['body'] );
-		$this->assertSame( 'WordPress', $data['responses'][1]['body'] );
+		$this->assertSame( 'FinPress', $data['responses'][1]['body'] );
 	}
 
 	/**
@@ -2252,7 +2252,7 @@ class Tests_REST_Server extends WP_Test_REST_TestCase {
 				'args'                => array(
 					'project' => array(
 						'type' => 'string',
-						'enum' => array( 'gutenberg', 'WordPress' ),
+						'enum' => array( 'gutenberg', 'FinPress' ),
 					),
 				),
 			)

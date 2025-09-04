@@ -2,7 +2,7 @@
 /**
  * Tests for WP_Block_Patterns_Registry.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 6.4.0
  *

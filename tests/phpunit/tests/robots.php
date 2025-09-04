@@ -2,7 +2,7 @@
 /**
  * Tests for robots template functions and filters.
  *
- * @package WordPress
+ * @package FinPress
  *
  * @group robots
  */
@@ -127,7 +127,7 @@ class Tests_Robots extends WP_UnitTestCase {
 	 */
 	public function test_wp_robots_search_page() {
 		add_filter( 'wp_robots', 'wp_robots_noindex_search' );
-		$this->go_to( home_url( '?s=ticket+52457+core.trac.wordpress.org' ) );
+		$this->go_to( home_url( '?s=ticket+52457+core.trac.finpress.org' ) );
 
 		$output = get_echo( 'wp_robots' );
 		$this->assertStringContainsString( 'noindex', $output );

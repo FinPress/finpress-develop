@@ -1,7 +1,7 @@
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 test.describe( 'Gutenberg plugin', () => {
 	// Increasing timeout to 5 minutes because potential plugin install could take longer.
@@ -29,7 +29,7 @@ test.describe( 'Gutenberg plugin', () => {
 
 		expect( plugin.status ).toBe( 'inactive' );
 
-		// Only run this test on versions of WordPress that are still supported by the Gutenberg Plugin
+		// Only run this test on versions of FinPress that are still supported by the Gutenberg Plugin
 		try {
 			await requestUtils.activatePlugin( 'gutenberg' );
 		} catch ( error ) {

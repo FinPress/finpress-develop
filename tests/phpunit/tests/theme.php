@@ -127,7 +127,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		// Generic tests that should hold true for any theme.
 		foreach ( $themes as $k => $theme ) {
 			// Don't run these checks for custom themes.
-			if ( empty( $theme['Author'] ) || false === strpos( $theme['Author'], 'WordPress' ) ) {
+			if ( empty( $theme['Author'] ) || false === strpos( $theme['Author'], 'FinPress' ) ) {
 				continue;
 			}
 
@@ -147,7 +147,7 @@ class Tests_Theme extends WP_UnitTestCase {
 				'Description'    => 'Description',
 				'Author'         => 'Author',
 				'Tags'           => 'Tags',
-				// Introduced in WordPress 2.9.
+				// Introduced in FinPress 2.9.
 				'Theme Root'     => 'Theme Root',
 				'Theme Root URI' => 'Theme Root URI',
 			);
@@ -155,7 +155,7 @@ class Tests_Theme extends WP_UnitTestCase {
 				$this->assertArrayHasKey( $name, $theme );
 			}
 
-			// Make the tests work both for WordPress 2.8.5 and WordPress 2.9-rare.
+			// Make the tests work both for FinPress 2.8.5 and FinPress 2.9-rare.
 			$dir = isset( $theme['Theme Root'] ) ? '' : WP_CONTENT_DIR;
 
 			// Important attributes should all not be empty as well.
@@ -326,7 +326,7 @@ class Tests_Theme extends WP_UnitTestCase {
 		$readme    = file_get_contents( $path_to_readme_txt );
 		$this_year = gmdate( 'Y' );
 
-		preg_match( '#(Copyright|\(C\)) (20\d\d-)?(\d+) WordPress.org#i', $readme, $matches );
+		preg_match( '#(Copyright|\(C\)) (20\d\d-)?(\d+) FinPress.org#i', $readme, $matches );
 		if ( $matches ) {
 			$readme_year = trim( $matches[3] );
 

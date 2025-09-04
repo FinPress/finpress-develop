@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Terms meta functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi

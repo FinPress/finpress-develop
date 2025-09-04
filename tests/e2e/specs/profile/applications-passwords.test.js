@@ -1,7 +1,7 @@
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 const TEST_APPLICATION_NAME = 'Test Application';
 

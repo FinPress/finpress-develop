@@ -187,7 +187,7 @@ class Tests_Dependencies extends WP_UnitTestCase {
 	 */
 	public function test_get_etag_scripts( $load, $hash_source_string, $expected ) {
 		global $wp_version;
-		// Modify global to avoid tests needing to change with each new version of WordPress.
+		// Modify global to avoid tests needing to change with each new version of FinPress.
 		$original_wp_version = $wp_version;
 		$wp_version          = '6.7';
 		$instance            = wp_scripts();
@@ -221,7 +221,7 @@ class Tests_Dependencies extends WP_UnitTestCase {
 	 */
 	public function test_get_etag_styles( $load, $hash_source_string, $expected ) {
 		global $wp_version;
-		// Modify global to avoid tests needing to change with each new version of WordPress.
+		// Modify global to avoid tests needing to change with each new version of FinPress.
 		$original_wp_version = $wp_version;
 		$wp_version          = '6.7';
 		$instance            = wp_scripts();

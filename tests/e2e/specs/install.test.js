@@ -5,13 +5,13 @@ import { writeFileSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 let wpConfigOriginal;
 
-test.describe( 'WordPress installation process', () => {
+test.describe( 'FinPress installation process', () => {
 	const wpConfig = join(
 		process.cwd(),
 		'wp-config.php',
@@ -31,7 +31,7 @@ test.describe( 'WordPress installation process', () => {
 		writeFileSync( wpConfig, wpConfigOriginal );
 	} );
 
-	test( 'should install WordPress with pre-existing database credentials', async ( { page } ) => {
+	test( 'should install FinPress with pre-existing database credentials', async ( { page } ) => {
 		await page.goto( '/' );
 
 		await expect(
@@ -40,7 +40,7 @@ test.describe( 'WordPress installation process', () => {
 		).toHaveURL( /wp-admin\/install\.php$/ );
 
 		await expect(
-			page.getByText( /WordPress database error/ ),
+			page.getByText( /FinPress database error/ ),
 			'should not have any database errors'
 		).not.toBeVisible();
 
@@ -53,14 +53,14 @@ test.describe( 'WordPress installation process', () => {
 
 		// This information matches tools/local-env/scripts/install.js.
 
-		await page.getByLabel( 'Site Title' ).fill( 'WordPress Develop' );
+		await page.getByLabel( 'Site Title' ).fill( 'FinPress Develop' );
 		await page.getByLabel( 'Username' ).fill( 'admin' );
 		await page.getByLabel( 'Password', { exact: true } ).fill( '' );
 		await page.getByLabel( 'Password', { exact: true } ).fill( 'password' );
 		await page.getByLabel( /Confirm use of weak password/ ).check()
 		await page.getByLabel( 'Your Email' ).fill( 'test@example.com' );
 
-		await page.getByRole( 'button', { name: 'Install WordPress' } ).click();
+		await page.getByRole( 'button', { name: 'Install FinPress' } ).click();
 
 		// Installation finished, can now log in.
 
@@ -79,7 +79,7 @@ test.describe( 'WordPress installation process', () => {
 		await page.getByRole( 'button', { name: 'Log In' } ).click();
 
 		await expect(
-			page.getByRole( 'heading', { name: 'Welcome to WordPress', level: 2 })
+			page.getByRole( 'heading', { name: 'Welcome to FinPress', level: 2 })
 		).toBeVisible();
 	} );
 } );

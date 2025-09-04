@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Themes_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi-themes
@@ -95,7 +95,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 	 *
 	 * @since 5.0.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$admin_id       = $factory->user->create(
@@ -674,8 +674,8 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 		$response = self::perform_active_theme_request();
 		$result   = $response->get_data();
 		$this->assertArrayHasKey( 'theme_uri', $result[0] );
-		$this->assertSame( 'http://wordpress.org/?search=1&term=2', $result[0]['theme_uri']['raw'] );
-		$this->assertSame( 'http://wordpress.org/?search=1&#038;term=2', $result[0]['theme_uri']['rendered'] );
+		$this->assertSame( 'http://finpress.org/?search=1&term=2', $result[0]['theme_uri']['raw'] );
+		$this->assertSame( 'http://finpress.org/?search=1&#038;term=2', $result[0]['theme_uri']['rendered'] );
 	}
 
 	/**
@@ -783,16 +783,16 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 	 */
 	public function test_theme_supports_editor_color_palette_array() {
 		remove_theme_support( 'editor-color-palette' );
-		$wordpress_blue = array(
-			'name'  => 'WordPress Blue',
-			'slug'  => 'wordpress-blue',
+		$finpress_blue = array(
+			'name'  => 'FinPress Blue',
+			'slug'  => 'finpress-blue',
 			'color' => '#0073AA',
 		);
-		add_theme_support( 'editor-color-palette', array( $wordpress_blue ) );
+		add_theme_support( 'editor-color-palette', array( $finpress_blue ) );
 		$response = self::perform_active_theme_request();
 		$result   = $response->get_data();
 		$this->assertArrayHasKey( 'theme_supports', $result[0] );
-		$this->assertSame( array( $wordpress_blue ), $result[0]['theme_supports']['editor-color-palette'] );
+		$this->assertSame( array( $finpress_blue ), $result[0]['theme_supports']['editor-color-palette'] );
 	}
 
 	/**
@@ -836,7 +836,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 	 */
 	public function test_theme_supports_custom_logo() {
 		remove_theme_support( 'custom-logo' );
-		$wordpress_logo = array(
+		$finpress_logo = array(
 			'width'                => 400,
 			'height'               => 100,
 			'flex-width'           => true,
@@ -844,11 +844,11 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 			'header-text'          => array( 'site-title', 'site-description' ),
 			'unlink-homepage-logo' => false,
 		);
-		add_theme_support( 'custom-logo', $wordpress_logo );
+		add_theme_support( 'custom-logo', $finpress_logo );
 		$response = self::perform_active_theme_request();
 		$result   = $response->get_data();
 		$this->assertArrayHasKey( 'theme_supports', $result[0] );
-		$this->assertSame( $wordpress_logo, $result[0]['theme_supports']['custom-logo'] );
+		$this->assertSame( $finpress_logo, $result[0]['theme_supports']['custom-logo'] );
 	}
 
 	/**
@@ -868,7 +868,7 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 	 */
 	public function test_theme_supports_custom_header() {
 		remove_theme_support( 'custom-header' );
-		$wordpress_header = array(
+		$finpress_header = array(
 			'default-image'          => '',
 			'random-default'         => false,
 			'width'                  => 0,
@@ -890,12 +890,12 @@ class WP_Test_REST_Themes_Controller extends WP_Test_REST_Controller_Testcase {
 			'admin-preview-callback',
 			'video-active-callback',
 		);
-		add_theme_support( 'custom-header', $wordpress_header );
+		add_theme_support( 'custom-header', $finpress_header );
 		$response = self::perform_active_theme_request();
 		$result   = $response->get_data();
 		$this->assertArrayHasKey( 'theme_supports', $result[0] );
 
-		$expected = array_diff_key( $wordpress_header, array_flip( $excluded ) );
+		$expected = array_diff_key( $finpress_header, array_flip( $excluded ) );
 		$this->assertSame( $expected, $result[0]['theme_supports']['custom-header'] );
 	}
 

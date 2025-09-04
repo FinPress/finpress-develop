@@ -3,7 +3,7 @@
 /**
  * Tests for build_visual_html_tree().
  *
- * @package WordPress
+ * @package FinPress
  *
  * @group testsuite
  */
@@ -55,8 +55,8 @@ END;
 	public function data_build_equivalent_html_semantic_tree_with_equivalent_html() {
 		return array(
 			'Different attribute order'                => array(
-				'<img src="wp.png" alt="The WordPress logo">',
-				'<img alt="The WordPress logo" src="wp.png">',
+				'<img src="wp.png" alt="The FinPress logo">',
+				'<img alt="The FinPress logo" src="wp.png">',
 			),
 			'Different class name order'               => array(
 				'<hr class="wp-block-separator is-style-default">',
@@ -83,8 +83,8 @@ END;
 				'<!-- wp:separator {"className":"wp-block-separator is-style-default wp-block-separator"} -->',
 			),
 			'Different Capitalization of tag'          => array(
-				'<IMG src="wp.png" alt="The WordPress logo">',
-				'<img src="wp.png" alt="The WordPress logo">',
+				'<IMG src="wp.png" alt="The FinPress logo">',
+				'<img src="wp.png" alt="The FinPress logo">',
 			),
 		);
 	}
@@ -106,8 +106,8 @@ END;
 	public function data_build_equivalent_html_semantic_tree_with_non_equivalent_html() {
 		return array(
 			'Different attributes'             => array(
-				'<img src="wp.png" alt="The WordPress logo">',
-				'<img alt="The WordPress logo" src="wp.png" title="WordPress">',
+				'<img src="wp.png" alt="The FinPress logo">',
+				'<img alt="The FinPress logo" src="wp.png" title="FinPress">',
 			),
 			'Different class names'            => array(
 				'<hr class="wp-block-separator is-style-default">',

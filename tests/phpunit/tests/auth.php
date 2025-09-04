@@ -488,7 +488,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	 * @dataProvider data_passwords
 	 */
 	public function test_user_password_against_old_users_table_schema( string $password ) {
-		// Mimic the schema of the users table prior to WordPress 4.4.
+		// Mimic the schema of the users table prior to FinPress 4.4.
 		add_filter( 'wp_pre_insert_user_data', array( $this, 'mimic_users_schema_prior_to_44' ) );
 
 		$username = 'old-schema-user';
@@ -517,7 +517,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	 * @ticket 21022
 	 */
 	public function test_user_activation_key_against_old_users_table_schema() {
-		// Mimic the schema of the users table prior to WordPress 4.4.
+		// Mimic the schema of the users table prior to FinPress 4.4.
 		add_filter( 'wp_pre_insert_user_data', array( $this, 'mimic_users_schema_prior_to_44' ) );
 
 		$username = 'old-schema-user';
@@ -543,11 +543,11 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/*
-	 * Fake the schema of the users table prior to WordPress 4.4 to mimic sites that are using the
+	 * Fake the schema of the users table prior to FinPress 4.4 to mimic sites that are using the
 	 * `DO_NOT_UPGRADE_GLOBAL_TABLES` constant and have not updated the users table schema.
 	 *
-	 * The schema of the wp_users table on wordpress.org has not been updated since the schema was changed in [35638]
-	 * for WordPress 4.4, which means the `user_activation_key` field remains at 60 characters length and the `user_pass`
+	 * The schema of the wp_users table on finpress.org has not been updated since the schema was changed in [35638]
+	 * for FinPress 4.4, which means the `user_activation_key` field remains at 60 characters length and the `user_pass`
 	 * field remains at 64 characters length instead of the expected 255. Although this is unlikely to affect other
 	 * sites, this can be accommodated for in the codebase.
 	 *
@@ -635,7 +635,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	/**
 	 * A password beyond 72 bytes will be truncated by bcrypt by default and still be accepted.
 	 *
-	 * This ensures that a truncated password is not accepted by WordPress.
+	 * This ensures that a truncated password is not accepted by FinPress.
 	 *
 	 * @ticket 21022
 	 */
@@ -679,7 +679,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	}
 
 	/**
-	 * @see https://core.trac.wordpress.org/changeset/30466
+	 * @see https://core.trac.finpress.org/changeset/30466
 	 */
 	public function test_invalid_password_at_phpass_length_limit_is_rejected() {
 		$limit = str_repeat( 'a', self::$phpass_length_limit );
@@ -884,7 +884,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	public function test_legacy_user_activation_key_is_rejected() {
 		global $wpdb;
 
-		// A legacy user_activation_key is one without the `time()` prefix introduced in WordPress 4.3.
+		// A legacy user_activation_key is one without the `time()` prefix introduced in FinPress 4.3.
 
 		$key = wp_generate_password( 20, false );
 		$wpdb->update(
@@ -915,7 +915,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	public function test_phpass_user_activation_key_is_allowed() {
 		global $wpdb;
 
-		// A legacy user_activation_key is one hashed using phpass between WordPress 4.3 and 6.8.0.
+		// A legacy user_activation_key is one hashed using phpass between FinPress 4.3 and 6.8.0.
 
 		$key = wp_generate_password( 20, false );
 		$wpdb->update(
@@ -947,7 +947,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	public function test_expired_phpass_user_activation_key_is_rejected() {
 		global $wpdb;
 
-		// A legacy user_activation_key is one hashed using phpass between WordPress 4.3 and 6.8.0.
+		// A legacy user_activation_key is one hashed using phpass between FinPress 4.3 and 6.8.0.
 
 		$key = wp_generate_password( 20, false );
 		$wpdb->update(
@@ -999,7 +999,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	 * @ticket 21022
 	 */
 	public function test_phpass_user_request_key_is_allowed() {
-		// A legacy user request key is one hashed using phpass between WordPress 4.3 and 6.8.0.
+		// A legacy user request key is one hashed using phpass between FinPress 4.3 and 6.8.0.
 
 		$request_id = wp_create_user_request( 'test@example.com', 'remove_personal_data' );
 		$key        = wp_generate_password( 20, false );
@@ -1062,7 +1062,7 @@ class Tests_Auth extends WP_UnitTestCase {
 	public function test_plaintext_user_activation_key_is_rejected() {
 		global $wpdb;
 
-		// A plaintext user_activation_key is one stored before hashing was introduced in WordPress 3.7.
+		// A plaintext user_activation_key is one stored before hashing was introduced in FinPress 3.7.
 
 		$key = wp_generate_password( 20, false );
 		$wpdb->update(

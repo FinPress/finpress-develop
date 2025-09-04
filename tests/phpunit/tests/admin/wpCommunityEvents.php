@@ -2,7 +2,7 @@
 /**
  * Unit tests for methods in WP_Community_Events.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 4.8.0
  *
@@ -240,9 +240,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Flexbox + CSS Grid: Magic for Responsive Layouts',
-				'url'                  => 'https://www.meetup.com/Eastbay-WordPress-Meetup/events/236031233/',
-				'meetup'               => 'The East Bay WordPress Meetup Group',
-				'meetup_url'           => 'https://www.meetup.com/Eastbay-WordPress-Meetup/',
+				'url'                  => 'https://www.meetup.com/Eastbay-FinPress-Meetup/events/236031233/',
+				'meetup'               => 'The East Bay FinPress Meetup Group',
+				'meetup_url'           => 'https://www.meetup.com/Eastbay-FinPress-Meetup/',
 				'start_unix_timestamp' => strtotime( 'next Sunday 1pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Sunday 2pm' ),
 
@@ -257,9 +257,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Part 3- Site Maintenance - Tools to Make It Easy',
-				'url'                  => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/events/237706839/',
-				'meetup'               => 'WordPress Bay Area Foothills Group',
-				'meetup_url'           => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/',
+				'url'                  => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/events/237706839/',
+				'meetup'               => 'FinPress Bay Area Foothills Group',
+				'meetup_url'           => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/',
 				'start_unix_timestamp' => strtotime( 'next Wednesday 1:30pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Wednesday 2:30pm' ),
 
@@ -355,9 +355,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Flexbox + CSS Grid: Magic for Responsive Layouts',
-				'url'                  => 'https://www.meetup.com/Eastbay-WordPress-Meetup/events/236031233/',
-				'meetup'               => 'The East Bay WordPress Meetup Group',
-				'meetup_url'           => 'https://www.meetup.com/Eastbay-WordPress-Meetup/',
+				'url'                  => 'https://www.meetup.com/Eastbay-FinPress-Meetup/events/236031233/',
+				'meetup'               => 'The East Bay FinPress Meetup Group',
+				'meetup_url'           => 'https://www.meetup.com/Eastbay-FinPress-Meetup/',
 				'start_unix_timestamp' => strtotime( 'next Monday 1pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Monday 2pm' ),
 
@@ -372,9 +372,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Part 3- Site Maintenance - Tools to Make It Easy',
-				'url'                  => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/events/237706839/',
-				'meetup'               => 'WordPress Bay Area Foothills Group',
-				'meetup_url'           => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/',
+				'url'                  => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/events/237706839/',
+				'meetup'               => 'FinPress Bay Area Foothills Group',
+				'meetup_url'           => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/',
 				'start_unix_timestamp' => strtotime( 'next Tuesday 1:30pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Tuesday 2:30pm' ),
 
@@ -388,9 +388,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 
 			array(
 				'type'                 => 'meetup',
-				'title'                => 'WordPress Q&A',
+				'title'                => 'FinPress Q&A',
 				'url'                  => 'https://www.meetup.com/sanjosewp/events/245419844/',
-				'meetup'               => 'The San Jose WordPress Meetup',
+				'meetup'               => 'The San Jose FinPress Meetup',
 				'meetup_url'           => 'https://www.meetup.com/sanjosewp/',
 				'start_unix_timestamp' => strtotime( 'next Wednesday 5:30pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Wednesday 6:30pm' ),
@@ -444,7 +444,7 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 		$this->assertCount( 3, $actual );
 		$this->assertSame( $actual[0]['title'], 'WordCamp San Diego' );
 		$this->assertSame( $actual[1]['title'], 'Part 3- Site Maintenance - Tools to Make It Easy' );
-		$this->assertSame( $actual[2]['title'], 'WordPress Q&A' );
+		$this->assertSame( $actual[2]['title'], 'FinPress Q&A' );
 	}
 
 	/**
@@ -461,9 +461,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Flexbox + CSS Grid: Magic for Responsive Layouts',
-				'url'                  => 'https://www.meetup.com/Eastbay-WordPress-Meetup/events/236031233/',
-				'meetup'               => 'The East Bay WordPress Meetup Group',
-				'meetup_url'           => 'https://www.meetup.com/Eastbay-WordPress-Meetup/',
+				'url'                  => 'https://www.meetup.com/Eastbay-FinPress-Meetup/events/236031233/',
+				'meetup'               => 'The East Bay FinPress Meetup Group',
+				'meetup_url'           => 'https://www.meetup.com/Eastbay-FinPress-Meetup/',
 				'start_unix_timestamp' => strtotime( '2 days ago' ) - HOUR_IN_SECONDS,
 				'end_unix_timestamp'   => strtotime( '2 days ago' ),
 
@@ -495,9 +495,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 			array(
 				'type'                 => 'meetup',
 				'title'                => 'Part 3- Site Maintenance - Tools to Make It Easy',
-				'url'                  => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/events/237706839/',
-				'meetup'               => 'WordPress Bay Area Foothills Group',
-				'meetup_url'           => 'https://www.meetup.com/Wordpress-Bay-Area-CA-Foothills/',
+				'url'                  => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/events/237706839/',
+				'meetup'               => 'FinPress Bay Area Foothills Group',
+				'meetup_url'           => 'https://www.meetup.com/Finpress-Bay-Area-CA-Foothills/',
 				'start_unix_timestamp' => strtotime( 'next Wednesday 1:30pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Wednesday 2:30pm' ),
 
@@ -511,9 +511,9 @@ class Tests_Admin_wpCommunityEvents extends WP_UnitTestCase {
 
 			array(
 				'type'                 => 'meetup',
-				'title'                => 'WordPress Q&A',
+				'title'                => 'FinPress Q&A',
 				'url'                  => 'https://www.meetup.com/sanjosewp/events/245419844/',
-				'meetup'               => 'The San Jose WordPress Meetup',
+				'meetup'               => 'The San Jose FinPress Meetup',
 				'meetup_url'           => 'https://www.meetup.com/sanjosewp/',
 				'start_unix_timestamp' => strtotime( 'next Thursday 5:30pm' ),
 				'end_unix_timestamp'   => strtotime( 'next Thursday 6:30pm' ),

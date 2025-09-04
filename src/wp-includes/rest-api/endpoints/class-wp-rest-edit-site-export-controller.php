@@ -2,7 +2,7 @@
 /**
  * REST API: WP_REST_Edit_Site_Export_Controller class
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage REST_API
  */
 

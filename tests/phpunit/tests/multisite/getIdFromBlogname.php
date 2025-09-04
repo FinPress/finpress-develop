@@ -15,12 +15,12 @@ class Tests_Multisite_GetIdFromBlogname extends WP_UnitTestCase {
 
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$network_ids = array(
-			'wordpress.org/'     => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'     => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
-			'www.wordpress.net/' => array(
-				'domain' => 'www.wordpress.net',
+			'www.finpress.net/' => array(
+				'domain' => 'www.finpress.net',
 				'path'   => '/',
 			),
 		);
@@ -31,35 +31,35 @@ class Tests_Multisite_GetIdFromBlogname extends WP_UnitTestCase {
 		unset( $id );
 
 		self::$site_ids = array(
-			'wordpress.org/'         => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/'         => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'foo.wordpress.org/'     => array(
-				'domain'     => 'foo.wordpress.org',
+			'foo.finpress.org/'     => array(
+				'domain'     => 'foo.finpress.org',
 				'path'       => '/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'wordpress.org/foo/'     => array(
-				'domain'     => 'wordpress.org',
+			'finpress.org/foo/'     => array(
+				'domain'     => 'finpress.org',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['wordpress.org/'],
+				'network_id' => self::$network_ids['finpress.org/'],
 			),
-			'www.wordpress.net/'     => array(
-				'domain'     => 'www.wordpress.net',
+			'www.finpress.net/'     => array(
+				'domain'     => 'www.finpress.net',
 				'path'       => '/',
-				'network_id' => self::$network_ids['www.wordpress.net/'],
+				'network_id' => self::$network_ids['www.finpress.net/'],
 			),
-			'foo.wordpress.net/'     => array(
-				'domain'     => 'foo.wordpress.net',
+			'foo.finpress.net/'     => array(
+				'domain'     => 'foo.finpress.net',
 				'path'       => '/',
-				'network_id' => self::$network_ids['www.wordpress.net/'],
+				'network_id' => self::$network_ids['www.finpress.net/'],
 			),
-			'www.wordpress.net/foo/' => array(
-				'domain'     => 'www.wordpress.net',
+			'www.finpress.net/foo/' => array(
+				'domain'     => 'www.finpress.net',
 				'path'       => '/foo/',
-				'network_id' => self::$network_ids['www.wordpress.net/'],
+				'network_id' => self::$network_ids['www.finpress.net/'],
 			),
 		);
 
@@ -91,12 +91,12 @@ class Tests_Multisite_GetIdFromBlogname extends WP_UnitTestCase {
 		global $current_site;
 
 		$original_network = $current_site;
-		$current_site     = get_network( self::$network_ids['wordpress.org/'] );
+		$current_site     = get_network( self::$network_ids['finpress.org/'] );
 
 		if ( is_subdomain_install() ) {
-			$expected = self::$site_ids['foo.wordpress.org/'];
+			$expected = self::$site_ids['foo.finpress.org/'];
 		} else {
-			$expected = self::$site_ids['wordpress.org/foo/'];
+			$expected = self::$site_ids['finpress.org/foo/'];
 		}
 
 		$result       = get_id_from_blogname( 'foo' );
@@ -112,12 +112,12 @@ class Tests_Multisite_GetIdFromBlogname extends WP_UnitTestCase {
 		global $current_site;
 
 		$original_network = $current_site;
-		$current_site     = get_network( self::$network_ids['www.wordpress.net/'] );
+		$current_site     = get_network( self::$network_ids['www.finpress.net/'] );
 
 		if ( is_subdomain_install() ) {
-			$expected = self::$site_ids['foo.wordpress.net/'];
+			$expected = self::$site_ids['foo.finpress.net/'];
 		} else {
-			$expected = self::$site_ids['www.wordpress.net/foo/'];
+			$expected = self::$site_ids['www.finpress.net/foo/'];
 		}
 
 		$result       = get_id_from_blogname( 'foo' );
@@ -130,7 +130,7 @@ class Tests_Multisite_GetIdFromBlogname extends WP_UnitTestCase {
 		global $current_site;
 
 		$original_network = $current_site;
-		$current_site     = get_network( self::$network_ids['wordpress.org/'] );
+		$current_site     = get_network( self::$network_ids['finpress.org/'] );
 
 		$result       = get_id_from_blogname( 'bar' );
 		$current_site = $original_network;

@@ -1,15 +1,15 @@
 <?php
 /**
- * WordPress PHPMailer class.
+ * FinPress PHPMailer class.
  *
- * @package WordPress
+ * @package FinPress
  * @since 6.8.0
  */
 
 /**
- * WordPress PHPMailer class.
+ * FinPress PHPMailer class.
  *
- * Overrides the internationalization method in order to use WordPress' instead.
+ * Overrides the internationalization method in order to use FinPress' instead.
  *
  * @since 6.8.0
  */
@@ -28,7 +28,7 @@ class WP_PHPMailer extends PHPMailer\PHPMailer\PHPMailer {
 	}
 
 	/**
-	 * Defines the error messages using WordPress' internationalization method.
+	 * Defines the error messages using FinPress' internationalization method.
 	 *
 	 * @since 6.8.0
 	 *

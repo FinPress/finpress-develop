@@ -2,7 +2,7 @@
 /**
  * Tests for the wp_print_speculation_rules() function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Speculative Loading
  */
 

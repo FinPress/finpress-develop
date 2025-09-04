@@ -2,7 +2,7 @@
 # A reusable workflow that finds and closes any pull requests that are linked to Trac
 # tickets that are referenced as fixed in commit messages.
 #
-# More info about using GitHub pull requests for contributing to WordPress can be found in the handbook: https://make.wordpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/.
+# More info about using GitHub pull requests for contributing to FinPress can be found in the handbook: https://make.finpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/.
 ##
 name: Run pull request cleanup
 
@@ -13,7 +13,7 @@ jobs:
   # Finds and closes pull requests referencing fixed Trac tickets in commit messages using the
   # documented expected format
   #
-  # Commit message format is documented in the Core handbook: https://make.wordpress.org/core/handbook/best-practices/commit-messages/.
+  # Commit message format is documented in the Core handbook: https://make.finpress.org/core/handbook/best-practices/commit-messages/.
   #
   # Performs the following steps:
   # - Parse fixed ticket numbers from the commit message.
@@ -41,7 +41,7 @@ jobs:
           COMMIT_MSG_RAW: ${{ github.event.head_commit.message }}
         run: |
           COMMIT_MESSAGE="$(echo "$COMMIT_MSG_RAW" | sed -n '$p')"
-          echo "svn_revision_number=$(echo "$COMMIT_MESSAGE" | sed -n 's/.*git-svn-id: https:\/\/develop.svn.wordpress.org\/[^@]*@\([0-9]*\) .*/\1/p')" >> "$GITHUB_OUTPUT"
+          echo "svn_revision_number=$(echo "$COMMIT_MESSAGE" | sed -n 's/.*git-svn-id: https:\/\/develop.svn.finpress.org\/[^@]*@\([0-9]*\) .*/\1/p')" >> "$GITHUB_OUTPUT"
 
       - name: Find pull requests
         id: linked-prs
@@ -53,7 +53,7 @@ jobs:
             let prNumbers = [];
 
             for (const ticket of fixedList) {
-              const tracTicketUrl = `https://core.trac.wordpress.org/ticket/${ticket}`;
+              const tracTicketUrl = `https://core.trac.finpress.org/ticket/${ticket}`;
               const corePrefix = `Core-${ticket}`;
 
               const query = `
@@ -89,8 +89,8 @@ jobs:
 
             const commentBody = `A commit was made that fixes the Trac ticket referenced in the description of this pull request.
 
-            SVN changeset: [${{ steps.git-svn-id.outputs.svn_revision_number }}](https://core.trac.wordpress.org/changeset/${{ steps.git-svn-id.outputs.svn_revision_number }})
-            GitHub commit: https://github.com/WordPress/wordpress-develop/commit/${{ github.sha }}
+            SVN changeset: [${{ steps.git-svn-id.outputs.svn_revision_number }}](https://core.trac.finpress.org/changeset/${{ steps.git-svn-id.outputs.svn_revision_number }})
+            GitHub commit: https://github.com/FinPress/finpress-develop/commit/${{ github.sha }}
 
             This PR will be closed, but please confirm the accuracy of this and reopen if there is more work to be done.`;
 

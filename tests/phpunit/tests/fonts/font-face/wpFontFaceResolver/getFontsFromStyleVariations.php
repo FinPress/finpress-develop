@@ -2,7 +2,7 @@
 /**
  * Test case for WP_Font_Face_Resolver::get_fonts_from_style_variations().
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage Fonts
  *
  * @since 6.7.0

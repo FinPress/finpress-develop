@@ -45,7 +45,7 @@ on:
         type: 'string'
         default: 'phpunit.xml.dist'
       report:
-        description: 'Whether to report results to WordPress.org Hosting Tests'
+        description: 'Whether to report results to FinPress.org Hosting Tests'
         required: false
         type: 'boolean'
         default: false
@@ -68,7 +68,7 @@ env:
 permissions: {}
 
 jobs:
-  # Runs the PHPUnit tests for WordPress.
+  # Runs the PHPUnit tests for FinPress.
   #
   # Performs the following steps:
   # - Sets environment variables.
@@ -78,11 +78,11 @@ jobs:
   # - Configures caching for Composer.
   # - Installs Composer dependencies.
   # - Logs Docker debug information (about the Docker installation within the runner).
-  # - Starts the WordPress Docker container.
+  # - Starts the FinPress Docker container.
   # - Logs general debug information about the runner.
   # - Logs the running Docker containers.
-  # - Logs debug information from inside the WordPress Docker container.
-  # - Install WordPress within the Docker container.
+  # - Logs debug information from inside the FinPress Docker container.
+  # - Install FinPress within the Docker container.
   # - Run the PHPUnit tests.
   # - Ensures version-controlled files are not modified or deleted.
   test-php:
@@ -162,7 +162,7 @@ jobs:
       - name: Log running Docker containers
         run: docker ps -a
 
-      - name: WordPress Docker container debug information
+      - name: FinPress Docker container debug information
         run: |
           docker compose run --rm mysql mysql --version
           docker compose run --rm php php --version
@@ -170,7 +170,7 @@ jobs:
           docker compose run --rm php php -i
           docker compose run --rm php locale -a
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: npm run env:install
 
       - name: Run slow PHPUnit tests

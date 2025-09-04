@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Theme Installation Administration API
+ * FinPress Theme Installation Administration API
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 
@@ -51,7 +51,7 @@ $theme_field_defaults = array(
 );
 
 /**
- * Retrieves the list of WordPress theme features (aka theme tags).
+ * Retrieves the list of FinPress theme features (aka theme tags).
  *
  * @since 2.8.0
  *

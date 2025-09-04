@@ -10,7 +10,7 @@
 class Tests_Functions_WpGetWpVersion extends WP_UnitTestCase {
 
 	/**
-	 * Tests that the WordPress version is returned.
+	 * Tests that the FinPress version is returned.
 	 *
 	 * @ticket 61627
 	 */

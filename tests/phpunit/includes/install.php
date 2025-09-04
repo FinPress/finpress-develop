@@ -1,6 +1,6 @@
 <?php
 /**
- * Installs WordPress for the purpose of the unit-tests
+ * Installs FinPress for the purpose of the unit-tests
  *
  * @todo Reuse the init/load code in init.php
  */
@@ -64,12 +64,12 @@ echo 'Installing...' . PHP_EOL;
 
 $wpdb->query( 'SET foreign_key_checks = 0' );
 foreach ( $wpdb->tables() as $table => $prefixed_table ) {
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$wpdb->query( "DROP TABLE IF EXISTS $prefixed_table" );
 }
 
 foreach ( $wpdb->tables( 'ms_global' ) as $table => $prefixed_table ) {
-	// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+	// phpcs:ignore FinPress.DB.PreparedSQL.InterpolatedNotPrepared
 	$wpdb->query( "DROP TABLE IF EXISTS $prefixed_table" );
 
 	// We need to create references to ms global tables.

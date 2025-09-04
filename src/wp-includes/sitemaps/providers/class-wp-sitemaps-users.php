@@ -4,7 +4,7 @@
  *
  * Builds the sitemaps for the 'user' object type.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Sitemaps
  * @since 5.5.0
  */

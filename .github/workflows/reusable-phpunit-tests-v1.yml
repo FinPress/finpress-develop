@@ -64,24 +64,24 @@ env:
 permissions: {}
 
 jobs:
-  # Runs the PHPUnit tests for WordPress.
+  # Runs the PHPUnit tests for FinPress.
   #
   # Performs the following steps:
   # - Sets environment variables.
   # - Sets up the environment variables needed for testing with memcached (if desired).
   # - Installs NodeJS.
-  # - Build WordPress
+  # - Build FinPress
   # _ Installs npm dependencies.
   # - Configures caching for Composer.
   # _ Installs Composer dependencies (if desired).
   # - Logs Docker debug information (about the Docker installation within the runner).
-  # - Starts the WordPress Docker container.
+  # - Starts the FinPress Docker container.
   # - Starts the Memcached server after the Docker network has been created (if desired).
   # - Logs general debug information about the runner.
   # - Logs the running Docker containers.
-  # - Logs debug information from inside the WordPress Docker container.
-  # - Logs debug information about what's installed within the WordPress Docker containers.
-  # - Install WordPress within the Docker container.
+  # - Logs debug information from inside the FinPress Docker container.
+  # - Logs debug information about what's installed within the FinPress Docker containers.
+  # - Install FinPress within the Docker container.
   # - Run the PHPUnit tests.
   test-php:
     name: PHP ${{ inputs.php }} / ${{ inputs.multisite && ' Multisite' || 'Single site' }}${{ inputs.split_slow && ' slow tests' || '' }}${{ inputs.memcached && ' with memcached' || '' }}
@@ -109,7 +109,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Build WordPress
+      - name: Build FinPress
         run: npm run build
 
       - name: Get composer cache directory
@@ -159,7 +159,7 @@ jobs:
       - name: Log running Docker containers
         run: docker ps -a
 
-      - name: WordPress Docker container debug information
+      - name: FinPress Docker container debug information
         run: |
           docker compose run --rm mysql mysql --version
           docker compose run --rm php php --version
@@ -167,7 +167,7 @@ jobs:
           docker compose run --rm php php -i
           docker compose run --rm php locale -a
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: npm run env:install
 
       - name: Run slow PHPUnit tests

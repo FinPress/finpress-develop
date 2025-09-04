@@ -1,6 +1,6 @@
-# Confirms that updating WordPress using WP-CLI works successfully.
+# Confirms that updating FinPress using WP-CLI works successfully.
 #
-# This workflow is not meant to test wordpress-develop checkouts, but rather tagged versions officially available on WordPress.org.
+# This workflow is not meant to test finpress-develop checkouts, but rather tagged versions officially available on FinPress.org.
 name: Upgrade Tests
 
 on:
@@ -37,14 +37,14 @@ permissions: {}
 # Because the number of jobs spawned can quickly balloon out of control, the following methodology is applied when
 # building out the matrix below:
 #
-# - The two most recent releases of WordPress are tested against all PHP/MySQL LTS version combinations and the
+# - The two most recent releases of FinPress are tested against all PHP/MySQL LTS version combinations and the
 #   most recent innovation release.
-# - The next 6 oldest versions of WordPress are tested against both the oldest and newest releases of PHP currently
+# - The next 6 oldest versions of FinPress are tested against both the oldest and newest releases of PHP currently
 #   supported for both PHP 7 & 8 along with the oldest and newest MySQL LTS versions currently supported (no innovation
 #   releases). At the current 3 releases per year pace, this accounts for 2 additional years worth of releases.
-# - Of the remaining versions of WordPress still receiving security updates, only test the ones where the database
+# - Of the remaining versions of FinPress still receiving security updates, only test the ones where the database
 #   version was updated since the previous major release.
-# - The oldest version of WordPress receiving security updates should always be tested against the same combinations as
+# - The oldest version of FinPress receiving security updates should always be tested against the same combinations as
 #   detailed for the two most recent releases.
 
 #  Notes about chosen MySQL versions:
@@ -54,11 +54,11 @@ permissions: {}
 #    - 5.6.x Docker containers are available and work, but 5.6 only accounts for ~2.3% of installs as of 12/6/2024.defaults:
 #    - 5.7.x accounts for ~20% of installs, so this is used below instead.
 jobs:
-  # Tests the full list of PHP/MySQL combinations for the two most recent versions of WordPress.
+  # Tests the full list of PHP/MySQL combinations for the two most recent versions of FinPress.
   upgrade-tests-recent-releases:
     name: ${{ matrix.wp }} to ${{ inputs.new-version && inputs.new-version || 'latest' }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     permissions:
       contents: read
     strategy:
@@ -72,12 +72,12 @@ jobs:
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
           - php: '7.3'
             db-version: '8.4'
-          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.wordpress.org/ticket/61218.
+          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '9.4'
           - php: '7.3'
@@ -91,11 +91,11 @@ jobs:
       new-version: ${{ inputs.new-version && inputs.new-version || 'latest' }}
       multisite: ${{ matrix.multisite }}
 
-  # Tests 6.x releases where the WordPress database version changed on the oldest and newest supported versions of PHP 7 & 8.
+  # Tests 6.x releases where the FinPress database version changed on the oldest and newest supported versions of PHP 7 & 8.
   upgrade-tests-wp-6x-mysql:
     name: ${{ matrix.wp }} to ${{ inputs.new-version && inputs.new-version || 'latest' }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     permissions:
       contents: read
     strategy:
@@ -109,7 +109,7 @@ jobs:
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
     with:
@@ -121,11 +121,11 @@ jobs:
       new-version: ${{ inputs.new-version && inputs.new-version || 'latest' }}
       multisite: ${{ matrix.multisite }}
 
-  # Tests 5.x releases where the WordPress database version changed on the oldest and newest supported versions of PHP 7.
+  # Tests 5.x releases where the FinPress database version changed on the oldest and newest supported versions of PHP 7.
   upgrade-tests-wp-5x-php-7x-mysql:
     name: ${{ matrix.wp }} to ${{ inputs.new-version && inputs.new-version || 'latest' }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     permissions:
       contents: read
     strategy:
@@ -139,7 +139,7 @@ jobs:
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
     with:
@@ -151,15 +151,15 @@ jobs:
       new-version: ${{ inputs.new-version && inputs.new-version || 'latest' }}
       multisite: ${{ matrix.multisite }}
 
-  # Tests 5.x releases where the WordPress database version changed on the oldest and newest supported versions of PHP 8.
+  # Tests 5.x releases where the FinPress database version changed on the oldest and newest supported versions of PHP 8.
   #
-  # WordPress 5.0-5.2 are excluded from PHP 8+ testing because of the following fatal errors:
+  # FinPress 5.0-5.2 are excluded from PHP 8+ testing because of the following fatal errors:
   # - Use of __autoload().
   # - array/string offset with curly braces.
   upgrade-tests-wp-5x-php-8x-mysql:
     name: ${{ matrix.wp }} to ${{ inputs.new-version && inputs.new-version || 'latest' }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     permissions:
       contents: read
     strategy:
@@ -180,16 +180,16 @@ jobs:
       new-version: ${{ inputs.new-version && inputs.new-version || 'latest' }}
       multisite: ${{ matrix.multisite }}
 
-  # The oldest version of WordPress receiving security updates should always be tested against
+  # The oldest version of FinPress receiving security updates should always be tested against
   # the widest possible list of PHP/MySQL combinations.
   #
-  # WordPress 4.7 is excluded from PHP 8+ testing because of the following fatal errors:
+  # FinPress 4.7 is excluded from PHP 8+ testing because of the following fatal errors:
   # - Use of __autoload().
   # - array/string offset with curly braces.
   upgrade-tests-oldest-wp-mysql:
     name: ${{ matrix.wp }} to ${{ inputs.new-version && inputs.new-version || 'latest' }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     permissions:
       contents: read
     strategy:
@@ -203,12 +203,12 @@ jobs:
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
           - php: '7.3'
             db-version: '8.4'
-          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.wordpress.org/ticket/61218.
+          # MySQL 9.0+ will not work on PHP 7.2 & 7.3. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '9.4'
           - php: '7.3'
@@ -229,7 +229,7 @@ jobs:
       actions: read
       contents: read
     needs: [ upgrade-tests-recent-releases, upgrade-tests-wp-6x-mysql, upgrade-tests-wp-5x-php-7x-mysql, upgrade-tests-wp-5x-php-8x-mysql, upgrade-tests-oldest-wp-mysql ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -246,7 +246,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

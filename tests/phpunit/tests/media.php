@@ -1955,7 +1955,7 @@ EOF;
 		$full_size_file = $image_meta['file'];
 
 		// Prepend an absolute path to simulate a pre-2.7 upload.
-		$image_meta['file'] = 'H:\home\wordpress\trunk/wp-content/uploads/' . $image_meta['file'];
+		$image_meta['file'] = 'H:\home\finpress\trunk/wp-content/uploads/' . $image_meta['file'];
 
 		foreach ( $intermediates as $int_size ) {
 			$image_url  = wp_get_attachment_image_url( self::$large_id, $int_size );
@@ -3948,7 +3948,7 @@ EOF;
 		$iframe1      = '<iframe src="https://www.example.com" width="640" height="360"></iframe>';
 		$img2         = get_image_tag( self::$large_id, '', '', '', 'medium' );
 		$img3         = get_image_tag( self::$large_id, '', '', '', 'thumbnail' );
-		$iframe2      = '<iframe src="https://wordpress.org" width="640" height="360"></iframe>';
+		$iframe2      = '<iframe src="https://finpress.org" width="640" height="360"></iframe>';
 		$prio_img1    = str_replace( ' src=', ' fetchpriority="high" src=', $img1 );
 		$lazy_img2    = wp_img_tag_add_loading_optimization_attrs( $img2, 'the_content' );
 		$lazy_img3    = wp_img_tag_add_loading_optimization_attrs( $img3, 'the_content' );
@@ -6826,7 +6826,7 @@ EOF;
 	/**
 	 * Returns a new WP_Query.
 	 *
-	 * @global WP_Query $wp_query WordPress Query object.
+	 * @global WP_Query $wp_query FinPress Query object.
 	 *
 	 * @return WP_Query a new query.
 	 */
@@ -6842,7 +6842,7 @@ EOF;
 	/**
 	 * Sets a query as main query.
 	 *
-	 * @global WP_Query $wp_the_query WordPress Query object.
+	 * @global WP_Query $wp_the_query FinPress Query object.
 	 *
 	 * @param WP_Query $query query to be set as main query.
 	 */

@@ -2,7 +2,7 @@
 /**
  * Multisite upgrade administration panel.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Multisite
  * @since 3.0.0
  */

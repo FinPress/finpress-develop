@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Templates_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @covers WP_REST_Templates_Controller

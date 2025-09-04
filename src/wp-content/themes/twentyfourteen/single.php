@@ -2,7 +2,7 @@
 /**
  * The Template for displaying all single posts
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Fourteen
  * @since Twenty Fourteen 1.0
  */

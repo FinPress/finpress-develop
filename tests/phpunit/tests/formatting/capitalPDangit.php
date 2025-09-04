@@ -1,5 +1,5 @@
 <?php
-// phpcs:disable WordPress.WP.CapitalPDangit.MisspelledInText -- 🙃
+// phpcs:disable FinPress.WP.CapitalPDangit.MisspelledInText -- 🙃
 
 /**
  * @group formatting
@@ -9,14 +9,14 @@
 class Tests_Formatting_CapitalPDangit extends WP_UnitTestCase {
 	public function test_esc_attr_quotes() {
 		global $wp_current_filter;
-		$this->assertSame( 'Something about WordPress', capital_P_dangit( 'Something about Wordpress' ) );
-		$this->assertSame( 'Something about (WordPress', capital_P_dangit( 'Something about (Wordpress' ) );
-		$this->assertSame( 'Something about &#8216;WordPress', capital_P_dangit( 'Something about &#8216;Wordpress' ) );
-		$this->assertSame( 'Something about &#8220;WordPress', capital_P_dangit( 'Something about &#8220;Wordpress' ) );
-		$this->assertSame( 'Something about >WordPress', capital_P_dangit( 'Something about >Wordpress' ) );
-		$this->assertSame( 'Wordpress', capital_P_dangit( 'Wordpress' ) );
+		$this->assertSame( 'Something about FinPress', capital_P_dangit( 'Something about Finpress' ) );
+		$this->assertSame( 'Something about (FinPress', capital_P_dangit( 'Something about (Finpress' ) );
+		$this->assertSame( 'Something about &#8216;FinPress', capital_P_dangit( 'Something about &#8216;Finpress' ) );
+		$this->assertSame( 'Something about &#8220;FinPress', capital_P_dangit( 'Something about &#8220;Finpress' ) );
+		$this->assertSame( 'Something about >FinPress', capital_P_dangit( 'Something about >Finpress' ) );
+		$this->assertSame( 'Finpress', capital_P_dangit( 'Finpress' ) );
 
 		$wp_current_filter = array( 'the_title' );
-		$this->assertSame( 'WordPress', capital_P_dangit( 'Wordpress' ) );
+		$this->assertSame( 'FinPress', capital_P_dangit( 'Finpress' ) );
 	}
 }

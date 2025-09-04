@@ -21,8 +21,8 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 				'domain' => 'foo.' . WP_TESTS_DOMAIN,
 				'path'   => '/',
 			),
-			'wordpress.org/'               => array(
-				'domain' => 'wordpress.org',
+			'finpress.org/'               => array(
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
 		);
@@ -70,8 +70,8 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 	}
 
 	public function test_get_blog_details_with_site_id_int() {
-		$site = get_blog_details( self::$site_ids['wordpress.org/'] );
-		$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
+		$site = get_blog_details( self::$site_ids['finpress.org/'] );
+		$this->assertEquals( self::$site_ids['finpress.org/'], $site->blog_id );
 	}
 
 	public function test_get_blog_details_with_invalid_site_id_int() {
@@ -80,8 +80,8 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 	}
 
 	public function test_get_blog_details_with_blog_id_in_fields() {
-		$site = get_blog_details( array( 'blog_id' => self::$site_ids['wordpress.org/'] ) );
-		$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
+		$site = get_blog_details( array( 'blog_id' => self::$site_ids['finpress.org/'] ) );
+		$this->assertEquals( self::$site_ids['finpress.org/'], $site->blog_id );
 	}
 
 	public function test_get_blog_details_with_invalid_blog_id_in_fields() {
@@ -92,17 +92,17 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 	public function test_get_blog_details_with_domain_and_path_in_fields() {
 		$site = get_blog_details(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			)
 		);
-		$this->assertEquals( self::$site_ids['wordpress.org/'], $site->blog_id );
+		$this->assertEquals( self::$site_ids['finpress.org/'], $site->blog_id );
 	}
 
 	public function test_get_blog_details_with_domain_and_invalid_path_in_fields() {
 		$site = get_blog_details(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/zxy/',
 			)
 		);
@@ -124,8 +124,8 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 			$this->markTestSkipped( 'This test is only valid in a subdomain configuration.' );
 		}
 
-		$site = get_blog_details( array( 'domain' => 'wordpress.org' ) );
-		$this->assertSame( self::$site_ids['wordpress.org/'], $site->blog_id );
+		$site = get_blog_details( array( 'domain' => 'finpress.org' ) );
+		$this->assertSame( self::$site_ids['finpress.org/'], $site->blog_id );
 	}
 
 	public function test_get_blog_details_with_only_domain_in_fields_subdirectory() {
@@ -133,7 +133,7 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 			$this->markTestSkipped( 'This test is only valid in a subdirectory configuration.' );
 		}
 
-		$site = get_blog_details( array( 'domain' => 'wordpress.org' ) );
+		$site = get_blog_details( array( 'domain' => 'finpress.org' ) );
 		$this->assertFalse( $site );
 	}
 
@@ -160,7 +160,7 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 	public function test_get_blog_details_get_object_vars( $get_all ) {
 		$site = get_blog_details(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
 			$get_all
@@ -179,7 +179,7 @@ class Tests_Multisite_GetBlogDetails extends WP_UnitTestCase {
 	public function test_get_blog_details_iterate_over_result( $get_all ) {
 		$site = get_blog_details(
 			array(
-				'domain' => 'wordpress.org',
+				'domain' => 'finpress.org',
 				'path'   => '/',
 			),
 			$get_all

@@ -2,7 +2,7 @@
 /**
  * Test cases for the `wp_privacy_generate_personal_data_export_group_html()` function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 5.2.0
  *
@@ -98,15 +98,15 @@ class Tests_Privacy_wpPrivacyGeneratePersonalDataExportGroupHtml extends WP_Unit
 				array(
 					array(
 						'name'  => 'HTTP Link',
-						'value' => 'http://wordpress.org',
+						'value' => 'http://finpress.org',
 					),
 					array(
 						'name'  => 'HTTPS Link',
-						'value' => 'https://wordpress.org',
+						'value' => 'https://finpress.org',
 					),
 					array(
 						'name'  => 'Link with Spaces',
-						'value' => 'https://wordpress.org not a link.',
+						'value' => 'https://finpress.org not a link.',
 					),
 				),
 			),
@@ -114,9 +114,9 @@ class Tests_Privacy_wpPrivacyGeneratePersonalDataExportGroupHtml extends WP_Unit
 
 		$actual = wp_privacy_generate_personal_data_export_group_html( $data, 'test-data-group', 2 );
 
-		$this->assertStringContainsString( '<a href="http://wordpress.org">http://wordpress.org</a>', $actual );
-		$this->assertStringContainsString( '<a href="https://wordpress.org">https://wordpress.org</a>', $actual );
-		$this->assertStringContainsString( 'https://wordpress.org not a link.', $actual );
+		$this->assertStringContainsString( '<a href="http://finpress.org">http://finpress.org</a>', $actual );
+		$this->assertStringContainsString( '<a href="https://finpress.org">https://finpress.org</a>', $actual );
+		$this->assertStringContainsString( 'https://finpress.org not a link.', $actual );
 	}
 
 	/**
@@ -147,7 +147,7 @@ class Tests_Privacy_wpPrivacyGeneratePersonalDataExportGroupHtml extends WP_Unit
 				array(
 					'links'      => array(
 						'name'  => 'Links are allowed',
-						'value' => '<a href="http://wordpress.org">http://wordpress.org</a>',
+						'value' => '<a href="http://finpress.org">http://finpress.org</a>',
 					),
 					'formatting' => array(
 						'name'  => 'Simple formatting is allowed',

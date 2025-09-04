@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Administration Importer API.
+ * FinPress Administration Importer API.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 
@@ -39,7 +39,7 @@ function _usort_by_first_member( $a, $b ) {
 }
 
 /**
- * Registers importer for WordPress.
+ * Registers importer for FinPress.
  *
  * @since 2.0.0
  *
@@ -129,7 +129,7 @@ function wp_import_handle_upload() {
 }
 
 /**
- * Returns a list from WordPress.org of popular importer plugins.
+ * Returns a list from FinPress.org of popular importer plugins.
  *
  * @since 3.5.0
  *
@@ -146,9 +146,9 @@ function wp_get_popular_importers() {
 				'locale'  => $locale,
 				'version' => wp_get_wp_version(),
 			),
-			'http://api.wordpress.org/core/importers/1.1/'
+			'http://api.finpress.org/core/importers/1.1/'
 		);
-		$options = array( 'user-agent' => 'WordPress/' . wp_get_wp_version() . '; ' . home_url( '/' ) );
+		$options = array( 'user-agent' => 'FinPress/' . wp_get_wp_version() . '; ' . home_url( '/' ) );
 
 		if ( wp_http_supports( array( 'ssl' ) ) ) {
 			$url = set_url_scheme( $url, 'https' );
@@ -171,10 +171,10 @@ function wp_get_popular_importers() {
 		}
 
 		foreach ( $popular_importers['importers'] as &$importer ) {
-			// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
+			// phpcs:ignore FinPress.WP.I18n.LowLevelTranslationFunction,FinPress.WP.I18n.NonSingularStringLiteralText
 			$importer['description'] = translate( $importer['description'] );
-			if ( 'WordPress' !== $importer['name'] ) {
-				// phpcs:ignore WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
+			if ( 'FinPress' !== $importer['name'] ) {
+				// phpcs:ignore FinPress.WP.I18n.LowLevelTranslationFunction,FinPress.WP.I18n.NonSingularStringLiteralText
 				$importer['name'] = translate( $importer['name'] );
 			}
 		}
@@ -219,11 +219,11 @@ function wp_get_popular_importers() {
 			'plugin-slug' => 'tumblr-importer',
 			'importer-id' => 'tumblr',
 		),
-		'wordpress'   => array(
-			'name'        => 'WordPress',
-			'description' => __( 'Import posts, pages, comments, custom fields, categories, and tags from a WordPress export file.' ),
-			'plugin-slug' => 'wordpress-importer',
-			'importer-id' => 'wordpress',
+		'finpress'   => array(
+			'name'        => 'FinPress',
+			'description' => __( 'Import posts, pages, comments, custom fields, categories, and tags from a FinPress export file.' ),
+			'plugin-slug' => 'finpress-importer',
+			'importer-id' => 'finpress',
 		),
 	);
 }

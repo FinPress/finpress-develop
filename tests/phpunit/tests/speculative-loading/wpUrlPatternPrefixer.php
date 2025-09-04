@@ -2,7 +2,7 @@
 /**
  * Tests for the WP_URL_Pattern_Prefixer class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Speculative Loading
  */
 

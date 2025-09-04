@@ -1,19 +1,19 @@
 <?php
 /**
- * WordPress Generic Request (POST/GET) Handler
+ * FinPress Generic Request (POST/GET) Handler
  *
  * Intended for form submission handling in themes and plugins.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 
-/** We are located in WordPress Administration Screens */
+/** We are located in FinPress Administration Screens */
 if ( ! defined( 'WP_ADMIN' ) ) {
 	define( 'WP_ADMIN', true );
 }
 
-/** Load WordPress Bootstrap */
+/** Load FinPress Bootstrap */
 require_once dirname( __DIR__ ) . '/wp-load.php';
 
 /** Allow for cross-domain requests (from the front end). */

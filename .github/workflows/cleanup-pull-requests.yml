@@ -24,5 +24,5 @@ jobs:
     name: Clean up pull requests
     permissions:
       pull-requests: write
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     uses: ./.github/workflows/reusable-cleanup-pull-requests.yml

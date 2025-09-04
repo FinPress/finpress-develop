@@ -11,7 +11,7 @@ on:
         required: true
         type: string
       LOCAL_DIR:
-        description: 'Where to run WordPress from.'
+        description: 'Where to run FinPress from.'
         required: false
         type: 'string'
         default: 'build'
@@ -45,7 +45,7 @@ on:
         value: ${{ inputs.BASE_TAG }}
     secrets:
       CODEVITALS_PROJECT_TOKEN:
-        description: 'The authorization token for https://www.codevitals.run/project/wordpress.'
+        description: 'The authorization token for https://www.codevitals.run/project/finpress.'
         required: false
 
 env:
@@ -81,18 +81,18 @@ jobs:
   # - Log debug information.
   # - Install npm dependencies.
   # - Install Playwright browsers.
-  # - Build WordPress.
+  # - Build FinPress.
   # - Start Docker environment.
-  # - Put the baseline or target version of WordPress in place if necessary.
+  # - Put the baseline or target version of FinPress in place if necessary.
   # - Install object cache drop-in.
   # - Log running Docker containers.
   # - Docker debug information.
-  # - Install WordPress.
-  # - WordPress debug information.
+  # - Install FinPress.
+  # - FinPress debug information.
   # - Enable themes on Multisite.
-  # - Install WordPress Importer plugin.
+  # - Install FinPress Importer plugin.
   # - Import mock data.
-  # - Deactivate WordPress Importer plugin.
+  # - Deactivate FinPress Importer plugin.
   # - Update permalink structure.
   # - Install additional languages.
   # - Disable external HTTP requests.
@@ -150,7 +150,7 @@ jobs:
       - name: Start Docker environment
         run: npm run env:start
 
-      - name: Build WordPress
+      - name: Build FinPress
         run: npm run build
 
       - name: Download previous build artifact (target branch or previous commit)
@@ -162,7 +162,7 @@ jobs:
             const artifacts = await github.rest.actions.listArtifactsForRepo({
               owner: context.repo.owner,
               repo: context.repo.repo,
-              name: 'wordpress-build-' + process.env.TARGET_SHA,
+              name: 'finpress-build-' + process.env.TARGET_SHA,
             });
             const matchArtifact = artifacts.data.artifacts[0];
             if ( ! matchArtifact ) {
@@ -183,7 +183,7 @@ jobs:
         if: ${{ inputs.subject == 'before' }}
         run: |
           unzip "${GITHUB_WORKSPACE}/before.zip"
-          unzip -o "${GITHUB_WORKSPACE}/wordpress.zip"
+          unzip -o "${GITHUB_WORKSPACE}/finpress.zip"
 
       - name: Set the environment to the baseline version
         if: ${{ inputs.subject == 'base' }}
@@ -207,7 +207,7 @@ jobs:
           docker compose run --rm php php -i
           docker compose run --rm php locale -a
 
-      - name: Install WordPress
+      - name: Install FinPress
         run: npm run env:install
 
       - name: Check version number
@@ -221,17 +221,17 @@ jobs:
           npm run env:cli -- theme enable twentytwentyfour --network --path="/var/www/${LOCAL_DIR}"
           npm run env:cli -- theme enable twentytwentyfive --network --path="/var/www/${LOCAL_DIR}"
 
-      - name: Install WordPress Importer plugin
-        run: npm run env:cli -- plugin install wordpress-importer --activate --path="/var/www/${LOCAL_DIR}"
+      - name: Install FinPress Importer plugin
+        run: npm run env:cli -- plugin install finpress-importer --activate --path="/var/www/${LOCAL_DIR}"
 
       - name: Import mock data
         run: |
-          curl -O https://raw.githubusercontent.com/WordPress/theme-test-data/b9752e0533a5acbb876951a8cbb5bcc69a56474c/themeunittestdata.wordpress.xml
-          npm run env:cli -- import themeunittestdata.wordpress.xml --authors=create --path="/var/www/${LOCAL_DIR}"
-          rm themeunittestdata.wordpress.xml
+          curl -O https://raw.githubusercontent.com/FinPress/theme-test-data/b9752e0533a5acbb876951a8cbb5bcc69a56474c/themeunittestdata.finpress.xml
+          npm run env:cli -- import themeunittestdata.finpress.xml --authors=create --path="/var/www/${LOCAL_DIR}"
+          rm themeunittestdata.finpress.xml
 
-      - name: Deactivate WordPress Importer plugin
-        run: npm run env:cli -- plugin deactivate wordpress-importer --path="/var/www/${LOCAL_DIR}"
+      - name: Deactivate FinPress Importer plugin
+        run: npm run env:cli -- plugin deactivate finpress-importer --path="/var/www/${LOCAL_DIR}"
 
       - name: Update permalink structure
         run: npm run env:cli -- rewrite structure '/%year%/%monthnum%/%postname%/' --path="/var/www/${LOCAL_DIR}"

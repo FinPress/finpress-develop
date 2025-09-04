@@ -1,6 +1,6 @@
-# Confirms that updating WordPress using WP-CLI works successfully.
+# Confirms that updating FinPress using WP-CLI works successfully.
 #
-# This workflow tests upgrading from a previous version to the current wordpress-develop checkout, not to a version available on WordPress.org.
+# This workflow tests upgrading from a previous version to the current finpress-develop checkout, not to a version available on FinPress.org.
 name: Upgrade Develop Version Tests
 
 on:
@@ -43,11 +43,11 @@ concurrency:
 permissions: {}
 
 jobs:
-  # Build WordPress from the current branch ready for the upgrade tests.
+  # Build FinPress from the current branch ready for the upgrade tests.
   build:
     name: Build
     uses: ./.github/workflows/reusable-build-package.yml
-    if: ${{ startsWith( github.repository, 'WordPress/' ) && ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
+    if: ${{ startsWith( github.repository, 'FinPress/' ) && ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
     permissions:
       contents: read
 
@@ -55,7 +55,7 @@ jobs:
   upgrade-tests-develop:
     name: Upgrade from ${{ matrix.wp }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository == 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' }}
     needs: [ build ]
     permissions:
       contents: read
@@ -66,15 +66,15 @@ jobs:
         php: [ '7.2', '8.4' ]
         db-type: [ 'mysql' ]
         db-version: [ '5.7', '8.4' ]
-        # WordPress 4.9 is the oldest version that supports PHP 7.2.
+        # FinPress 4.9 is the oldest version that supports PHP 7.2.
         wp: [ '4.9', '6.6', '6.7', '6.8' ]
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
-          # WordPress 4.9 does not support PHP 8.4.
+          # FinPress 4.9 does not support PHP 8.4.
           - php: '8.4'
             wp: '4.9'
     with:
@@ -90,7 +90,7 @@ jobs:
   upgrade-tests-develop-forks:
     name: Upgrade from ${{ matrix.wp }}
     uses: ./.github/workflows/reusable-upgrade-testing.yml
-    if: ${{ github.repository != 'WordPress/wordpress-develop' }}
+    if: ${{ github.repository != 'FinPress/finpress-develop' }}
     needs: [ build ]
     permissions:
       contents: read
@@ -101,12 +101,12 @@ jobs:
         php: [ '7.2', '8.4' ]
         db-type: [ 'mysql' ]
         db-version: [ '8.4' ]
-        # WordPress 4.9 is the oldest version that supports PHP 7.2.
+        # FinPress 4.9 is the oldest version that supports PHP 7.2.
         wp: [ '6.7', '6.8' ]
         multisite: [ false, true ]
 
         exclude:
-          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.wordpress.org/ticket/61218.
+          # The PHP <= 7.3/MySQL 8.4 jobs currently fail due to mysql_native_password being disabled by default. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '8.4'
     with:
@@ -125,7 +125,7 @@ jobs:
       actions: read
       contents: read
     needs: [ upgrade-tests-develop ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -142,7 +142,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

@@ -5,9 +5,9 @@ const { createRequire } = require( 'node:module' );
 const { dirname } = require( 'node:path' );
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-const DependencyExtractionPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
+const DependencyExtractionPlugin = require( '@finpress/dependency-extraction-webpack-plugin' );
 
 /**
  * Internal dependencies
@@ -18,7 +18,7 @@ const {
 	normalizeJoin,
 	MODULES,
 	SCRIPT_AND_MODULE_DUAL_PACKAGES,
-	WORDPRESS_NAMESPACE,
+	finpress_NAMESPACE,
 } = require( './shared' );
 
 /** @type {Map<string, string>} */
@@ -33,7 +33,7 @@ for ( const packageName of MODULES.concat( SCRIPT_AND_MODULE_DUAL_PACKAGES ) ) {
 		continue;
 	}
 
-	const moduleName = packageName.substring( WORDPRESS_NAMESPACE.length );
+	const moduleName = packageName.substring( finpress_NAMESPACE.length );
 	let { wpScriptModuleExports } = depPackageJson;
 
 	// Special handling for { "wpScriptModuleExports": "./build-module/index.js" }.

@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Block_Patterns_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST_API
  * @since 6.0.0
  *
@@ -55,7 +55,7 @@ class Tests_REST_WpRestBlockPatternsController extends WP_Test_REST_Controller_T
 	 *
 	 * @since 6.0.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( $factory ) {
 		self::$admin_id = $factory->user->create( array( 'role' => 'administrator' ) );

@@ -1,14 +1,14 @@
 {
-	"name": "wordpress/wordpress",
+	"name": "finpress/finpress",
 	"version": "6.9.0",
 	"license": "GPL-2.0-or-later",
-	"description": "WordPress is open source software you can use to create a beautiful website, blog, or app.",
-	"homepage": "https://wordpress.org",
+	"description": "FinPress is open source software you can use to create a beautiful website, blog, or app.",
+	"homepage": "https://finpress.org",
 	"keywords": [
-		"blog", "cms", "wordpress", "wp"
+		"blog", "cms", "finpress", "wp"
 	],
 	"support": {
-		"issues": "https://core.trac.wordpress.org/"
+		"issues": "https://core.trac.finpress.org/"
 	},
 	"require": {
 		"ext-hash": "*",

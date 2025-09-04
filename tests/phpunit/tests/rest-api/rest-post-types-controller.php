@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Posts_Types_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -153,7 +153,7 @@ class WP_Test_REST_Post_Types_Controller extends WP_Test_REST_Controller_Testcas
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'cpt',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 			)
 		);
 		$request  = new WP_REST_Request( 'GET', '/wp/v2/types/cpt' );
@@ -170,7 +170,7 @@ class WP_Test_REST_Post_Types_Controller extends WP_Test_REST_Controller_Testcas
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'cpt_template',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 				'template'       => array(
 					array( 'core/paragraph', array( 'placeholder' => 'Content' ) ),
 				),

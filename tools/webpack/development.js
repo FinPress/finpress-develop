@@ -4,9 +4,9 @@
 const { join } = require( 'path' );
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
-const DependencyExtractionWebpackPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
+const DependencyExtractionWebpackPlugin = require( '@finpress/dependency-extraction-webpack-plugin' );
 
 const baseDir = join( __dirname, '../../' );
 

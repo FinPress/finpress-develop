@@ -2,9 +2,9 @@
 /**
  * Shows the excerpt.
  *
- * @link https://developer.wordpress.org/themes/basics/template-hierarchy/
+ * @link https://developer.finpress.org/themes/basics/template-hierarchy/
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Twenty_One
  * @since Twenty Twenty-One 1.0
  */

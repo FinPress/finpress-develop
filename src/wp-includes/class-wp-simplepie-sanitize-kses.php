@@ -2,7 +2,7 @@
 /**
  * Feed API: WP_SimplePie_Sanitize_KSES class
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Feed
  * @since 4.7.0
  */
@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 class WP_SimplePie_Sanitize_KSES extends SimplePie\Sanitize {
 
 	/**
-	 * WordPress SimplePie sanitization using KSES.
+	 * FinPress SimplePie sanitization using KSES.
 	 *
 	 * Sanitizes the incoming data, to ensure that it matches the type of data expected, using KSES.
 	 *

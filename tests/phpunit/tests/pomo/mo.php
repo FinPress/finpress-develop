@@ -10,7 +10,7 @@ class Tests_POMO_MO extends WP_UnitTestCase {
 		$mo->import_from_file( DIR_TESTDATA . '/pomo/simple.mo' );
 		$this->assertSame(
 			array(
-				'Project-Id-Version'   => 'WordPress 2.6-bleeding',
+				'Project-Id-Version'   => 'FinPress 2.6-bleeding',
 				'Report-Msgid-Bugs-To' => 'wp-polyglots@lists.automattic.com',
 			),
 			$mo->headers

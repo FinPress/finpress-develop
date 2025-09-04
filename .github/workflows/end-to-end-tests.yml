@@ -1,7 +1,7 @@
 name: End-to-end Tests
 
 on:
-  # The end-to-end test suite was introduced in WordPress 5.3.
+  # The end-to-end test suite was introduced in FinPress 5.3.
   push:
     branches:
       - trunk
@@ -60,7 +60,7 @@ jobs:
     uses: ./.github/workflows/reusable-end-to-end-tests.yml
     permissions:
       contents: read
-    if: ${{ github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -77,7 +77,7 @@ jobs:
       actions: read
       contents: read
     needs: [ e2e-tests ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -94,7 +94,7 @@ jobs:
     needs: [ e2e-tests, slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

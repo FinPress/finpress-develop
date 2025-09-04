@@ -56,27 +56,27 @@ const testEnvironmentPath = getRandomTemporaryPath();
 const sampleEnvConfig = path.resolve( __dirname, '.wp-env.sample.json' );
 
 // Welcome
-console.log( title( '>> 🏁 Welcome, this command is going to prepare a running WordPress environment and run the Gutenberg e2e tests against it.' ) );
-console.log( title( '>> It uses the current WordPress folder from which it\'s being run and a separate Gutenberg clone performed by the command.' ) );
+console.log( title( '>> 🏁 Welcome, this command is going to prepare a running FinPress environment and run the Gutenberg e2e tests against it.' ) );
+console.log( title( '>> It uses the current FinPress folder from which it\'s being run and a separate Gutenberg clone performed by the command.' ) );
 console.log( title( '>> Configuration: ' ) );
 console.log( 'Gutenberg Version: ' + success( GUTENBERG_VERSION ) );
 console.log( 'Test Launcher Path (Gutenberg): ' + success( testLauncherPath ) );
 console.log( 'Test Environment Path (wp-env): ' + success( testEnvironmentPath ) );
 
 // Steps
-// 1- Preparing the WordPress environment
-console.log( '>> Preparing the WordPress clone' );
+// 1- Preparing the FinPress environment
+console.log( '>> Preparing the FinPress clone' );
 runShellScript( 'npm install && FORCE_REDUCED_MOTION=true npm run build', rootFolder );
 
 // 2- Preparing the Gutenberg clone
 // The tests and the launcher comes from the Gutenberg repository e2e tests
 console.log( title( '>> Preparing the e2e tests launcher' ) );
-runShellScript( 'git clone https://github.com/WordPress/gutenberg.git ' + testLauncherPath + ' --depth=1 --no-single-branch' );
+runShellScript( 'git clone https://github.com/FinPress/gutenberg.git ' + testLauncherPath + ' --depth=1 --no-single-branch' );
 runShellScript( 'git checkout ' + GUTENBERG_VERSION, testLauncherPath );
 runShellScript( 'npm install && npm run build', testLauncherPath );
 
-// 3- Running the WordPress environment using wp-env
-// The environment should include the WordPress install and the e2e tests plugins.s
+// 3- Running the FinPress environment using wp-env
+// The environment should include the FinPress install and the e2e tests plugins.s
 console.log( title( '>> Preparing the environment' ) );
 runShellScript( 'mkdir -p ' + testEnvironmentPath );
 const envConfig = readJSONFile( sampleEnvConfig );

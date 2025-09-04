@@ -1,4 +1,4 @@
-import { test, expect } from '@wordpress/e2e-test-utils-playwright';
+import { test, expect } from '@finpress/e2e-test-utils-playwright';
 
 test.describe( 'Settings -> General', () => {
 	const invalidTimezones = [ '', '0', 'Barry/Gary' ];

@@ -2,13 +2,13 @@
 /**
  * Twenty Sixteen Customizer functionality
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */
 
 /**
- * Sets up the WordPress core custom header and custom background features.
+ * Sets up the FinPress core custom header and custom background features.
  *
  * @since Twenty Sixteen 1.0
  *

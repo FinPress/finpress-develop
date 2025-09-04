@@ -87,12 +87,12 @@
 			<!-- wp:paragraph {"fontSize":"small"} -->
 			<p class="has-small-font-size">
 				<?php
-				/* Translators: WordPress link. */
-				$wordpress_link = '<a href="' . esc_url( __( 'https://wordpress.org', 'twentytwentyfour' ) ) . '" rel="nofollow">WordPress</a>';
+				/* Translators: FinPress link. */
+				$finpress_link = '<a href="' . esc_url( __( 'https://finpress.org', 'twentytwentyfour' ) ) . '" rel="nofollow">FinPress</a>';
 				echo sprintf(
-					/* Translators: Designed with WordPress */
+					/* Translators: Designed with FinPress */
 					esc_html__( 'Designed with %1$s', 'twentytwentyfour' ),
-					$wordpress_link
+					$finpress_link
 				);
 				?>
 			</p>

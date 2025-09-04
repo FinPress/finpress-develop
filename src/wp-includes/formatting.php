@@ -1,10 +1,10 @@
 <?php
 /**
- * Main WordPress Formatting API.
+ * Main FinPress Formatting API.
  *
  * Handles many functions for formatting output.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 /**
@@ -940,13 +940,6 @@ function seems_utf8( $str ) {
  *                                                     // E.g. The “ü” in ISO-8859-1 is a single byte 0xFC,
  *                                                     // but in UTF-8 is the two-byte sequence 0xC3 0xBC.
  *
- * A “valid” string consists of “well-formed UTF-8 code unit sequence[s],” meaning
- * that the bytes conform to the UTF-8 encoding scheme, all characters use the minimal
- * byte sequence required by UTF-8, and that no sequence encodes a UTF-16 surrogate
- * code point or any character above the representable range.
- *
- * @see https://www.unicode.org/versions/Unicode16.0.0/core-spec/chapter-3/#G32860
- *
  * @see _wp_is_valid_utf8_fallback
  *
  * @since 6.9.0
@@ -1292,7 +1285,7 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
 	// Check for support for utf8 in the installed PCRE library once and store the result in a static.
 	static $utf8_pcre = null;
 	if ( ! isset( $utf8_pcre ) ) {
-		// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+		// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged
 		$utf8_pcre = @preg_match( '/^./u', 'a' );
 	}
 	// We can't demand utf8 in the PCRE installation, so just return the string in those cases.
@@ -1300,7 +1293,7 @@ function wp_check_invalid_utf8( $text, $strip = false ) {
 		return $text;
 	}
 
-	// phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- preg_match fails when it encounters invalid UTF8 in $text.
+	// phpcs:ignore FinPress.PHP.NoSilencedErrors.Discouraged -- preg_match fails when it encounters invalid UTF8 in $text.
 	if ( 1 === @preg_match( '/^./us', $text ) ) {
 		return $text;
 	}
@@ -2724,7 +2717,7 @@ function convert_invalid_entities( $content ) {
  * @param bool   $force If true, forces balancing, ignoring the value of the option. Default false.
  * @return string Balanced text.
  */
-function balanceTags( $text, $force = false ) {  // phpcs:ignore WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
+function balanceTags( $text, $force = false ) {  // phpcs:ignore FinPress.NamingConventions.ValidFunctionName.FunctionNameInvalid
 	if ( $force || (int) get_option( 'use_balanceTags' ) === 1 ) {
 		return force_balance_tags( $text );
 	} else {
@@ -4167,7 +4160,7 @@ function wp_trim_excerpt( $text = '', $post = null ) {
 		/*
 		 * Only restore the filter callback if it was removed above. The logic
 		 * to unhook and restore only applies on the default priority of 10,
-		 * which is generally used for the filter callback in WordPress core.
+		 * which is generally used for the filter callback in FinPress core.
 		 */
 		if ( $filter_image_removed ) {
 			add_filter( 'the_content', 'wp_filter_content_tags', 12 );
@@ -4624,7 +4617,7 @@ function _deep_replace( $search, $subject ) {
  *
  * @since 2.8.0
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb FinPress database abstraction object.
  *
  * @param string|array $data Unescaped data.
  * @return string|array Escaped data, in the same type as supplied.
@@ -5011,7 +5004,7 @@ function wp_make_link_relative( $link ) {
  *
  * @since 2.0.5
  *
- * @global wpdb $wpdb WordPress database abstraction object.
+ * @global wpdb $wpdb FinPress database abstraction object.
  *
  * @param string $option The name of the option.
  * @param mixed  $value  The unsanitized value.
@@ -5151,7 +5144,7 @@ function sanitize_option( $option, $value ) {
 				if ( preg_match( '#http(s?)://(.+)#i', $value ) ) {
 					$value = sanitize_url( $value );
 				} else {
-					$error = __( 'The WordPress address you entered did not appear to be a valid URL. Please enter a valid URL.' );
+					$error = __( 'The FinPress address you entered did not appear to be a valid URL. Please enter a valid URL.' );
 				}
 			}
 			break;
@@ -5244,7 +5237,7 @@ function sanitize_option( $option, $value ) {
 				$error = sprintf(
 					/* translators: %s: Documentation URL. */
 					__( 'A structure tag is required when using custom permalinks. <a href="%s">Learn more</a>' ),
-					__( 'https://wordpress.org/documentation/article/customize-permalinks/#choosing-your-permalink-structure' )
+					__( 'https://finpress.org/documentation/article/customize-permalinks/#choosing-your-permalink-structure' )
 				);
 			}
 			break;
@@ -5398,7 +5391,7 @@ function wp_pre_kses_block_attributes( $content, $allowed_html, $allowed_protoco
 }
 
 /**
- * WordPress' implementation of PHP sprintf() with filters.
+ * FinPress' implementation of PHP sprintf() with filters.
  *
  * @since 2.5.0
  * @since 5.3.0 Formalized the existing and already documented `...$args` parameter
@@ -5852,9 +5845,9 @@ function wp_basename( $path, $suffix = '' ) {
 	return urldecode( basename( str_replace( array( '%2F', '%5C' ), '/', urlencode( $path ) ), $suffix ) );
 }
 
-// phpcs:disable WordPress.WP.CapitalPDangit.MisspelledInComment,WordPress.WP.CapitalPDangit.MisspelledInText,WordPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- 8-)
+// phpcs:disable FinPress.WP.CapitalPDangit.MisspelledInComment,FinPress.WP.CapitalPDangit.MisspelledInText,FinPress.NamingConventions.ValidFunctionName.FunctionNameInvalid -- 8-)
 /**
- * Forever eliminate "Wordpress" from the planet (or at least the little bit we can influence).
+ * Forever eliminate "Finpress" from the planet (or at least the little bit we can influence).
  *
  * Violating our coding standards for a good function name.
  *
@@ -5867,7 +5860,7 @@ function capital_P_dangit( $text ) {
 	// Simple replacement for titles.
 	$current_filter = current_filter();
 	if ( 'the_title' === $current_filter || 'wp_title' === $current_filter ) {
-		return str_replace( 'Wordpress', 'WordPress', $text );
+		return str_replace( 'Finpress', 'FinPress', $text );
 	}
 	// Still here? Use the more judicious replacement.
 	static $dblq = false;
@@ -5875,8 +5868,8 @@ function capital_P_dangit( $text ) {
 		$dblq = _x( '&#8220;', 'opening curly double quote' );
 	}
 	return str_replace(
-		array( ' Wordpress', '&#8216;Wordpress', $dblq . 'Wordpress', '>Wordpress', '(Wordpress' ),
-		array( ' WordPress', '&#8216;WordPress', $dblq . 'WordPress', '>WordPress', '(WordPress' ),
+		array( ' Finpress', '&#8216;Finpress', $dblq . 'Finpress', '>Finpress', '(Finpress' ),
+		array( ' FinPress', '&#8216;FinPress', $dblq . 'FinPress', '>FinPress', '(FinPress' ),
 		$text
 	);
 }
@@ -6341,7 +6334,7 @@ function wp_staticize_emoji_for_email( $mail ) {
  * @access private
  *
  * @param string $type Optional. Which array type to return. Accepts 'partials' or 'entities', default 'entities'.
- * @return array An array to match all emoji that WordPress recognises.
+ * @return array An array to match all emoji that FinPress recognises.
  */
 function _wp_emoji_list( $type = 'entities' ) {
 	// Do not remove the START/END comments - they're used to find where to insert the arrays.

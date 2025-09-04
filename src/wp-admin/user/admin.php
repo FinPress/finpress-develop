@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress User Administration Bootstrap
+ * FinPress User Administration Bootstrap
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  * @since 3.1.0
  */

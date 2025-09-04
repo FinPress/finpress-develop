@@ -2,7 +2,7 @@
 /**
  * SVG icons related functions and filters
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Seventeen
  * @since Twenty Seventeen 1.0
  */
@@ -100,7 +100,7 @@ function twentyseventeen_get_svg( $args = array() ) {
 	 *
 	 * The whitespace around `<use>` is intentional - it is a work around to a keyboard navigation bug in Safari 10.
 	 *
-	 * See https://core.trac.wordpress.org/ticket/38387.
+	 * See https://core.trac.finpress.org/ticket/38387.
 	 */
 	$svg .= ' <use href="#icon-' . esc_html( $args['icon'] ) . '" xlink:href="#icon-' . esc_html( $args['icon'] ) . '"></use> ';
 
@@ -207,8 +207,8 @@ function twentyseventeen_social_links_icons() {
 		'vk.com'          => 'vk',
 		'wa.me'           => 'whatsapp',
 		'whatsapp.com'    => 'whatsapp',
-		'wordpress.org'   => 'wordpress',
-		'wordpress.com'   => 'wordpress',
+		'finpress.org'   => 'finpress',
+		'finpress.com'   => 'finpress',
 		'yelp.com'        => 'yelp',
 		'youtube.com'     => 'youtube',
 	);

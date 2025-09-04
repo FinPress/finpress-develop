@@ -2,13 +2,13 @@
 /**
  * Implements Custom Header functionality for Twenty Fourteen
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Fourteen
  * @since Twenty Fourteen 1.0
  */
 
 /**
- * Sets up the WordPress core custom header settings.
+ * Sets up the FinPress core custom header settings.
  *
  * @since Twenty Fourteen 1.0
  *

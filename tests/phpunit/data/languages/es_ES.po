@@ -14,7 +14,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 
-#. translators: 'rtl' or 'ltr'. This sets the text direction for WordPress.
+#. translators: 'rtl' or 'ltr'. This sets the text direction for FinPress.
 #: wp-includes/locale.php:201
 msgctxt "text direction"
 msgid "ltr"

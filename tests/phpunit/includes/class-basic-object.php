@@ -2,7 +2,7 @@
 /**
  * Unit Tests: Basic_Object cloass
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  * @since 4.7.0
  */
@@ -42,7 +42,7 @@ class Basic_Object {
 		return call_user_func_array( array( $this, $name ), $arguments );
 	}
 
-	// phpcs:ignore WordPress.NamingConventions.ValidFunctionName.MethodNameInvalid
+	// phpcs:ignore FinPress.NamingConventions.ValidFunctionName.MethodNameInvalid
 	private function callMe() {
 		return 'maybe';
 	}

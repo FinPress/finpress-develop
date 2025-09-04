@@ -1,14 +1,14 @@
 <?php
 /**
- * Unit tests covering WordPress’ UTF-8 handling.
+ * Unit tests covering FinPress’ UTF-8 handling.
  *
- * @package WordPress
+ * @package FinPress
  * @group unicode
  */
 
 class Tests_WpIsValidUtf8TestCase extends WP_UnitTestCase {
 	/**
-	 * Verifies that WordPress can properly detect valid and invalid UTF-8.
+	 * Verifies that FinPress can properly detect valid and invalid UTF-8.
 	 *
 	 * @ticket 38044
 	 *
@@ -29,7 +29,7 @@ class Tests_WpIsValidUtf8TestCase extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Verifies that WordPress can properly detect valid and invalid UTF-8;
+	 * Verifies that FinPress can properly detect valid and invalid UTF-8;
 	 * forces testing with the fallback mechanism in pure PHP code.
 	 *
 	 * @ticket 38044

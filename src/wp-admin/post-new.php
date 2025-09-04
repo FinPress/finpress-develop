@@ -2,11 +2,11 @@
 /**
  * New Post Administration Screen.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Administration
  */
 
-/** Load WordPress Administration Bootstrap */
+/** Load FinPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
 
 /**

@@ -37,7 +37,7 @@ updates:
       interval: "daily"
     open-pull-requests-limit: 20
     ignore:
-      - dependency-name: "@wordpress/*"
+      - dependency-name: "@finpress/*"
     groups:
       ##
       # Groups for updating devDependencies.
@@ -101,7 +101,7 @@ updates:
         patterns:
           - "react*"
           - "!react-refresh"
-      # Dependencies used for bundling polyfill libraries into WordPress.
+      # Dependencies used for bundling polyfill libraries into FinPress.
       external-polyfills:
         patterns:
           - "core-js-url-browser"
@@ -171,7 +171,7 @@ updates:
       twentytwenty-miscellaneous:
         patterns:
           - "concurrently"
-          - "@wordpress/scripts"
+          - "@finpress/scripts"
 
   - package-ecosystem: "npm"
     directory: "/src/wp-content/themes/twentynineteen"

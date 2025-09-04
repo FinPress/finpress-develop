@@ -3,7 +3,7 @@
 /**
  * Test WP_Theme_JSON_Resolver class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Theme
  *
  * @since 5.8.0

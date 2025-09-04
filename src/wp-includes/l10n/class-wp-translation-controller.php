@@ -2,7 +2,7 @@
 /**
  * I18N: WP_Translation_Controller class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage I18N
  * @since 6.5.0
  */

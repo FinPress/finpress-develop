@@ -2,7 +2,7 @@
 /**
  * The template for displaying search results pages
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Sixteen
  * @since Twenty Sixteen 1.0
  */

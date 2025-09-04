@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Block_Directory_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -23,7 +23,7 @@ class WP_REST_Block_Directory_Controller_Test extends WP_Test_REST_Controller_Te
 	 *
 	 * @since 5.5.0
 	 *
-	 * @param WP_UnitTest_Factory $factory WordPress unit test factory.
+	 * @param WP_UnitTest_Factory $factory FinPress unit test factory.
 	 */
 	public static function wpSetUpBeforeClass( WP_UnitTest_Factory $factory ) {
 		self::$admin_id = $factory->user->create(
@@ -90,7 +90,7 @@ class WP_REST_Block_Directory_Controller_Test extends WP_Test_REST_Controller_Te
 		$request = new WP_REST_Request( 'GET', '/wp/v2/block-directory/search' );
 		$request->set_query_params( array( 'term' => 'foo' ) );
 
-		$this->prevent_requests_to_host( 'api.wordpress.org' );
+		$this->prevent_requests_to_host( 'api.finpress.org' );
 
 		$this->expectWarning();
 		$response = rest_do_request( $request );
@@ -269,7 +269,7 @@ class WP_REST_Block_Directory_Controller_Test extends WP_Test_REST_Controller_Te
 	 *
 	 * @param string $blocked_host The host to block connections to.
 	 */
-	private function prevent_requests_to_host( $blocked_host = 'api.wordpress.org' ) {
+	private function prevent_requests_to_host( $blocked_host = 'api.finpress.org' ) {
 		add_filter(
 			'pre_http_request',
 			static function ( $response, $parsed_args, $url ) use ( $blocked_host ) {
@@ -298,7 +298,7 @@ class WP_REST_Block_Directory_Controller_Test extends WP_Test_REST_Controller_Te
 			'slug'                     => 'guidepost',
 			'version'                  => '1.2.1',
 			'author'                   => '<a href="https://sortabrilliant.com">sorta brilliant</a>',
-			'author_profile'           => 'https://profiles.wordpress.org/sortabrilliant',
+			'author_profile'           => 'https://profiles.finpress.org/sortabrilliant',
 			'requires'                 => '5.0',
 			'tested'                   => '5.4.0',
 			'requires_php'             => '5.6',
@@ -320,7 +320,7 @@ class WP_REST_Block_Directory_Controller_Test extends WP_Test_REST_Controller_Te
 			'homepage'                 => 'https://sortabrilliant.com/guidepost/',
 			'description'              => '<p>A guidepost gives you directions. It lets you know where you’re going. It gives you a preview of what’s to come. How does it work? Guideposts are magic, no they really are.</p>',
 			'short_description'        => 'A guidepost gives you directions. It lets you know where you’re going. It gives you a preview of what’s to come.',
-			'download_link'            => 'https://downloads.wordpress.org/plugin/guidepost.1.2.1.zip',
+			'download_link'            => 'https://downloads.finpress.org/plugin/guidepost.1.2.1.zip',
 			'tags'                     => array(
 				'block'   => 'block',
 				'heading' => 'heading',

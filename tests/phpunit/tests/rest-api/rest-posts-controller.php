@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Posts_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -3132,7 +3132,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 
 		$user = wp_get_current_user();
 		$user->add_cap( 'publish_posts', false );
-		// Flush capabilities, https://core.trac.wordpress.org/ticket/28374
+		// Flush capabilities, https://core.trac.finpress.org/ticket/28374
 		$user->get_role_caps();
 		$user->update_user_level_from_caps();
 
@@ -3154,7 +3154,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 
 		$user = wp_get_current_user();
 		$user->add_cap( 'publish_posts', false );
-		// Flush capabilities, https://core.trac.wordpress.org/ticket/28374
+		// Flush capabilities, https://core.trac.finpress.org/ticket/28374
 		$user->get_role_caps();
 		$user->update_user_level_from_caps();
 
@@ -3239,7 +3239,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 	/**
 	 * Test with a valid format, but one unsupported by the theme.
 	 *
-	 * https://core.trac.wordpress.org/ticket/38610
+	 * https://core.trac.finpress.org/ticket/38610
 	 */
 	public function test_create_post_with_unsupported_format() {
 		wp_set_current_user( self::$editor_id );
@@ -3759,7 +3759,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 
 		$user = wp_get_current_user();
 		$user->add_cap( 'edit_published_posts', false );
-		// Flush capabilities, https://core.trac.wordpress.org/ticket/28374
+		// Flush capabilities, https://core.trac.finpress.org/ticket/28374
 		$user->get_role_caps();
 		$user->update_user_level_from_caps();
 
@@ -3859,7 +3859,7 @@ Shankle pork chop prosciutto ribeye ham hock pastrami. T-bone shank brisket baco
 	/**
 	 * Test with a valid format, but one unsupported by the theme.
 	 *
-	 * https://core.trac.wordpress.org/ticket/38610
+	 * https://core.trac.finpress.org/ticket/38610
 	 */
 	public function test_update_post_with_unsupported_format() {
 		wp_set_current_user( self::$editor_id );

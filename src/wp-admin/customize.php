@@ -2,14 +2,14 @@
 /**
  * Theme Customize Screen.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 3.4.0
  */
 
 define( 'IFRAME_REQUEST', true );
 
-/** Load WordPress Administration Bootstrap */
+/** Load FinPress Administration Bootstrap */
 require_once __DIR__ . '/admin.php';
 
 if ( ! current_user_can( 'customize' ) ) {
@@ -254,7 +254,7 @@ do_action( 'customize_controls_head' );
 						</p>
 						<p>
 							<?php
-							_e( '<a href="https://wordpress.org/documentation/article/customizer/">Documentation on Customizer</a>' );
+							_e( '<a href="https://finpress.org/documentation/article/customizer/">Documentation on Customizer</a>' );
 							?>
 						</p>
 					</div>

@@ -1,6 +1,6 @@
-# WordPress
+# FinPress
 
-Welcome to the WordPress development repository! Please check out the [contributor handbook](https://make.wordpress.org/core/handbook/) for information about how to open bug reports, contribute patches, test changes, write documentation, or get involved in any way you can.
+Welcome to the FinPress development repository! Please check out the [contributor handbook](https://make.finpress.org/core/handbook/) for information about how to open bug reports, contribute patches, test changes, write documentation, or get involved in any way you can.
 
 * [Getting Started](#getting-started)
 * [Credentials](#credentials)
@@ -19,11 +19,11 @@ A codespace will open in a web-based version of Visual Studio Code. The [dev con
 
 In some browsers the keyboard shortcut for opening the command palette (Ctrl/Command + Shift + P) may collide with a browser shortcut. The command palette can be opened via the `F1` key or via the cog icon in the bottom left of the editor.
 
-When opening your codespace, be sure to wait for the `postCreateCommand` to finish running to ensure your WordPress install is successfully set up. This can take a few minutes.
+When opening your codespace, be sure to wait for the `postCreateCommand` to finish running to ensure your FinPress install is successfully set up. This can take a few minutes.
 
 ### Local development
 
-WordPress is a PHP, MySQL, and JavaScript based project, and uses Node for its JavaScript dependencies. A local development environment is available to quickly get up and running.
+FinPress is a PHP, MySQL, and JavaScript based project, and uses Node for its JavaScript dependencies. A local development environment is available to quickly get up and running.
 
 You will need a basic understanding of how to use the command line on your computer. This will allow you to set up the local development environment, to start it and stop it when necessary, and to run the tests.
 
@@ -35,11 +35,11 @@ You will need Node and npm installed on your computer. Node is a JavaScript runt
 
 If you are not using a package manager, see the [Node.js download page](https://nodejs.org/en/download/) for installers and binaries.
 
-**Note:** WordPress currently only officially supports Node.js `20.x` and npm `10.x`.
+**Note:** FinPress currently only officially supports Node.js `20.x` and npm `10.x`.
 
 You will also need a container environment such as [Docker Desktop](https://www.docker.com/products/docker-desktop) installed and running on your computer. The container environment is the virtualization software that powers the local development environment and can be installed just like any other regular application.
 
-**Note:** WordPress currently only officially supports Docker but several container environments are available and should generally be compatible, such as [Colima](https://github.com/abiosoft/colima), [OrbStack](https://orbstack.dev/), [Podman Desktop](https://podman-desktop.io/), and [Rancher Desktop](https://rancherdesktop.io/).
+**Note:** FinPress currently only officially supports Docker but several container environments are available and should generally be compatible, such as [Colima](https://github.com/abiosoft/colima), [OrbStack](https://orbstack.dev/), [Podman Desktop](https://podman-desktop.io/), and [Rancher Desktop](https://rancherdesktop.io/).
 
 ### Development Environment Commands
 
@@ -47,7 +47,7 @@ Ensure your container environment is running before using these commands.
 
 #### To start the development environment for the first time
 
-Clone the current repository using `git clone https://github.com/WordPress/wordpress-develop.git`. Then in your terminal move to the repository folder `cd wordpress-develop` and run the following commands:
+Clone the current repository using `git clone https://github.com/FinPress/finpress-develop.git`. Then in your terminal move to the repository folder `cd finpress-develop` and run the following commands:
 
 ```
 npm install
@@ -56,11 +56,11 @@ npm run env:start
 npm run env:install
 ```
 
-Your WordPress site will be accessible at http://localhost:8889. You can see or change configurations in the `.env` file located at the root of the project directory.
+Your FinPress site will be accessible at http://localhost:8889. You can see or change configurations in the `.env` file located at the root of the project directory.
 
 #### To watch for changes
 
-If you're making changes to WordPress core files, you should start the file watcher in order to build or copy the files as necessary:
+If you're making changes to FinPress core files, you should start the file watcher in order to build or copy the files as necessary:
 
 ```
 npm run dev
@@ -68,13 +68,13 @@ npm run dev
 
 To stop the watcher, press `ctrl+c`.
 
-#### To run a [WP-CLI](https://make.wordpress.org/cli/handbook/) command
+#### To run a [WP-CLI](https://make.finpress.org/cli/handbook/) command
 
 ```
 npm run env:cli -- <command>
 ```
 
-WP-CLI has [many useful commands](https://developer.wordpress.org/cli/commands/) you can use to work on your WordPress site. Where the documentation mentions running `wp`, run `npm run env:cli --` instead. For example:
+WP-CLI has [many useful commands](https://developer.finpress.org/cli/commands/) you can use to work on your FinPress site. Where the documentation mentions running `wp`, run `npm run env:cli --` instead. For example:
 
 ```
 npm run env:cli -- help
@@ -97,7 +97,7 @@ npm run test:php -- --group <group name or ticket number>
 ```
 
 #### Generating a code coverage report
-PHP code coverage reports are [generated daily](https://github.com/WordPress/wordpress-develop/actions/workflows/test-coverage.yml) and [submitted to Codecov.io](https://app.codecov.io/gh/WordPress/wordpress-develop).
+PHP code coverage reports are [generated daily](https://github.com/FinPress/finpress-develop/actions/workflows/test-coverage.yml) and [submitted to Codecov.io](https://app.codecov.io/gh/FinPress/finpress-develop).
 
 After the local container environment has [been installed and started](#to-start-the-development-environment-for-the-first-time), the following command can be used to generate a code coverage report. 
 
@@ -163,7 +163,7 @@ Additionally, the "Use Rosetta for x86/AMD64 emulation on Apple Silicon" setting
 
 These are the default environment credentials:
 
-* Database Name: `wordpress_develop`
+* Database Name: `finpress_develop`
 * Username: `root`
 * Password: `password`
 

@@ -3,7 +3,7 @@
  * These functions can be replaced via plugins. If plugins do not redefine these
  * functions, then these will be used instead.
  *
- * @package WordPress
+ * @package FinPress
  */
 
 if ( ! function_exists( 'wp_set_current_user' ) ) :
@@ -12,7 +12,7 @@ if ( ! function_exists( 'wp_set_current_user' ) ) :
 	 *
 	 * Set $id to null and specify a name if you do not know a user's ID.
 	 *
-	 * Some WordPress functionality is based on the current user and not based on
+	 * Some FinPress functionality is based on the current user and not based on
 	 * the signed in user. Therefore, it opens the ability to edit and perform
 	 * actions on users who aren't signed in.
 	 *
@@ -118,7 +118,7 @@ if ( ! function_exists( 'cache_users' ) ) :
 	 *
 	 * @since 3.0.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb FinPress database abstraction object.
 	 *
 	 * @param int[] $user_ids User ID numbers list
 	 */
@@ -158,22 +158,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 	 * The default charset is based on the charset used on the blog. The charset can
 	 * be set using the {@see 'wp_mail_charset'} filter.
 	 *
-	 * When using the `$embeds` parameter to embed images for use in HTML emails,
-	 * reference the embedded file in your HTML with a `cid:` URL whose value
-	 * matches the file's Content-ID. By default, the Content-ID (`cid`) used for
-	 * each embedded file is the key in the embeds array, unless modified via the
-	 * {@see 'wp_mail_embed_args'} filter. For example:
-	 *
-	 * `<img src="cid:0" alt="Logo">`
-	 * `<img src="cid:my-image" alt="Image">`
-	 *
-	 * You may also customize the Content-ID for each file by using the
-	 * {@see 'wp_mail_embed_args'} filter and setting the `cid` value.
-	 *
 	 * @since 1.2.1
 	 * @since 5.5.0 is_email() is used for email validation,
 	 *              instead of PHPMailer's default validator.
-	 * @since 6.9.0 Added $embeds parameter.
 	 *
 	 * @global PHPMailer\PHPMailer\PHPMailer $phpmailer
 	 *
@@ -182,10 +169,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 	 * @param string          $message     Message contents.
 	 * @param string|string[] $headers     Optional. Additional headers.
 	 * @param string|string[] $attachments Optional. Paths to files to attach.
-	 * @param string|string[] $embeds      Optional. Paths to files to embed.
 	 * @return bool Whether the email was sent successfully.
 	 */
-	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array(), $embeds = array() ) {
+	function wp_mail( $to, $subject, $message, $headers = '', $attachments = array() ) {
 		// Compact the input, apply the filters, and extract them back out.
 
 		/**
@@ -201,10 +187,9 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 *     @type string          $message     Message contents.
 		 *     @type string|string[] $headers     Additional headers.
 		 *     @type string|string[] $attachments Paths to files to attach.
-		 *     @type string|string[] $embeds      Paths to files to embed.
 		 * }
 		 */
-		$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments', 'embeds' ) );
+		$atts = apply_filters( 'wp_mail', compact( 'to', 'subject', 'message', 'headers', 'attachments' ) );
 
 		/**
 		 * Filters whether to preempt sending an email.
@@ -224,7 +209,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		 *     @type string          $message     Message contents.
 		 *     @type string|string[] $headers     Additional headers.
 		 *     @type string|string[] $attachments Paths to files to attach.
-		 *     @type string|string[] $embeds      Paths to files to embed.
 		 * }
 		 */
 		$pre_wp_mail = apply_filters( 'pre_wp_mail', null, $atts );
@@ -260,15 +244,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
 		if ( ! is_array( $attachments ) ) {
 			$attachments = explode( "\n", str_replace( "\r\n", "\n", $attachments ) );
 		}
-
-		if ( isset( $atts['embeds'] ) ) {
-			$embeds = $atts['embeds'];
-		}
-
-		if ( ! is_array( $embeds ) ) {
-			$embeds = explode( "\n", str_replace( "\r\n", "\n", $embeds ) );
-		}
-
 		global $phpmailer;
 
 		// (Re)create it, if it's gone missing.
@@ -388,20 +363,20 @@ if ( ! function_exists( 'wp_mail' ) ) :
 
 		// If we don't have a name from the input headers.
 		if ( ! isset( $from_name ) ) {
-			$from_name = 'WordPress';
+			$from_name = 'FinPress';
 		}
 
 		/*
-		 * If we don't have an email from the input headers, default to wordpress@$sitename
+		 * If we don't have an email from the input headers, default to finpress@$sitename
 		 * Some hosts will block outgoing mail from this address if it doesn't exist,
 		 * but there's no easy alternative. Defaulting to admin_email might appear to be
 		 * another option, but some hosts may refuse to relay mail from an unknown domain.
-		 * See https://core.trac.wordpress.org/ticket/5007.
+		 * See https://core.trac.finpress.org/ticket/5007.
 		 */
 		if ( ! isset( $from_email ) ) {
 			// Get the site domain and get rid of www.
 			$sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
-			$from_email = 'wordpress@';
+			$from_email = 'finpress@';
 
 			if ( null !== $sitename ) {
 				if ( str_starts_with( $sitename, 'www.' ) ) {
@@ -556,50 +531,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			}
 		}
 
-		if ( ! empty( $embeds ) ) {
-			foreach ( $embeds as $key => $embed_path ) {
-				/**
-				 * Filters the arguments for PHPMailer's addEmbeddedImage() method.
-				 *
-				 * @since 6.9.0
-				 *
-				 * @param array $args {
-				 *     An array of arguments for `addEmbeddedImage()`.
-				 *     @type string $path        The path to the file.
-				 *     @type string $cid         The Content-ID of the image. Default: The key in the embeds array.
-				 *     @type string $name        The filename of the image.
-				 *     @type string $encoding    The encoding of the image. Default: 'base64'.
-				 *     @type string $type        The MIME type of the image. Default: empty string, which lets PHPMailer auto-detect.
-				 *     @type string $disposition The disposition of the image. Default: 'inline'.
-				 * }
-				 */
-				$embed_args = apply_filters(
-					'wp_mail_embed_args',
-					array(
-						'path'        => $embed_path,
-						'cid'         => (string) $key,
-						'name'        => basename( $embed_path ),
-						'encoding'    => 'base64',
-						'type'        => '',
-						'disposition' => 'inline',
-					)
-				);
-
-				try {
-					$phpmailer->addEmbeddedImage(
-						$embed_args['path'],
-						$embed_args['cid'],
-						$embed_args['name'],
-						$embed_args['encoding'],
-						$embed_args['type'],
-						$embed_args['disposition']
-					);
-				} catch ( PHPMailer\PHPMailer\Exception $e ) {
-					continue;
-				}
-			}
-		}
-
 		/**
 		 * Fires after PHPMailer is initialized.
 		 *
@@ -632,7 +563,6 @@ if ( ! function_exists( 'wp_mail' ) ) :
 			 *     @type string   $message     Message contents.
 			 *     @type string[] $headers     Additional headers.
 			 *     @type string[] $attachments Paths to files to attach.
-			 *     @type string[] $embeds      Paths to files to embed.
 			 * }
 			 */
 			do_action( 'wp_mail_succeeded', $mail_data );
@@ -1237,7 +1167,7 @@ if ( ! function_exists( 'is_user_logged_in' ) ) :
 	 * Determines whether the current visitor is a logged in user.
 	 *
 	 * For more information on this and similar theme functions, check out
-	 * the {@link https://developer.wordpress.org/themes/basics/conditional-tags/
+	 * the {@link https://developer.finpress.org/themes/basics/conditional-tags/
 	 * Conditional Tags} article in the Theme Developer Handbook.
 	 *
 	 * @since 2.0.0
@@ -1464,10 +1394,10 @@ if ( ! function_exists( 'wp_redirect' ) ) :
 	 *
 	 * @param string       $location      The path or URL to redirect to.
 	 * @param int          $status        Optional. HTTP response status code to use. Default '302' (Moved Temporarily).
-	 * @param string|false $x_redirect_by Optional. The application doing the redirect or false to omit. Default 'WordPress'.
+	 * @param string|false $x_redirect_by Optional. The application doing the redirect or false to omit. Default 'FinPress'.
 	 * @return bool False if the redirect was canceled, true otherwise.
 	 */
-	function wp_redirect( $location, $status = 302, $x_redirect_by = 'WordPress' ) {
+	function wp_redirect( $location, $status = 302, $x_redirect_by = 'FinPress' ) {
 		global $is_IIS;
 
 		/**
@@ -1607,10 +1537,10 @@ if ( ! function_exists( 'wp_safe_redirect' ) ) :
 	 *
 	 * @param string       $location      The path or URL to redirect to.
 	 * @param int          $status        Optional. HTTP response status code to use. Default '302' (Moved Temporarily).
-	 * @param string|false $x_redirect_by Optional. The application doing the redirect or false to omit. Default 'WordPress'.
+	 * @param string|false $x_redirect_by Optional. The application doing the redirect or false to omit. Default 'FinPress'.
 	 * @return bool False if the redirect was canceled, true otherwise.
 	 */
-	function wp_safe_redirect( $location, $status = 302, $x_redirect_by = 'WordPress' ) {
+	function wp_safe_redirect( $location, $status = 302, $x_redirect_by = 'FinPress' ) {
 
 		// Need to look at the URL the way it will end up in wp_redirect().
 		$location = wp_sanitize_redirect( $location );
@@ -1816,7 +1746,7 @@ if ( ! function_exists( 'wp_notify_postauthor' ) ) :
 		$blogname        = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
 		$comment_content = wp_specialchars_decode( $comment->comment_content );
 
-		$wp_email = 'wordpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
+		$wp_email = 'finpress@' . preg_replace( '#^www\.#', '', wp_parse_url( network_home_url(), PHP_URL_HOST ) );
 
 		if ( '' === $comment->comment_author ) {
 			$from = "From: \"$blogname\" <$wp_email>";
@@ -1961,7 +1891,7 @@ if ( ! function_exists( 'wp_notify_moderator' ) ) :
 	 *
 	 * @since 1.0.0
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb FinPress database abstraction object.
 	 *
 	 * Uses the {@see 'notify_moderator'} filter to determine whether the site moderator
 	 * should be notified, overriding the site setting.
@@ -2348,7 +2278,7 @@ if ( ! function_exists( 'wp_new_user_notification' ) ) :
 		 * end in a period. To avoid the ambiguity, ensure that the login is not the last query
 		 * arg in the URL. If moving it to the end, a trailing period will need to be escaped.
 		 *
-		 * @see https://core.trac.wordpress.org/tickets/42957
+		 * @see https://core.trac.finpress.org/tickets/42957
 		 */
 		$message .= network_site_url( 'wp-login.php?login=' . rawurlencode( $user->user_login ) . "&key=$key&action=rp", 'login' ) . "\r\n\r\n";
 
@@ -2525,7 +2455,7 @@ if ( ! function_exists( 'wp_salt' ) ) :
 	 * The secret keys in wp-config.php should be updated to strong, random keys to maximize
 	 * security. Below is an example of how the secret key constants are defined.
 	 * Do not paste this example directly into wp-config.php. Instead, have a
-	 * {@link https://api.wordpress.org/secret-key/1.1/salt/ secret key created} just
+	 * {@link https://api.finpress.org/secret-key/1.1/salt/ secret key created} just
 	 * for you.
 	 *
 	 *     define('AUTH_KEY',         ' Xakm<o xQy rw4EMsLKM-?!T+,PFF})H4lzcW57AF0U@N@< >M%G4Yt>f`z]MON');
@@ -2542,7 +2472,7 @@ if ( ! function_exists( 'wp_salt' ) ) :
 	 *
 	 * @since 2.5.0
 	 *
-	 * @link https://api.wordpress.org/secret-key/1.1/salt/ Create secrets for wp-config.php
+	 * @link https://api.finpress.org/secret-key/1.1/salt/ Create secrets for wp-config.php
 	 *
 	 * @param string $scheme Authentication scheme (auth, secure_auth, logged_in, nonce).
 	 * @return string Salt value
@@ -2551,7 +2481,7 @@ if ( ! function_exists( 'wp_salt' ) ) :
 		static $cached_salts = array();
 		if ( isset( $cached_salts[ $scheme ] ) ) {
 			/**
-			 * Filters the WordPress salt.
+			 * Filters the FinPress salt.
 			 *
 			 * @since 2.5.0
 			 *
@@ -2581,7 +2511,7 @@ if ( ! function_exists( 'wp_salt' ) ) :
 			/*
 			 * translators: This string should only be translated if wp-config-sample.php is localized.
 			 * You can check the localized release package or
-			 * https://i18n.svn.wordpress.org/<locale code>/branches/<wp version>/dist/wp-config-sample.php
+			 * https://i18n.svn.finpress.org/<locale code>/branches/<wp version>/dist/wp-config-sample.php
 			 */
 			$duplicated_keys[ __( 'put your unique phrase here' ) ] = true;
 		}
@@ -2796,7 +2726,7 @@ if ( ! function_exists( 'wp_check_password' ) ) :
 	 * instead use the other package password hashing algorithm.
 	 *
 	 * @since 2.5.0
-	 * @since 6.8.0 Passwords in WordPress are now hashed with bcrypt by default. A
+	 * @since 6.8.0 Passwords in FinPress are now hashed with bcrypt by default. A
 	 *              password that wasn't hashed with bcrypt will be checked with phpass.
 	 *
 	 * @global PasswordHash $wp_hasher phpass object. Used as a fallback for verifying
@@ -2859,8 +2789,8 @@ if ( ! function_exists( 'wp_password_needs_rehash' ) ) :
 	 * Checks whether a password hash needs to be rehashed.
 	 *
 	 * Passwords are hashed with bcrypt using the default cost. A password hashed in a prior version
-	 * of WordPress may still be hashed with phpass and will need to be rehashed. If the default cost
-	 * or algorithm is changed in PHP or WordPress then a password hashed in a previous version will
+	 * of FinPress may still be hashed with phpass and will need to be rehashed. If the default cost
+	 * or algorithm is changed in PHP or FinPress then a password hashed in a previous version will
 	 * need to be rehashed.
 	 *
 	 * Note that, just like wp_check_password(), this function may be used to check a value that is
@@ -3062,7 +2992,7 @@ if ( ! function_exists( 'wp_set_password' ) ) :
 	 * @since 2.5.0
 	 * @since 6.8.0 The password is now hashed using bcrypt by default instead of phpass.
 	 *
-	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global wpdb $wpdb FinPress database abstraction object.
 	 *
 	 * @param string $password The plaintext new user password.
 	 * @param int    $user_id  User ID.

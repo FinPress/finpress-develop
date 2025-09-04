@@ -2,7 +2,7 @@
 /**
  * Interactivity API: WP_Interactivity_API class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Interactivity API
  * @since 6.5.0
  */
@@ -330,7 +330,7 @@ final class WP_Interactivity_API {
 	}
 
 	/**
-	 * Registers the `@wordpress/interactivity` script modules.
+	 * Registers the `@finpress/interactivity` script modules.
 	 *
 	 * @deprecated 6.7.0 Script Modules registration is handled by {@see wp_default_script_modules()}.
 	 *
@@ -346,8 +346,8 @@ final class WP_Interactivity_API {
 	 * @since 6.5.0
 	 */
 	public function add_hooks() {
-		add_filter( 'script_module_data_@wordpress/interactivity', array( $this, 'filter_script_module_interactivity_data' ) );
-		add_filter( 'script_module_data_@wordpress/interactivity-router', array( $this, 'filter_script_module_interactivity_router_data' ) );
+		add_filter( 'script_module_data_@finpress/interactivity', array( $this, 'filter_script_module_interactivity_data' ) );
+		add_filter( 'script_module_data_@finpress/interactivity-router', array( $this, 'filter_script_module_interactivity_router_data' ) );
 	}
 
 	/**
@@ -454,7 +454,7 @@ final class WP_Interactivity_API {
 						if ( ! preg_match(
 							/*
 							 * This must align with the client-side regex used by the interactivity API.
-							 * @see https://github.com/WordPress/gutenberg/blob/ca616014255efbb61f34c10917d52a2d86c1c660/packages/interactivity/src/vdom.ts#L20-L32
+							 * @see https://github.com/FinPress/gutenberg/blob/ca616014255efbb61f34c10917d52a2d86c1c660/packages/interactivity/src/vdom.ts#L20-L32
 							 */
 							'/' .
 							'^data-wp-' .
@@ -1107,7 +1107,7 @@ CSS;
 	}
 
 	/**
-	 * Outputs markup for the @wordpress/interactivity-router script module.
+	 * Outputs markup for the @finpress/interactivity-router script module.
 	 *
 	 * This method prints a div element representing a loading bar visible during
 	 * navigation.

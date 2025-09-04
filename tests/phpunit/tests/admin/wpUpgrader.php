@@ -1719,9 +1719,9 @@ class Tests_Admin_WpUpgrader extends WP_UnitTestCase {
 			}
 		);
 
-		$result = self::$instance->download_package( 'wordpress-seo' );
+		$result = self::$instance->download_package( 'finpress-seo' );
 
-		$this->assertStringContainsString( '/wordpress-seo-', $result );
+		$this->assertStringContainsString( '/finpress-seo-', $result );
 	}
 
 	/**
@@ -1747,7 +1747,7 @@ class Tests_Admin_WpUpgrader extends WP_UnitTestCase {
 			}
 		);
 
-		$result = self::$instance->download_package( 'wordpress-seo' );
+		$result = self::$instance->download_package( 'finpress-seo' );
 
 		$this->assertWPError(
 			$result,

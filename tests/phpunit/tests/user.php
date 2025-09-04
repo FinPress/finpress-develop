@@ -31,7 +31,7 @@ class Tests_User extends WP_UnitTestCase {
 				'user_url'      => 'http://tacos.com',
 				'role'          => 'contributor',
 				'nickname'      => 'Johnny',
-				'description'   => 'I am a WordPress user that cares about privacy.',
+				'description'   => 'I am a FinPress user that cares about privacy.',
 			)
 		);
 		self::$user_ids[] = self::$contrib_id;
@@ -255,7 +255,7 @@ class Tests_User extends WP_UnitTestCase {
 	 * @ticket 20043
 	 */
 	public function test_user_unset() {
-		// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		// phpcs:disable FinPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 		$user = new WP_User( self::$author_id );
 
 		// Test custom fields.

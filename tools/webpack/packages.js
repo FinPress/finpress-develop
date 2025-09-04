@@ -6,12 +6,12 @@ const LiveReloadPlugin = require( 'webpack-livereload-plugin' );
 const UglifyJS = require( 'uglify-js' );
 
 /**
- * WordPress dependencies
+ * FinPress dependencies
  */
 const {
 	camelCaseDash,
-} = require( '@wordpress/dependency-extraction-webpack-plugin/lib/util' );
-const DependencyExtractionPlugin = require( '@wordpress/dependency-extraction-webpack-plugin' );
+} = require( '@finpress/dependency-extraction-webpack-plugin/lib/util' );
+const DependencyExtractionPlugin = require( '@finpress/dependency-extraction-webpack-plugin' );
 
 /**
  * Internal dependencies
@@ -23,7 +23,7 @@ const {
 	stylesTransform,
 	BUNDLED_PACKAGES,
 	MODULES,
-	WORDPRESS_NAMESPACE,
+	finpress_NAMESPACE,
 } = require( './shared' );
 const { dependencies } = require( '../../package' );
 
@@ -73,15 +73,15 @@ module.exports = function (
 			( packageName ) =>
 				! BUNDLED_PACKAGES.includes( packageName ) &&
 				! MODULES.includes( packageName ) &&
-				packageName.startsWith( WORDPRESS_NAMESPACE )
+				packageName.startsWith( finpress_NAMESPACE )
 		)
 		.map( ( packageName ) =>
-			packageName.replace( WORDPRESS_NAMESPACE, '' )
+			packageName.replace( finpress_NAMESPACE, '' )
 		);
 
 	const vendors = {
 		'lodash.js': 'lodash/lodash.js',
-		'wp-polyfill.js': '@wordpress/babel-preset-default/build/polyfill.js',
+		'wp-polyfill.js': '@finpress/babel-preset-default/build/polyfill.js',
 		'wp-polyfill-fetch.js': 'whatwg-fetch/dist/fetch.umd.js',
 		'wp-polyfill-element-closest.js': 'element-closest/browser.js',
 		'wp-polyfill-node-contains.js':
@@ -102,7 +102,7 @@ module.exports = function (
 	const minifiedVendors = {
 		'lodash.min.js': 'lodash/lodash.min.js',
 		'wp-polyfill.min.js':
-			'@wordpress/babel-preset-default/build/polyfill.min.js',
+			'@finpress/babel-preset-default/build/polyfill.min.js',
 		'wp-polyfill-element-closest.min.js': 'element-closest/browser.js',
 		'wp-polyfill-formdata.min.js': 'formdata-polyfill/formdata.min.js',
 		'wp-polyfill-url.min.js': 'core-js-url-browser/url.min.js',
@@ -153,7 +153,7 @@ module.exports = function (
 	let cssCopies = packages.map( ( packageName ) => ( {
 		from: normalizeJoin(
 			baseDir,
-			`node_modules/@wordpress/${ packageName }/build-style/*.css`
+			`node_modules/@finpress/${ packageName }/build-style/*.css`
 		),
 		to: normalizeJoin(
 			baseDir,
@@ -164,7 +164,7 @@ module.exports = function (
 	} ) );
 
 	const phpCopies = Object.keys( phpFiles ).map( ( filename ) => ( {
-		from: normalizeJoin( baseDir, `node_modules/@wordpress/${ filename }` ),
+		from: normalizeJoin( baseDir, `node_modules/@finpress/${ filename }` ),
 		to: normalizeJoin( baseDir, `src/${ phpFiles[ filename ] }` ),
 	} ) );
 
@@ -175,7 +175,7 @@ module.exports = function (
 			memo[ packageName ] = {
 				import: normalizeJoin(
 					baseDir,
-					`node_modules/@wordpress/${ packageName }`
+					`node_modules/@finpress/${ packageName }`
 				),
 				library: {
 					name: [ 'wp', camelCaseDash( packageName ) ],
@@ -209,7 +209,7 @@ module.exports = function (
 	if ( config.mode === 'development' ) {
 		config.plugins.push(
 			new LiveReloadPlugin( {
-				port: process.env.WORDPRESS_LIVE_RELOAD_PORT || 35729,
+				port: process.env.finpress_LIVE_RELOAD_PORT || 35729,
 			} )
 		);
 	}

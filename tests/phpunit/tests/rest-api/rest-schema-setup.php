@@ -4,7 +4,7 @@
  *
  * Also generates the fixture data used by the wp-api.js QUnit tests.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi

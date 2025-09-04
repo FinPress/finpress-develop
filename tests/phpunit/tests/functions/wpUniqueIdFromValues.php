@@ -3,7 +3,7 @@
 /**
  * Test cases for the `wp_unique_id_from_values()` function.
  *
- * @package WordPress\UnitTests
+ * @package FinPress\UnitTests
  *
  * @since 6.8.0
  *

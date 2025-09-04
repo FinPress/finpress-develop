@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_REST_Users_Controller functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  *
  * @group restapi
@@ -110,7 +110,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		if ( is_multisite() ) {
 			self::$site = $factory->blog->create(
 				array(
-					'domain' => 'rest.wordpress.org',
+					'domain' => 'rest.finpress.org',
 					'path'   => '/',
 				)
 			);
@@ -1587,7 +1587,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 				$this->assertSame( 'Sorry, that username already exists!', $error['message'] );
 			} else {
 				$expected = '<strong>Error:</strong> This email address is already registered. ' .
-							'<a href="http://rest.wordpress.org/wp-login.php">Log in</a> with ' .
+							'<a href="http://rest.finpress.org/wp-login.php">Log in</a> with ' .
 							'this address or choose another one.';
 				$this->assertSame( $expected, $error['message'] );
 			}
@@ -1732,7 +1732,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertSame( 'de_DE', $user->locale );
 
 		// Check that we haven't inadvertently changed the user's password,
-		// as per https://core.trac.wordpress.org/ticket/21429
+		// as per https://core.trac.finpress.org/ticket/21429
 		$this->assertSame( $pw_before, $user->user_pass );
 	}
 
@@ -1977,7 +1977,7 @@ class WP_Test_REST_Users_Controller extends WP_Test_REST_Controller_Testcase {
 		$this->assertSame( 'New Last', $user->last_name );
 
 		// Check that we haven't inadvertently changed the user's password,
-		// as per https://core.trac.wordpress.org/ticket/21429
+		// as per https://core.trac.finpress.org/ticket/21429
 		$this->assertSame( $pw_before, $user->user_pass );
 	}
 

@@ -9,14 +9,14 @@
  */
 class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	/**
-	 * The current WordPress version.
+	 * The current FinPress version.
 	 *
 	 * @var string
 	 */
 	private static $wp_version;
 
 	/**
-	 * Sets the test WordPress version property and global before any tests run.
+	 * Sets the test FinPress version property and global before any tests run.
 	 */
 	public static function set_up_before_class() {
 		parent::set_up_before_class();
@@ -25,7 +25,7 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Resets the test WordPress version global after each test runs.
+	 * Resets the test FinPress version global after each test runs.
 	 */
 	public function tear_down() {
 		$GLOBALS['_wp_tests_wp_version'] = self::$wp_version;
@@ -33,7 +33,7 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	}
 
 	/**
-	 * Unsets the test WordPress version global after all tests run.
+	 * Unsets the test FinPress version global after all tests run.
 	 */
 	public static function tear_down_after_class() {
 		unset( $GLOBALS['_wp_tests_wp_version'] );
@@ -48,7 +48,7 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	 * @ticket 54257
 	 * @ticket 61781
 	 *
-	 * @param mixed $required The minimum required WordPress version.
+	 * @param mixed $required The minimum required FinPress version.
 	 * @param bool  $expected The expected result.
 	 */
 	public function test_is_wp_version_compatible( $required, $expected ) {
@@ -138,7 +138,7 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	 * @ticket 59448
 	 * @ticket 61781
 	 *
-	 * @param mixed  $required The minimum required WordPress version.
+	 * @param mixed  $required The minimum required FinPress version.
 	 * @param string $wp       The value for the $wp_version global variable.
 	 * @param bool   $expected The expected result.
 	 */
@@ -210,7 +210,7 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 	 * @ticket 54257
 	 * @ticket 61781
 	 *
-	 * @param string $required  The minimum required WordPress version.
+	 * @param string $required  The minimum required FinPress version.
 	 * @param string $wp        The value for the $wp_version global variable.
 	 * @param bool   $expected  The expected result.
 	 */
@@ -240,47 +240,47 @@ class Tests_Functions_IsWpVersionCompatible extends WP_UnitTestCase {
 		$higher_version = implode( '.', $higher_version );
 
 		return array(
-			'a lower required version and an alpha wordpress version' => array(
+			'a lower required version and an alpha finpress version' => array(
 				'required' => $lower_version,
 				'wp'       => $version . '-alpha-12341-src',
 				'expected' => true,
 			),
-			'a lower required version and a beta wordpress version'   => array(
+			'a lower required version and a beta finpress version'   => array(
 				'required' => $lower_version,
 				'wp'       => $version . '-beta1',
 				'expected' => true,
 			),
-			'a lower required version and a release candidate wordpress version'   => array(
+			'a lower required version and a release candidate finpress version'   => array(
 				'required' => $lower_version,
 				'wp'       => $version . '-RC1',
 				'expected' => true,
 			),
-			'the same required version and an alpha wordpress version' => array(
+			'the same required version and an alpha finpress version' => array(
 				'required' => $version,
 				'wp'       => $version . '-alpha-12341-src',
 				'expected' => true,
 			),
-			'the same required version and a beta wordpress version' => array(
+			'the same required version and a beta finpress version' => array(
 				'required' => $version,
 				'wp'       => $version . '-beta1',
 				'expected' => true,
 			),
-			'the same required version and a release candidate wordpress version' => array(
+			'the same required version and a release candidate finpress version' => array(
 				'required' => $version,
 				'wp'       => $version . '-RC1',
 				'expected' => true,
 			),
-			'a higher required version and an alpha wordpress version'   => array(
+			'a higher required version and an alpha finpress version'   => array(
 				'required' => $higher_version,
 				'wp'       => $version . '-alpha-12341-src',
 				'expected' => false,
 			),
-			'a higher required version and a beta wordpress version'   => array(
+			'a higher required version and a beta finpress version'   => array(
 				'required' => $higher_version,
 				'wp'       => $version . '-beta1',
 				'expected' => false,
 			),
-			'a higher required version and a release candidate wordpress version'   => array(
+			'a higher required version and a release candidate finpress version'   => array(
 				'required' => $higher_version,
 				'wp'       => $version . '-RC1',
 				'expected' => false,

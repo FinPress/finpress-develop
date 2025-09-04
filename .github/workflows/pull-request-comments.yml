@@ -27,7 +27,7 @@ jobs:
       issues: write
       pull-requests: write
     timeout-minutes: 5
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name == 'pull_request_target' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name == 'pull_request_target' }}
     steps:
       - name: Post a welcome comment
         uses: wow-actions/welcome@68019c2c271561f63162fea75bb7707ef8a02c85 # v1.3.1
@@ -37,47 +37,47 @@ jobs:
             Hi @{{ author }}! 👋
 
 
-            Thank you for your contribution to WordPress! 💖
+            Thank you for your contribution to FinPress! 💖
 
 
-            It looks like this is your first pull request to `wordpress-develop`. Here are a few things to be aware of that may help you out!
+            It looks like this is your first pull request to `finpress-develop`. Here are a few things to be aware of that may help you out!
 
 
-            **No one monitors this repository for new pull requests.** Pull requests **must** be attached to a Trac ticket to be considered for inclusion in WordPress Core. To attach a pull request to a Trac ticket, please include the ticket's full URL in your pull request description.
+            **No one monitors this repository for new pull requests.** Pull requests **must** be attached to a Trac ticket to be considered for inclusion in FinPress Core. To attach a pull request to a Trac ticket, please include the ticket's full URL in your pull request description.
 
 
-            **Pull requests are never merged on GitHub.** The WordPress codebase continues to be managed through the SVN repository that this GitHub repository mirrors. Please feel free to open pull requests to work on any contribution you are making.
+            **Pull requests are never merged on GitHub.** The FinPress codebase continues to be managed through the SVN repository that this GitHub repository mirrors. Please feel free to open pull requests to work on any contribution you are making.
 
 
-            More information about how GitHub pull requests can be used to contribute to WordPress can be found in [the Core Handbook](https://make.wordpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/).
+            More information about how GitHub pull requests can be used to contribute to FinPress can be found in [the Core Handbook](https://make.finpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/).
 
 
-            **Please include automated tests.** Including tests in your pull request is one way to help your patch be considered faster. To learn about WordPress' test suites, visit the [Automated Testing](https://make.wordpress.org/core/handbook/testing/automated-testing/) page in the handbook.
+            **Please include automated tests.** Including tests in your pull request is one way to help your patch be considered faster. To learn about FinPress' test suites, visit the [Automated Testing](https://make.finpress.org/core/handbook/testing/automated-testing/) page in the handbook.
 
 
-            If you have not had a chance, please review the [Contribute with Code page](https://make.wordpress.org/core/handbook/contribute/) in the [WordPress Core Handbook](https://make.wordpress.org/core/handbook/).
+            If you have not had a chance, please review the [Contribute with Code page](https://make.finpress.org/core/handbook/contribute/) in the [FinPress Core Handbook](https://make.finpress.org/core/handbook/).
 
 
-            The [Developer Hub](https://developer.wordpress.org/) also documents the various [coding standards](https://make.wordpress.org/core/handbook/best-practices/coding-standards/) that are followed:
+            The [Developer Hub](https://developer.finpress.org/) also documents the various [coding standards](https://make.finpress.org/core/handbook/best-practices/coding-standards/) that are followed:
 
-            - [PHP Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/php/)
+            - [PHP Coding Standards](https://developer.finpress.org/coding-standards/finpress-coding-standards/php/)
 
-            - [CSS Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/css/)
+            - [CSS Coding Standards](https://developer.finpress.org/coding-standards/finpress-coding-standards/css/)
 
-            - [HTML Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/html/)
+            - [HTML Coding Standards](https://developer.finpress.org/coding-standards/finpress-coding-standards/html/)
 
-            - [JavaScript Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/javascript/)
+            - [JavaScript Coding Standards](https://developer.finpress.org/coding-standards/finpress-coding-standards/javascript/)
 
-            - [Accessibility Coding Standards](https://developer.wordpress.org/coding-standards/wordpress-coding-standards/accessibility/)
+            - [Accessibility Coding Standards](https://developer.finpress.org/coding-standards/finpress-coding-standards/accessibility/)
 
-            - [Inline Documentation Standards](https://developer.wordpress.org/coding-standards/inline-documentation-standards/)
+            - [Inline Documentation Standards](https://developer.finpress.org/coding-standards/inline-documentation-standards/)
 
 
             Thank you,
 
-            The WordPress Project
+            The FinPress Project
 
-  # Leaves a comment on a pull request with a link to test the changes in a WordPress Playground instance.
+  # Leaves a comment on a pull request with a link to test the changes in a FinPress Playground instance.
   playground-details:
     name: Comment on a pull request with Playground details
     runs-on: ubuntu-24.04
@@ -85,7 +85,7 @@ jobs:
       issues: write
       pull-requests: write
     if: >
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event.workflow_run.event == 'pull_request' &&
       github.event.workflow_run.conclusion == 'success'
     steps:
@@ -141,16 +141,16 @@ jobs:
             const comments = ( await github.rest.issues.listComments( commentInfo ) ).data;
 
             for ( const currentComment of comments ) {
-              if ( currentComment.user.type === 'Bot' && currentComment.body.includes( 'Test using WordPress Playground' ) ) {
+              if ( currentComment.user.type === 'Bot' && currentComment.body.includes( 'Test using FinPress Playground' ) ) {
                 return;
               }
             };
 
             // No comment was found. Create one.
-            commentInfo.body = `## Test using WordPress Playground
-            The changes in this pull request can previewed and tested using a [WordPress Playground](https://developer.wordpress.org/playground/) instance.
+            commentInfo.body = `## Test using FinPress Playground
+            The changes in this pull request can previewed and tested using a [FinPress Playground](https://developer.finpress.org/playground/) instance.
 
-            [WordPress Playground](https://developer.wordpress.org/playground/) is an experimental project that creates a full WordPress instance entirely within the browser.
+            [FinPress Playground](https://developer.finpress.org/playground/) is an experimental project that creates a full FinPress instance entirely within the browser.
 
             ### Some things to be aware of
             - The Plugin and Theme Directories cannot be accessed within Playground.
@@ -158,11 +158,11 @@ jobs:
             - All changes will be lost when refreshing the page.
             - A fresh instance is created each time the link below is clicked.
             - Every time this pull request is updated, a new ZIP file containing all changes is created. If changes are not reflected in the Playground instance,
-            it's possible that the most recent build failed, or has not completed. Check the [list of workflow runs to be sure](https://github.com/WordPress/wordpress-develop/actions/workflows/test-build-processes.yml).
+            it's possible that the most recent build failed, or has not completed. Check the [list of workflow runs to be sure](https://github.com/FinPress/finpress-develop/actions/workflows/test-build-processes.yml).
 
-            For more details about these limitations and more, check out the [Limitations page](https://wordpress.github.io/wordpress-playground/limitations/) in the WordPress Playground documentation.
+            For more details about these limitations and more, check out the [Limitations page](https://finpress.github.io/finpress-playground/limitations/) in the FinPress Playground documentation.
 
-            [Test this pull request with WordPress Playground](https://playground.wordpress.net/wordpress.html?pr=${ issue_number }).
+            [Test this pull request with FinPress Playground](https://playground.finpress.net/finpress.html?pr=${ issue_number }).
             `;
 
             github.rest.issues.createComment( commentInfo );
@@ -174,7 +174,7 @@ jobs:
     permissions:
       issues: write
       pull-requests: write
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name == 'pull_request_target' && ! github.event.pull_request.draft && github.event.pull_request.state == 'open' && github.actor != 'dependabot[bot]' }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name == 'pull_request_target' && ! github.event.pull_request.draft && github.event.pull_request.state == 'open' && github.actor != 'dependabot[bot]' }}
     steps:
       - name: Check for Trac ticket and manage comment
         uses: actions/github-script@60a0d83039c74a4aee543508d2ffcb1c3799cdea # v7.0.1
@@ -200,7 +200,7 @@ jobs:
             const prBody = pr.body ?? '';
             const prTitle = pr.title ?? '';
 
-            const tracTicketRegex = new RegExp( '(https?://core.trac.wordpress.org/ticket/|Core-|ticket:)([0-9]+)', 'g' );
+            const tracTicketRegex = new RegExp( '(https?://core.trac.finpress.org/ticket/|Core-|ticket:)([0-9]+)', 'g' );
             const tracTicketMatches = prBody.match( tracTicketRegex ) || prTitle.match( tracTicketRegex );
 
             if ( ! tracTicketMatches ) {
@@ -209,9 +209,9 @@ jobs:
                 repo,
                 issue_number: number,
                 body: `## Trac Ticket Missing
-            This pull request is missing a link to a [Trac ticket](https://core.trac.wordpress.org/). For a contribution to be considered, there must be a corresponding ticket in Trac.
+            This pull request is missing a link to a [Trac ticket](https://core.trac.finpress.org/). For a contribution to be considered, there must be a corresponding ticket in Trac.
 
-            To attach a pull request to a Trac ticket, please include the ticket's full URL in your pull request description. More information about contributing to WordPress on GitHub can be found in [the Core Handbook](https://make.wordpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/).
+            To attach a pull request to a Trac ticket, please include the ticket's full URL in your pull request description. More information about contributing to FinPress on GitHub can be found in [the Core Handbook](https://make.finpress.org/core/handbook/contribute/git/github-pull-requests-for-code-review/).
             `,
               } );
             }

@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress Customize Control classes
+ * FinPress Customize Control classes
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Customize
  * @since 3.4.0
  */

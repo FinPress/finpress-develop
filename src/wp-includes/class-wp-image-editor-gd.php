@@ -1,13 +1,13 @@
 <?php
 /**
- * WordPress GD Image Editor
+ * FinPress GD Image Editor
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Image_Editor
  */
 
 /**
- * WordPress Image Editor Class for Image Manipulation through GD
+ * FinPress Image Editor Class for Image Manipulation through GD
  *
  * @since 3.5.0
  *

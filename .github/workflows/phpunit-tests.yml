@@ -55,7 +55,7 @@ jobs:
   #
   # Creates a PHPUnit test job for each PHP/MySQL combination.
   #
-  # Though MySQL 5.5 and 5.6 are still supported by WordPress, they are not currently tested here because the Docker
+  # Though MySQL 5.5 and 5.6 are still supported by FinPress, they are not currently tested here because the Docker
   # images do not work. Testing against MariaDB 5.5 provides a reasonable level of MySQL 5.5 testing (see MariaDB matrix
   # below for more details).
   #
@@ -65,7 +65,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ startsWith( github.repository, 'WordPress/' ) && ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
+    if: ${{ startsWith( github.repository, 'FinPress/' ) && ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -130,7 +130,7 @@ jobs:
   #
   # Creates a PHPUnit test job for each PHP/MariaDB combination.
   #
-  # All LTS versions of MariaDB supported by WordPress with greater than 1% usage according to w.org/stats should be
+  # All LTS versions of MariaDB supported by FinPress with greater than 1% usage according to w.org/stats should be
   # tested. The exceptions to this rule are the most recent LTS and version 5.5.
   #
   # The 5.5 release was intended as a drop-in replacement for MySQL. Because the MySQL 5.5 Docker containers do not
@@ -142,7 +142,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ startsWith( github.repository, 'WordPress/' ) && ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
+    if: ${{ startsWith( github.repository, 'FinPress/' ) && ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -194,7 +194,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ startsWith( github.repository, 'WordPress/' ) && ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
+    if: ${{ startsWith( github.repository, 'FinPress/' ) && ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -207,7 +207,7 @@ jobs:
         db-innovation: [ true ]
 
         exclude:
-          # MySQL 9.0+ will not work on PHP <= 7.3 because mysql_native_password was removed. See https://core.trac.wordpress.org/ticket/61218.
+          # MySQL 9.0+ will not work on PHP <= 7.3 because mysql_native_password was removed. See https://core.trac.finpress.org/ticket/61218.
           - php: '7.2'
             db-version: '9.4'
           - php: '7.3'
@@ -237,7 +237,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ startsWith( github.repository, 'WordPress/' ) && ( github.repository == 'WordPress/wordpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
+    if: ${{ startsWith( github.repository, 'FinPress/' ) && ( github.repository == 'FinPress/finpress-develop' || ( github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' ) ) }}
     strategy:
       fail-fast: false
       matrix:
@@ -266,7 +266,7 @@ jobs:
     permissions:
       contents: read
     secrets: inherit
-    if: ${{ ! startsWith( github.repository, 'WordPress/' ) && github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
+    if: ${{ ! startsWith( github.repository, 'FinPress/' ) && github.event_name == 'pull_request' && github.actor != 'dependabot[bot]' }}
     strategy:
       fail-fast: false
       matrix:
@@ -318,7 +318,7 @@ jobs:
       actions: read
       contents: read
     needs: [ test-with-mysql, test-with-mariadb, test-innovation-releases, html-api-test-groups, limited-matrix-for-forks ]
-    if: ${{ github.repository == 'WordPress/wordpress-develop' && github.event_name != 'pull_request' && always() }}
+    if: ${{ github.repository == 'FinPress/finpress-develop' && github.event_name != 'pull_request' && always() }}
     with:
       calling_status: ${{ contains( needs.*.result, 'cancelled' ) && 'cancelled' || contains( needs.*.result, 'failure' ) && 'failure' || 'success' }}
     secrets:
@@ -335,7 +335,7 @@ jobs:
     needs: [ slack-notifications ]
     if: |
       always() &&
-      github.repository == 'WordPress/wordpress-develop' &&
+      github.repository == 'FinPress/finpress-develop' &&
       github.event_name != 'pull_request' &&
       github.run_attempt < 2 &&
       (

@@ -2,7 +2,7 @@
 /**
  * Blocks API: WP_Block class
  *
- * @package WordPress
+ * @package FinPress
  * @since 5.5.0
  */
 

@@ -20,7 +20,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		require_once DIR_TESTDATA . '/../includes/mock-image-editor.php';
 
 		// Ensure no legacy / failed tests detritus.
-		$folder = get_temp_dir() . 'wordpress-gsoc-flyer*.*';
+		$folder = get_temp_dir() . 'finpress-gsoc-flyer*.*';
 
 		foreach ( glob( $folder ) as $file ) {
 			unlink( $file );
@@ -688,7 +688,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 	 */
 	public function test_wp_crop_image_should_fail_with_wp_error_object_if_url_does_not_exist() {
 		$file = wp_crop_image(
-			'https://wordpress.org/screenshots/3.9/canoladoesnotexist.jpg',
+			'https://finpress.org/screenshots/3.9/canoladoesnotexist.jpg',
 			0,
 			0,
 			100,
@@ -763,8 +763,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Rendering PDFs is not supported on this system.' );
 		}
 
-		$orig_file = DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf';
-		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
+		$orig_file = DIR_TESTDATA . '/images/finpress-gsoc-flyer.pdf';
+		$test_file = get_temp_dir() . 'finpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
 
 		$editor = wp_get_image_editor( $test_file );
@@ -790,32 +790,32 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$expected = array(
 			'sizes'    => array(
 				'full'      => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf.jpg',
 					'width'     => 1088,
 					'height'    => 1408,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf.jpg' ),
 				),
 				'medium'    => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-232x300.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-232x300.jpg',
 					'width'     => 232,
 					'height'    => 300,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-232x300.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-232x300.jpg' ),
 				),
 				'large'     => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-791x1024.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-791x1024.jpg',
 					'width'     => 791,
 					'height'    => 1024,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-791x1024.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-791x1024.jpg' ),
 				),
 				'thumbnail' => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-116x150.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-116x150.jpg',
 					'width'     => 116,
 					'height'    => 150,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-116x150.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-116x150.jpg' ),
 				),
 			),
 			'filesize' => wp_filesize( $test_file ),
@@ -841,8 +841,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		update_option( 'medium_crop', 1 );
 
-		$orig_file = DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf';
-		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
+		$orig_file = DIR_TESTDATA . '/images/finpress-gsoc-flyer.pdf';
+		$test_file = get_temp_dir() . 'finpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
 
 		$editor = wp_get_image_editor( $test_file );
@@ -868,32 +868,32 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$expected = array(
 			'sizes'    => array(
 				'full'      => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf.jpg',
 					'width'     => 1088,
 					'height'    => 1408,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf.jpg' ),
 				),
 				'medium'    => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-300x300.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-300x300.jpg',
 					'width'     => 300,
 					'height'    => 300,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-300x300.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-300x300.jpg' ),
 				),
 				'large'     => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-791x1024.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-791x1024.jpg',
 					'width'     => 791,
 					'height'    => 1024,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-791x1024.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-791x1024.jpg' ),
 				),
 				'thumbnail' => array(
-					'file'      => 'wordpress-gsoc-flyer-pdf-116x150.jpg',
+					'file'      => 'finpress-gsoc-flyer-pdf-116x150.jpg',
 					'width'     => 116,
 					'height'    => 150,
 					'mime-type' => 'image/jpeg',
-					'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-116x150.jpg' ),
+					'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-116x150.jpg' ),
 				),
 			),
 			'filesize' => wp_filesize( $test_file ),
@@ -915,8 +915,8 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 			$this->markTestSkipped( 'Rendering PDFs is not supported on this system.' );
 		}
 
-		$orig_file = DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf';
-		$test_file = get_temp_dir() . 'wordpress-gsoc-flyer.pdf';
+		$orig_file = DIR_TESTDATA . '/images/finpress-gsoc-flyer.pdf';
+		$test_file = get_temp_dir() . 'finpress-gsoc-flyer.pdf';
 		copy( $orig_file, $test_file );
 
 		$editor = wp_get_image_editor( $test_file );
@@ -943,11 +943,11 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 		$temp_dir = get_temp_dir();
 
 		$expected = array(
-			'file'      => 'wordpress-gsoc-flyer-pdf-77x100.jpg',
+			'file'      => 'finpress-gsoc-flyer-pdf-77x100.jpg',
 			'width'     => 77,
 			'height'    => 100,
 			'mime-type' => 'image/jpeg',
-			'filesize'  => wp_filesize( $temp_dir . 'wordpress-gsoc-flyer-pdf-77x100.jpg' ),
+			'filesize'  => wp_filesize( $temp_dir . 'finpress-gsoc-flyer-pdf-77x100.jpg' ),
 		);
 
 		// Different environments produce slightly different filesize results.
@@ -992,7 +992,7 @@ class Tests_Image_Functions extends WP_UnitTestCase {
 
 		// PDF with same name as JPEG.
 		$pdf_path = $temp_dir . 'test.pdf';
-		copy( DIR_TESTDATA . '/images/wordpress-gsoc-flyer.pdf', $pdf_path );
+		copy( DIR_TESTDATA . '/images/finpress-gsoc-flyer.pdf', $pdf_path );
 
 		$editor = wp_get_image_editor( $pdf_path );
 		if ( is_wp_error( $editor ) ) {

@@ -2,7 +2,7 @@
 /**
  * Unit tests covering WP_HTML_Processor serialization functionality.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage HTML-API
  *
  * @since 6.7.0
@@ -310,7 +310,7 @@ class Tests_HtmlApi_WpHtmlProcessor_Serialize extends WP_UnitTestCase {
 			'None'                       => array( '', '' ),
 			'Empty'                      => array( '<!DOCTYPE>', '<!DOCTYPE>' ),
 			'HTML5'                      => array( '<!DOCTYPE html>', '<!DOCTYPE html>' ),
-			'Strange name'               => array( '<!DOCTYPE WordPress>', '<!DOCTYPE wordpress>' ),
+			'Strange name'               => array( '<!DOCTYPE FinPress>', '<!DOCTYPE finpress>' ),
 			'With public'                => array( '<!DOCTYPE html PUBLIC "x">', '<!DOCTYPE html PUBLIC "x">' ),
 			'With system'                => array( '<!DOCTYPE html SYSTEM "y">', '<!DOCTYPE html SYSTEM "y">' ),
 			'With public and system'     => array( '<!DOCTYPE html PUBLIC "x" "y">', '<!DOCTYPE html PUBLIC "x" "y">' ),

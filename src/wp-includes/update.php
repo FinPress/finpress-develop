@@ -1,8 +1,8 @@
 <?php
 /**
- * A simple set of functions to check the WordPress.org Version Update service.
+ * A simple set of functions to check the FinPress.org Version Update service.
  *
- * @package WordPress
+ * @package FinPress
  * @since 2.3.0
  */
 
@@ -12,19 +12,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Checks WordPress version against the newest version.
+ * Checks FinPress version against the newest version.
  *
- * The WordPress version, PHP version, and locale is sent to api.wordpress.org.
+ * The FinPress version, PHP version, and locale is sent to api.finpress.org.
  *
- * Checks against the WordPress server at api.wordpress.org. Will only check
- * if WordPress isn't installing.
+ * Checks against the FinPress server at api.finpress.org. Will only check
+ * if FinPress isn't installing.
  *
  * @since 2.3.0
  *
- * @global wpdb   $wpdb             WordPress database abstraction object.
+ * @global wpdb   $wpdb             FinPress database abstraction object.
  * @global string $wp_local_package Locale code of the package.
  *
- * @param array $extra_stats Extra statistics to report to the WordPress.org API.
+ * @param array $extra_stats Extra statistics to report to the FinPress.org API.
  * @param bool  $force_check Whether to bypass the transient cache and force a fresh update check.
  *                           Defaults to false, true if $extra_stats is set.
  */
@@ -64,7 +64,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	}
 
 	/**
-	 * Filters the locale requested for WordPress core translations.
+	 * Filters the locale requested for FinPress core translations.
 	 *
 	 * @since 2.8.0
 	 *
@@ -158,15 +158,15 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 	 * @param array $query {
 	 *     Version check query arguments.
 	 *
-	 *     @type string $version            WordPress version number.
+	 *     @type string $version            FinPress version number.
 	 *     @type string $php                PHP version number.
 	 *     @type string $locale             The locale to retrieve updates for.
 	 *     @type string $mysql              MySQL version number.
 	 *     @type string $local_package      The value of the $wp_local_package global, when set.
-	 *     @type int    $blogs              Number of sites on this WordPress installation.
-	 *     @type int    $users              Number of users on this WordPress installation.
-	 *     @type int    $multisite_enabled  Whether this WordPress installation uses Multisite.
-	 *     @type int    $initial_db_version Database version of WordPress at time of installation.
+	 *     @type int    $blogs              Number of sites on this FinPress installation.
+	 *     @type int    $users              Number of users on this FinPress installation.
+	 *     @type int    $multisite_enabled  Whether this FinPress installation uses Multisite.
+	 *     @type int    $initial_db_version Database version of FinPress at time of installation.
 	 *     @type array  $extensions         List of PHP extensions and their versions.
 	 *     @type array  $platform_flags     List containing the operating system name and bit support.
 	 *     @type array  $image_support      List of image formats supported by GD and Imagick.
@@ -189,7 +189,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 		$query['channel'] = WP_AUTO_UPDATE_CORE;
 	}
 
-	$url      = 'http://api.wordpress.org/core/version-check/1.7/?' . http_build_query( $query, '', '&' );
+	$url      = 'http://api.finpress.org/core/version-check/1.7/?' . http_build_query( $query, '', '&' );
 	$http_url = $url;
 	$ssl      = wp_http_supports( array( 'ssl' ) );
 
@@ -201,7 +201,7 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 
 	$options = array(
 		'timeout'    => $doing_cron ? 30 : 3,
-		'user-agent' => 'WordPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
+		'user-agent' => 'FinPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
 		'headers'    => array(
 			'wp_install' => $wp_install,
 			'wp_blog'    => home_url( '/' ),
@@ -216,9 +216,9 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 			__FUNCTION__,
 			sprintf(
 				/* translators: %s: Support forums URL. */
-				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-				__( 'https://wordpress.org/support/forums/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+				__( 'An unexpected error occurred. Something may be wrong with FinPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'https://finpress.org/support/forums/' )
+			) . ' ' . __( '(FinPress could not establish a secure connection to FinPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$response = wp_remote_post( $http_url, $options );
@@ -305,18 +305,18 @@ function wp_version_check( $extra_stats = array(), $force_check = false ) {
 }
 
 /**
- * Checks for available updates to plugins based on the latest versions hosted on WordPress.org.
+ * Checks for available updates to plugins based on the latest versions hosted on FinPress.org.
  *
  * Despite its name this function does not actually perform any updates, it only checks for available updates.
  *
- * A list of all plugins installed is sent to api.wordpress.org, along with the site locale.
+ * A list of all plugins installed is sent to api.finpress.org, along with the site locale.
  *
- * Checks against the WordPress server at api.wordpress.org. Will only check
- * if WordPress isn't installing.
+ * Checks against the FinPress server at api.finpress.org. Will only check
+ * if FinPress isn't installing.
  *
  * @since 2.3.0
  *
- * @param array $extra_stats Extra statistics to report to the WordPress.org API.
+ * @param array $extra_stats Extra statistics to report to the FinPress.org API.
  */
 function wp_update_plugins( $extra_stats = array() ) {
 	if ( wp_installing() ) {
@@ -420,14 +420,14 @@ function wp_update_plugins( $extra_stats = array() ) {
 			'locale'       => wp_json_encode( $locales ),
 			'all'          => wp_json_encode( true ),
 		),
-		'user-agent' => 'WordPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
+		'user-agent' => 'FinPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
 	);
 
 	if ( $extra_stats ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url      = 'http://api.wordpress.org/plugins/update-check/1.1/';
+	$url      = 'http://api.finpress.org/plugins/update-check/1.1/';
 	$http_url = $url;
 	$ssl      = wp_http_supports( array( 'ssl' ) );
 
@@ -442,9 +442,9 @@ function wp_update_plugins( $extra_stats = array() ) {
 			__FUNCTION__,
 			sprintf(
 				/* translators: %s: Support forums URL. */
-				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-				__( 'https://wordpress.org/support/forums/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+				__( 'An unexpected error occurred. Something may be wrong with FinPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'https://finpress.org/support/forums/' )
+			) . ' ' . __( '(FinPress could not establish a secure connection to FinPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$raw_response = wp_remote_post( $http_url, $options );
@@ -496,7 +496,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		 *     @type string   $version      The version of the plugin.
 		 *     @type string   $url          The URL for details of the plugin.
 		 *     @type string   $package      Optional. The update ZIP for the plugin.
-		 *     @type string   $tested       Optional. The version of WordPress the plugin is tested against.
+		 *     @type string   $tested       Optional. The version of FinPress the plugin is tested against.
 		 *     @type string   $requires_php Optional. The version of PHP which the plugin requires.
 		 *     @type bool     $autoupdate   Optional. Whether the plugin should automatically update.
 		 *     @type string[] $icons        Optional. Array of plugin icons.
@@ -535,7 +535,7 @@ function wp_update_plugins( $extra_stats = array() ) {
 		$update->id     = $plugin_data['UpdateURI'];
 		$update->plugin = $plugin_file;
 
-		// WordPress needs the version field specified as 'new_version'.
+		// FinPress needs the version field specified as 'new_version'.
 		if ( ! isset( $update->new_version ) ) {
 			$update->new_version = $update->version;
 		}
@@ -576,18 +576,18 @@ function wp_update_plugins( $extra_stats = array() ) {
 }
 
 /**
- * Checks for available updates to themes based on the latest versions hosted on WordPress.org.
+ * Checks for available updates to themes based on the latest versions hosted on FinPress.org.
  *
  * Despite its name this function does not actually perform any updates, it only checks for available updates.
  *
- * A list of all themes installed is sent to api.wordpress.org, along with the site locale.
+ * A list of all themes installed is sent to api.finpress.org, along with the site locale.
  *
- * Checks against the WordPress server at api.wordpress.org. Will only check
- * if WordPress isn't installing.
+ * Checks against the FinPress server at api.finpress.org. Will only check
+ * if FinPress isn't installing.
  *
  * @since 2.7.0
  *
- * @param array $extra_stats Extra statistics to report to the WordPress.org API.
+ * @param array $extra_stats Extra statistics to report to the FinPress.org API.
  */
 function wp_update_themes( $extra_stats = array() ) {
 	if ( wp_installing() ) {
@@ -706,14 +706,14 @@ function wp_update_themes( $extra_stats = array() ) {
 			'translations' => wp_json_encode( $translations ),
 			'locale'       => wp_json_encode( $locales ),
 		),
-		'user-agent' => 'WordPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
+		'user-agent' => 'FinPress/' . wp_get_wp_version() . '; ' . home_url( '/' ),
 	);
 
 	if ( $extra_stats ) {
 		$options['body']['update_stats'] = wp_json_encode( $extra_stats );
 	}
 
-	$url      = 'http://api.wordpress.org/themes/update-check/1.1/';
+	$url      = 'http://api.finpress.org/themes/update-check/1.1/';
 	$http_url = $url;
 	$ssl      = wp_http_supports( array( 'ssl' ) );
 
@@ -728,9 +728,9 @@ function wp_update_themes( $extra_stats = array() ) {
 			__FUNCTION__,
 			sprintf(
 				/* translators: %s: Support forums URL. */
-				__( 'An unexpected error occurred. Something may be wrong with WordPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
-				__( 'https://wordpress.org/support/forums/' )
-			) . ' ' . __( '(WordPress could not establish a secure connection to WordPress.org. Please contact your server administrator.)' ),
+				__( 'An unexpected error occurred. Something may be wrong with FinPress.org or this server&#8217;s configuration. If you continue to have problems, please try the <a href="%s">support forums</a>.' ),
+				__( 'https://finpress.org/support/forums/' )
+			) . ' ' . __( '(FinPress could not establish a secure connection to FinPress.org. Please contact your server administrator.)' ),
 			headers_sent() || WP_DEBUG ? E_USER_WARNING : E_USER_NOTICE
 		);
 		$raw_response = wp_remote_post( $http_url, $options );
@@ -777,7 +777,7 @@ function wp_update_themes( $extra_stats = array() ) {
 		 *     @type string $version      The version of the theme.
 		 *     @type string $url          The URL for details of the theme.
 		 *     @type string $package      Optional. The update ZIP for the theme.
-		 *     @type string $tested       Optional. The version of WordPress the theme is tested against.
+		 *     @type string $tested       Optional. The version of FinPress the theme is tested against.
 		 *     @type string $requires_php Optional. The version of PHP which the theme requires.
 		 *     @type bool   $autoupdate   Optional. Whether the theme should automatically update.
 		 *     @type array  $translations {
@@ -812,7 +812,7 @@ function wp_update_themes( $extra_stats = array() ) {
 		// This should remain constant.
 		$update->id = $theme_data['UpdateURI'];
 
-		// WordPress needs the version field specified as 'new_version'.
+		// FinPress needs the version field specified as 'new_version'.
 		if ( ! isset( $update->new_version ) ) {
 			$update->new_version = $update->version;
 		}
@@ -842,9 +842,9 @@ function wp_update_themes( $extra_stats = array() ) {
 }
 
 /**
- * Performs WordPress automatic background updates.
+ * Performs FinPress automatic background updates.
  *
- * Updates WordPress core plus any plugins and themes that have automatic updates enabled.
+ * Updates FinPress core plus any plugins and themes that have automatic updates enabled.
  *
  * @since 3.7.0
  */
@@ -894,7 +894,7 @@ function wp_get_translation_updates() {
  * @return array {
  *     Fetched update data.
  *
- *     @type int[]   $counts       An array of counts for available plugin, theme, and WordPress updates.
+ *     @type int[]   $counts       An array of counts for available plugin, theme, and FinPress updates.
  *     @type string  $update_title Titles of available updates.
  * }
  */
@@ -902,7 +902,7 @@ function wp_get_update_data() {
 	$counts = array(
 		'plugins'      => 0,
 		'themes'       => 0,
-		'wordpress'    => 0,
+		'finpress'    => 0,
 		'translations' => 0,
 	);
 
@@ -929,13 +929,13 @@ function wp_get_update_data() {
 	$core = current_user_can( 'update_core' );
 
 	if ( $core && function_exists( 'get_core_updates' ) ) {
-		$update_wordpress = get_core_updates( array( 'dismissed' => false ) );
+		$update_finpress = get_core_updates( array( 'dismissed' => false ) );
 
-		if ( ! empty( $update_wordpress )
-			&& ! in_array( $update_wordpress[0]->response, array( 'development', 'latest' ), true )
+		if ( ! empty( $update_finpress )
+			&& ! in_array( $update_finpress[0]->response, array( 'development', 'latest' ), true )
 			&& current_user_can( 'update_core' )
 		) {
-			$counts['wordpress'] = 1;
+			$counts['finpress'] = 1;
 		}
 	}
 
@@ -943,12 +943,12 @@ function wp_get_update_data() {
 		$counts['translations'] = 1;
 	}
 
-	$counts['total'] = $counts['plugins'] + $counts['themes'] + $counts['wordpress'] + $counts['translations'];
+	$counts['total'] = $counts['plugins'] + $counts['themes'] + $counts['finpress'] + $counts['translations'];
 	$titles          = array();
 
-	if ( $counts['wordpress'] ) {
-		/* translators: %d: Number of available WordPress updates. */
-		$titles['wordpress'] = sprintf( __( '%d WordPress Update' ), $counts['wordpress'] );
+	if ( $counts['finpress'] ) {
+		/* translators: %d: Number of available FinPress updates. */
+		$titles['finpress'] = sprintf( __( '%d FinPress Update' ), $counts['finpress'] );
 	}
 
 	if ( $counts['plugins'] ) {
@@ -972,14 +972,14 @@ function wp_get_update_data() {
 		'title'  => $update_title,
 	);
 	/**
-	 * Filters the returned array of update data for plugins, themes, and WordPress core.
+	 * Filters the returned array of update data for plugins, themes, and FinPress core.
 	 *
 	 * @since 3.5.0
 	 *
 	 * @param array $update_data {
 	 *     Fetched update data.
 	 *
-	 *     @type int[]   $counts       An array of counts for available plugin, theme, and WordPress updates.
+	 *     @type int[]   $counts       An array of counts for available plugin, theme, and FinPress updates.
 	 *     @type string  $update_title Titles of available updates.
 	 * }
 	 * @param array $titles An array of update counts and UI strings for available updates.
@@ -1007,7 +1007,7 @@ function _maybe_update_core() {
 /**
  * Checks the last time plugins were run before checking plugin versions.
  *
- * This might have been backported to WordPress 2.6.1 for performance reasons.
+ * This might have been backported to FinPress 2.6.1 for performance reasons.
  * This is used for the wp-admin to check only so often instead of every page
  * load.
  *
@@ -1110,7 +1110,7 @@ function wp_delete_all_temp_backups() {
  *
  * @access private
  *
- * @global WP_Filesystem_Base $wp_filesystem WordPress filesystem subclass.
+ * @global WP_Filesystem_Base $wp_filesystem FinPress filesystem subclass.
  */
 function _wp_delete_all_temp_backups() {
 	global $wp_filesystem;
@@ -1132,7 +1132,7 @@ function _wp_delete_all_temp_backups() {
 		wp_trigger_error(
 			__FUNCTION__,
 			/* translators: %s: Directory name. */
-			sprintf( __( 'Unable to locate WordPress content directory (%s).' ), 'wp-content' )
+			sprintf( __( 'Unable to locate FinPress content directory (%s).' ), 'wp-content' )
 		);
 		return;
 	}

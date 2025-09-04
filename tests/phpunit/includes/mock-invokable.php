@@ -2,7 +2,7 @@
 /**
  * File for Mock_Invokable class.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage UnitTests
  */
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * WordPress List utility class
+ * FinPress List utility class
  *
- * @package WordPress
+ * @package FinPress
  * @since 4.7.0
  */
 

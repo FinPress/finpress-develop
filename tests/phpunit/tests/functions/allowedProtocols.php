@@ -50,16 +50,16 @@ class Tests_Functions_AllowedProtocols extends WP_UnitTestCase {
 			array( 'ftps', 'ftps://example.com' ),
 			array( 'mailto', 'mailto://someone@example.com' ),                     // RFC6068
 			array( 'news', 'news://news.server.example/example.group.this' ),      // RFC5538
-			array( 'irc', 'irc://example.com/wordpress' ),
-			array( 'irc6', 'irc6://example.com/wordpress' ),
-			array( 'ircs', 'ircs://example.com/wordpress' ),
+			array( 'irc', 'irc://example.com/finpress' ),
+			array( 'irc6', 'irc6://example.com/finpress' ),
+			array( 'ircs', 'ircs://example.com/finpress' ),
 			array( 'gopher', 'gopher://example.com/7a_gopher_selector%09foobar' ), // RFC4266
 			array( 'nntp', 'nntp://news.server.example/example.group.this' ),      // RFC5538
 			array( 'feed', 'feed://example.com/rss.xml' ),
 			array( 'telnet', 'telnet://user:password@example.com:80/' ),           // RFC4248
 			array( 'mms', 'mms://example.com:80/path' ),
-			array( 'rtsp', 'rtsp://media.example.com:554/wordpress/audiotrack' ),  // RFC2326
-			array( 'svn', 'svn://core.svn.wordpress.org/' ),
+			array( 'rtsp', 'rtsp://media.example.com:554/finpress/audiotrack' ),  // RFC2326
+			array( 'svn', 'svn://core.svn.finpress.org/' ),
 			array( 'tel', 'tel:+1-234-567-8910' ),                                 // RFC3966
 			array( 'sms', 'sms:+1-234-567-8910' ),                                 // RFC3966
 			array( 'fax', 'fax:+123.456.78910' ),                                  // RFC2806/RFC3966

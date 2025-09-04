@@ -2,7 +2,7 @@
 /**
  * Widget API: Default core widgets
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Widgets
  * @since 2.8.0
  */

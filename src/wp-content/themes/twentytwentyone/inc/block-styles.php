@@ -2,9 +2,9 @@
 /**
  * Block Styles
  *
- * @link https://developer.wordpress.org/reference/functions/register_block_style/
+ * @link https://developer.finpress.org/reference/functions/register_block_style/
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Twenty_One
  * @since Twenty Twenty-One 1.0
  */

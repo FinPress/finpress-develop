@@ -2,7 +2,7 @@
 /**
  * Tests for the features using get_hooked_blocks function.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  *
  * @since 6.4.0

@@ -22,9 +22,9 @@ define( 'WP_DEBUG', array_key_exists( 'd', $opts ) );
 if ( ! empty( $opts['r'] ) ) {
 	define( 'DIR_WP', realpath( $opts['r'] ) );
 } elseif ( ! empty( $opts['v'] ) ) {
-		define( 'DIR_WP', DIR_TESTROOT . '/wordpress-' . $opts['v'] );
+		define( 'DIR_WP', DIR_TESTROOT . '/finpress-' . $opts['v'] );
 } else {
-	define( 'DIR_WP', DIR_TESTROOT . '/wordpress' );
+	define( 'DIR_WP', DIR_TESTROOT . '/finpress' );
 }
 
 // Make sure all useful errors are displayed during setup.

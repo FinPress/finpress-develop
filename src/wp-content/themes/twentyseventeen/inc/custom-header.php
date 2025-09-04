@@ -2,15 +2,15 @@
 /**
  * Custom header implementation
  *
- * @link https://codex.wordpress.org/Custom_Headers
+ * @link https://codex.finpress.org/Custom_Headers
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Twenty_Seventeen
  * @since Twenty Seventeen 1.0
  */
 
 /**
- * Sets up the WordPress core custom header feature.
+ * Sets up the FinPress core custom header feature.
  *
  * @uses twentyseventeen_header_style()
  */

@@ -2,7 +2,7 @@
 /**
  * Datasets for unit and integration tests.
  *
- * @package    WordPress
+ * @package    FinPress
  * @subpackage Fonts
  */
 

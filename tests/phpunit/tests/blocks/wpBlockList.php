@@ -2,7 +2,7 @@
 /**
  * Tests for WP_Block_List.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage Blocks
  * @since 5.5.0
  *

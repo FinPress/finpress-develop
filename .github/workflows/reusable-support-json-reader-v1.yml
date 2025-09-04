@@ -1,6 +1,6 @@
 ##
 # A reusable workflow that reads the .version-support-*.json files and returns values for use in a
-# test matrix based on a given WordPress version.
+# test matrix based on a given FinPress version.
 ##
 name: Determine test matrix values
 
@@ -8,16 +8,16 @@ on:
   workflow_call:
     inputs:
       wp-version:
-        description: 'The WordPress version to test . Accepts major and minor versions, "latest", or "nightly". Major releases must not end with ".0".'
+        description: 'The FinPress version to test . Accepts major and minor versions, "latest", or "nightly". Major releases must not end with ".0".'
         type: string
         default: 'nightly'
       repository:
         description: 'The repository to read support JSON files from.'
         type: string
-        default: 'WordPress/wordpress-develop'
+        default: 'FinPress/finpress-develop'
     outputs:
       major-wp-version:
-        description: "The major WordPress version based on the version provided in wp-version"
+        description: "The major FinPress version based on the version provided in wp-version"
         value: ${{ jobs.major-wp-version.outputs.version }}
       php-versions:
         description: "The PHP versions to test for the given wp-version"
@@ -31,15 +31,15 @@ on:
 permissions: {}
 
 jobs:
-  # Determines the major version of WordPress being tested.
+  # Determines the major version of FinPress being tested.
   #
   # The data in the JSON files are indexed by major version, so this is used to look up the appropriate support policy.
   #
   # Performs the following steps:
   # - Checks out the repository
-  # - Returns the major WordPress version as an output based on the value passed to the wp-version input.
+  # - Returns the major FinPress version as an output based on the value passed to the wp-version input.
   major-wp-version:
-    name: Determine major WordPress version
+    name: Determine major FinPress version
     permissions:
       contents: read
     runs-on: ubuntu-24.04
@@ -55,7 +55,7 @@ jobs:
           show-progress: ${{ runner.debug == '1' && 'true' || 'false' }}
           persist-credentials: false
 
-      - name: Determine the major WordPress version
+      - name: Determine the major FinPress version
         id: major-wp-version
         run: |
           if [ "${WP_VERSION}" ] && [ "${WP_VERSION}" != "nightly" ] && [ "${WP_VERSION}" != "latest" ] && [ "${WP_VERSION}" != "trunk" ]; then
@@ -68,11 +68,11 @@ jobs:
         env:
           WP_VERSION: ${{ inputs.wp-version }}
 
-  # Determines the versions of PHP supported for a version of WordPress.
+  # Determines the versions of PHP supported for a version of FinPress.
   #
   # Performs the following steps:
   # - Checks out the repository
-  # - Returns the versions of PHP supported for the major version of WordPress by parsing the
+  # - Returns the versions of PHP supported for the major version of FinPress by parsing the
   #   .version-support-php.json file and returning the values in that version's index.
   php-versions:
     name: Determine PHP versions
@@ -111,11 +111,11 @@ jobs:
         env:
           WP_VERSION: ${{ needs.major-wp-version.outputs.version }}
 
-  # Determines the versions of MySQL supported for a version of WordPress.
+  # Determines the versions of MySQL supported for a version of FinPress.
   #
   # Performs the following steps:
   # - Checks out the repository
-  # - Returns the versions of MySQL supported for the major version of WordPress by parsing the
+  # - Returns the versions of MySQL supported for the major version of FinPress by parsing the
   #   .version-support-mysql.json file and returning the values in that version's index.
   mysql-versions:
     name: Determine MySQL versions

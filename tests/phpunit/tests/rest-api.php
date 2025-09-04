@@ -2,7 +2,7 @@
 /**
  * REST API functions.
  *
- * @package WordPress
+ * @package FinPress
  * @subpackage REST API
  */
 
@@ -1859,12 +1859,12 @@ class Tests_REST_API extends WP_UnitTestCase {
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'cpt',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 			)
 		);
 		$post = self::factory()->post->create_and_get( array( 'post_type' => 'cpt' ) );
 
-		$this->assertSame( '/wordpress/v1/cpt/' . $post->ID, rest_get_route_for_post( $post ) );
+		$this->assertSame( '/finpress/v1/cpt/' . $post->ID, rest_get_route_for_post( $post ) );
 		unregister_post_type( 'cpt' );
 	}
 
@@ -1884,11 +1884,11 @@ class Tests_REST_API extends WP_UnitTestCase {
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'cpt',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 			)
 		);
 
-		$this->assertSame( '/wordpress/v1/cpt', rest_get_route_for_post_type_items( 'cpt' ) );
+		$this->assertSame( '/finpress/v1/cpt', rest_get_route_for_post_type_items( 'cpt' ) );
 		unregister_post_type( 'cpt' );
 	}
 
@@ -1993,12 +1993,12 @@ class Tests_REST_API extends WP_UnitTestCase {
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'ct',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 			)
 		);
 		$term = self::factory()->term->create_and_get( array( 'taxonomy' => 'ct' ) );
 
-		$this->assertSame( '/wordpress/v1/ct/' . $term->term_id, rest_get_route_for_term( $term ) );
+		$this->assertSame( '/finpress/v1/ct/' . $term->term_id, rest_get_route_for_term( $term ) );
 		unregister_taxonomy( 'ct' );
 	}
 
@@ -2019,11 +2019,11 @@ class Tests_REST_API extends WP_UnitTestCase {
 			array(
 				'show_in_rest'   => true,
 				'rest_base'      => 'ct',
-				'rest_namespace' => 'wordpress/v1',
+				'rest_namespace' => 'finpress/v1',
 			)
 		);
 
-		$this->assertSame( '/wordpress/v1/ct', rest_get_route_for_taxonomy_items( 'ct' ) );
+		$this->assertSame( '/finpress/v1/ct', rest_get_route_for_taxonomy_items( 'ct' ) );
 		unregister_post_type( 'ct' );
 	}
 

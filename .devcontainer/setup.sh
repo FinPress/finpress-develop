@@ -12,7 +12,7 @@ fi
 cd /workspace
 npm install && npm run build:dev
 
-# Install WordPress and activate the plugin/theme.
+# Install FinPress and activate the plugin/theme.
 cd /var/www/html
-echo "Setting up WordPress at $SITE_HOST"
-wp core install --url="$SITE_HOST" --title="WordPress Trunk" --admin_user="admin" --admin_email="admin@example.com" --admin_password="password" --skip-email
+echo "Setting up FinPress at $SITE_HOST"
+wp core install --url="$SITE_HOST" --title="FinPress Trunk" --admin_user="admin" --admin_email="admin@example.com" --admin_password="password" --skip-email

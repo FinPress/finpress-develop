@@ -1,6 +1,6 @@
 {
 	"extends": [
-		"@wordpress/stylelint-config"
+		"@finpress/stylelint-config"
 	],
 	"rules": {
 		"indentation": "tab",
