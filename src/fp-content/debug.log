@@ -1,0 +1,33 @@
+[31-Aug-2025 08:54:27 UTC] Automatic updates starting...
+[31-Aug-2025 08:54:28 UTC] Automatic updates complete.
+[31-Aug-2025 08:58:56 UTC] PHP Warning:  require_once(/var/www/src/wp-content/plugins/woocommerce/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php): Failed to open stream: No such file or directory in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php on line 109
+[31-Aug-2025 08:58:56 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/var/www/src/wp-content/plugins/woocommerce/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php' (include_path='.:/usr/local/lib/php') in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php:109
+Stack trace:
+#0 /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-autoloader-handler.php(124): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Version_Loader->load_filemap()
+#1 /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-autoloader.php(80): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Autoloader_Handler->activate_autoloader(Array)
+#2 /var/www/src/wp-content/plugins/woocommerce/vendor/autoload_packages.php(13): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Autoloader::init()
+#3 /var/www/src/wp-content/plugins/woocommerce/src/Autoloader.php(37): require('/var/www/src/wp...')
+#4 /var/www/src/wp-content/plugins/woocommerce/woocommerce.php(27): Automattic\WooCommerce\Autoloader::init()
+#5 /var/www/src/wp-admin/includes/plugin.php(2381): include_once('/var/www/src/wp...')
+#6 /var/www/src/wp-admin/includes/plugin.php(671): plugin_sandbox_scrape('woocommerce/woo...')
+#7 /var/www/src/wp-admin/plugins.php(60): activate_plugin('woocommerce/woo...', 'http://localhos...', false)
+#8 {main}
+  thrown in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php on line 109
+[31-Aug-2025 08:59:03 UTC] PHP Warning:  require_once(/var/www/src/wp-content/plugins/woocommerce/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php): Failed to open stream: No such file or directory in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php on line 109
+[31-Aug-2025 08:59:03 UTC] PHP Fatal error:  Uncaught Error: Failed opening required '/var/www/src/wp-content/plugins/woocommerce/vendor/phpunit/phpunit/src/Framework/Assert/Functions.php' (include_path='.:/usr/local/lib/php') in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php:109
+Stack trace:
+#0 /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-autoloader-handler.php(124): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Version_Loader->load_filemap()
+#1 /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-autoloader.php(80): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Autoloader_Handler->activate_autoloader(Array)
+#2 /var/www/src/wp-content/plugins/woocommerce/vendor/autoload_packages.php(13): Automattic\Jetpack\Autoloader\jp2f744c421d4cd35b5683380aed6445fe\al5_0_0\Autoloader::init()
+#3 /var/www/src/wp-content/plugins/woocommerce/src/Autoloader.php(37): require('/var/www/src/wp...')
+#4 /var/www/src/wp-content/plugins/woocommerce/woocommerce.php(27): Automattic\WooCommerce\Autoloader::init()
+#5 /var/www/src/wp-admin/includes/plugin.php(2381): include_once('/var/www/src/wp...')
+#6 /var/www/src/wp-admin/includes/plugin.php(671): plugin_sandbox_scrape('woocommerce/woo...')
+#7 /var/www/src/wp-admin/plugins.php(60): activate_plugin('woocommerce/woo...', 'http://localhos...', false)
+#8 {main}
+  thrown in /var/www/src/wp-content/plugins/woocommerce/vendor/jetpack-autoloader/class-version-loader.php on line 109
+[31-Aug-2025 22:45:55 UTC] Automatic updates starting...
+[31-Aug-2025 22:45:56 UTC] Automatic updates complete.
+[31-Aug-2025 22:56:51 UTC] PHP Notice:  Function _load_textdomain_just_in_time was called <strong>incorrectly</strong>. Translation loading for the <code>woocommerce</code> domain was triggered too early. This is usually an indicator for some code in the plugin or theme running too early. Translations should be loaded at the <code>init</code> action or later. Please see <a href="https://developer.wordpress.org/advanced-administration/debug/debug-wordpress/">Debugging in WordPress</a> for more information. (This message was added in version 6.7.0.) in /var/www/src/wp-includes/functions.php on line 6124
+[31-Aug-2025 23:02:58 UTC] Cron reschedule event error for hook: action_scheduler_run_queue, Error code: invalid_schedule, Error message: Event schedule does not exist., Data: {"schedule":"every_minute","args":["WP Cron"],"interval":60}
+[01-Sep-2025 00:01:14 UTC] Cron reschedule event error for hook: action_scheduler_run_queue, Error code: invalid_schedule, Error message: Event schedule does not exist., Data: {"schedule":"every_minute","args":["WP Cron"],"interval":60}
