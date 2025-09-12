@@ -5982,7 +5982,7 @@ function get_url_in_content( $content ) {
 	$processor = new WP_HTML_Tag_Processor( $content );
 	while ( $processor->next_tag( 'A' ) ) {
 		$href = $processor->get_attribute( 'href' );
-		if ( is_string( $href ) && ! empty( $href ) ) {
+		if ( is_string( $href ) && '' !== $href ) {
 			return sanitize_url( $href );
 		}
 	}
@@ -6404,8 +6404,9 @@ function sanitize_hex_color( $color ) {
  *
  * @since 3.4.0
  *
- * @param string $color
- * @return string|null
+ * @param string $color The color value to sanitize. Can be with or without a #.
+ * @return string|null The sanitized hex color without the hash prefix,
+ *                     empty string if input is empty, or null if invalid.
  */
 function sanitize_hex_color_no_hash( $color ) {
 	$color = ltrim( $color, '#' );
@@ -6425,8 +6426,9 @@ function sanitize_hex_color_no_hash( $color ) {
  *
  * @since 3.4.0
  *
- * @param string $color
- * @return string
+ * @param string $color The color value to add the hash prefix to. Can be with or without a #.
+ * @return string The color with the hash prefix if it's a valid hex color,
+ *                otherwise the original value.
  */
 function maybe_hash_hex_color( $color ) {
 	$unhashed = sanitize_hex_color_no_hash( $color );
